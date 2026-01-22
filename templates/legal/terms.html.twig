@@ -1,0 +1,268 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Conditions générales de vente
+{% endblock %}
+
+{% block body %}
+	<section class="legal">
+		<div class="container-legal">
+			<div class="text-start">
+				<header>
+					<h2 class="title-legal">
+						Conditions générales de vente
+					</h2>
+				</header>
+				<div class="content-legal">
+					<div class="align-baseline">
+						<br>
+						<strong>1) Objet<br></strong>
+						<br>
+					</div>
+					<div class="align-baseline">
+						Les présentes Conditions Générales de Vente (CGV) ont pour objet de définir les modalités de vente et d'utilisation du programme de formation accessible via notre application.
+					</div>
+					<div class="align-baseline">
+						<br>
+						<strong>2) Acceptation des CGV<br></strong>
+						<br>
+					</div>
+					<div class="align-baseline">
+						L'achat d'un rendez-vous implique l'acceptation sans réserve des présentes CGV par l'acheteur.
+					</div>
+					<div class="align-baseline">
+						<br>
+						<strong>3) Description du service<br></strong>
+						<br>
+					</div>
+					<div class="align-baseline">
+						L'application propose l'achat d'un rendez-vous en ligne.
+					</div>
+					<div class="align-baseline">
+						<br>
+						<strong>4) Prix et paiement<br></strong>
+						<br>
+					</div>
+					<div class="align-baseline">
+						Le prix du rendez-vous est indiqué en euros, toutes taxes comprises. Le paiement est réalisé en ligne via l'API de Stripe. L'acheteur garantit disposer des autorisations nécessaires pour utiliser le mode de paiement choisi.
+					</div>
+					<div class="align-baseline">
+						<br>
+						<strong>5) Droit de rétractation et remboursement<br></strong>
+						<br>
+					</div>
+					<div class="align-baseline">
+						<ol>
+							<li>
+								<strong>Droit de rétractation</strong>
+								<p>
+									Conformément aux articles
+									<strong>L221-18 et suivants</strong>
+									du Code de la consommation,
+																																																																																																												    le Client consommateur dispose en principe d'un délai de
+									<strong>quatorze (14) jours</strong>
+									pour exercer son droit de rétractation à compter de la validation de sa commande.
+								</p>
+								<p>
+									Toutefois, en application de l'article
+									<strong>L221-28, 1° et 13°</strong>, le droit de rétractation ne peut être exercé pour :
+								</p>
+								<ul>
+									<li>
+										les
+										<strong>prestations de services pleinement exécutées avant la fin du délai de rétractation</strong>
+										et dont l'exécution a commencé après accord préalable exprès du consommateur et renoncement exprès à son droit de rétractation ;
+									</li>
+									<li>
+										les
+										<strong>services fournis à une date ou selon une périodicité déterminée</strong>
+										(tels que les rendez-vous programmés).
+									</li>
+								</ul>
+								<p class="mt-3">
+									En validant le paiement du rendez-vous, le Client reconnaît expressément que :
+								</p>
+								<ol>
+									<li>
+										la prestation est
+										<strong>personnalisée</strong>
+										et réalisée à une
+										<strong>date déterminée</strong>
+										;
+									</li>
+									<li>
+										son exécution
+										<strong>commence avant la fin du délai légal de rétractation</strong>
+										;
+									</li>
+									<li>
+										il
+										<strong>renonce donc expressément à son droit de rétractation</strong>, conformément aux dispositions légales précitées.
+									</li>
+								</ol>
+							</li>
+							<li>
+								<strong>Politique d'annulation</strong>
+								<p>
+									Les rendez-vous étant planifiés à l'avance et mobilisant des ressources humaines et techniques, toute annulation est soumise aux conditions suivantes :
+								</p>
+								<div class="table-responsive">
+									<table class="table table-bordered align-middle text-center">
+										<thead class="table-light">
+											<tr>
+												<th class="align-middle text-center">Moment de l'annulation</th>
+												<th class="align-middle text-center">Remboursement applicable</th>
+												<th class="align-middle text-center">Conditions</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>Plus de
+													<strong>48 heures</strong>
+													avant l'heure du rendez-vous</td>
+												<td>
+													<strong>Remboursement intégral</strong>
+												</td>
+												<td>Annulation possible via l'espace client ou par écrit</td>
+											</tr>
+											<tr>
+												<td>Entre
+													<strong>48h et 24h</strong>
+													avant le rendez-vous</td>
+												<td>
+													<strong>Remboursement à 50 %</strong>
+												</td>
+												<td>Déduction des frais de gestion et de blocage du créneau</td>
+											</tr>
+											<tr>
+												<td>Moins de
+													<strong>24 heures</strong>
+													avant le rendez-vous ou le
+													<strong>jour même</strong>
+												</td>
+												<td>
+													<strong>Aucun remboursement</strong>
+												</td>
+												<td>La prestation est considérée comme due en intégralité</td>
+											</tr>
+											<tr>
+												<td>
+													<strong>Non-présentation</strong>
+													du Client au rendez-vous</td>
+												<td>
+													<strong>Aucun remboursement</strong>
+												</td>
+												<td>Le rendez-vous est considéré comme consommé</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</li>
+							<li>
+								<strong>Report du rendez-vous</strong>
+								<p>
+									Sous réserve de disponibilité, le Client peut
+									<strong>demander un report</strong>
+									de son rendez-vous
+									<strong>jusqu'à 24 heures avant l'heure prévue</strong>, sans frais supplémentaires.<br>
+									Toute demande de report effectuée à moins de 24 heures du rendez-vous est considérée comme une annulation tardive et soumise aux conditions ci-dessus.
+								</p>
+							</li>
+							<li>
+								<strong>Annulation par le Prestataire</strong>
+								<p>
+									En cas d'imprévu exceptionnel empêchant le Prestataire d'assurer le rendez-vous (indisponibilité, panne technique, force majeure),
+																		    celui-ci s'engage à :
+								</p>
+								<ul>
+									<li>proposer au Client
+										<strong>un nouveau créneau</strong>
+										dans les meilleurs délais, ou</li>
+									<li>procéder à un
+										<strong>remboursement intégral</strong>
+										du montant payé, sans autre indemnité.</li>
+								</ul>
+							</li>
+							<li class="mt-3">
+								<strong>Formalisme de la demande de remboursement</strong>
+								<p>
+									La demande de remboursement doit être effectuée par e-mail à
+									<a href="mailto:{{ company.email }}">{{ company.email }}</a>
+									en indiquant les informations nécessaires à l'identification de la commande.</p>
+							</li>
+						</p>
+					</li>
+					<li>
+						<strong>Formulaire type de rétractation</strong>
+						(À compléter et renvoyer uniquement si vous souhaitez vous rétracter du contrat)
+						<br>
+						Lettre à adresser en recommandé avec accusé de réception au vendeur.
+						<br>
+						À ..., le ... (date de la lettre)
+						<br>
+						Madame, Monsieur,
+						<br>
+						Conformément à l'article L. 221-18 du code de la consommation, je vous notifie par la présente ma rétractation du contrat portant sur l'achat du programme de formation suivant :
+						<br>
+						<ul>
+							<li>Commande effectuée le : [date]</li>
+							<li>Nom de l'acheteur : [prénom] [nom]</li>
+							<li>Adresse de l'acheteur : [adresse]</li>
+							<li>Date : [date]</li>
+						</ul>
+						En conséquence, je vous prie de bien vouloir me restituer au plus vite et au plus tard dans les 14 jours suivant la réception de la présente, la somme de ... euros que je vous ai versée lors de ma commande, ceci conformément aux dispositions de l'article L. 221-24 du code de la consommation.
+					</li>
+				</ol>
+			</div>
+			<div class="align-baseline">
+				<br>
+				<strong>6) Résiliation du compte<br></strong>
+				<br>
+			</div>
+			<div class="align-baseline">
+				Nous mettons à votre disposition une fonctionnalité gratuite vous permettant de résilier votre abonnement par voie électronique. L'utilisateur peut supprimer son compte directement depuis son profil, mettant ainsi fin à son abonnement.
+			</div>
+			<div class="align-baseline">
+				<br>
+				<strong>7) Responsabilité<br></strong>
+				<br>
+			</div>
+			<div class="align-baseline">
+				Le vendeur ne saurait être tenu responsable des interruptions ou dysfonctionnements de l'application liés à des problèmes techniques, de maintenance ou à toute cause échappant à son contrôle.
+			</div>
+			<div class="align-baseline">
+				<br>
+				<strong>8) Protection des données personnelles<br></strong>
+				<br>
+			</div>
+			<div class="align-baseline">
+				Les données collectées lors de l'achat sont traitées conformément à notre politique de confidentialité disponible à l'adresse
+				<a href="{{ path('app_privacy')}}">{{ path('app_privacy')}}</a>
+			</div>
+			<div class="align-baseline">
+				<br>
+				<strong>9) Modifications des CGV<br></strong>
+				<br>
+			</div>
+			<div class="align-baseline">
+				Le vendeur se réserve le droit de modifier les présentes CGV à tout moment. Les CGV applicables sont celles en vigueur au moment de l'achat.
+			</div>
+			<div class="align-baseline">
+				<br>
+				<strong>10) Droit applicable et litiges<br></strong>
+				<br>
+			</div>
+			<div class="align-baseline">
+				Les présentes CGV sont soumises au droit français. En cas de litige, les parties s'efforceront de trouver une solution amiable avant toute action judiciaire devant les tribunaux compétents.
+			</div>
+			<div class="align-baseline">
+				<br>
+				<strong>11) Contact<br></strong>
+				<br>
+			</div>
+			<div class="align-baseline">
+				Pour toute question ou réclamation, vous pouvez nous contacter à l'adresse suivante :
+				<a href="mailto:{{ company.email }}">{{ company.email }}</a>.
+			</div>
+		</div>
+	</div>
+</div></section>{% include "shared/_footer.html.twig" %}{% endblock %}

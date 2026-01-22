@@ -1155,6 +1155,10 @@ h6,
     overflow: hidden;
 }
 
+.jyoYKi {
+    min-height: 570px;
+}
+
 .legal-footer {
     display: flex;
     flex-wrap: wrap;
