@@ -40,6 +40,21 @@ h6,
 
 :root {
     --bs-body-font-family: "Roboto", sans-serif;
+        /* Couleurs "app" (mode clair par défaut) */
+    --app-bg: #ffffff;
+    --app-surface: rgb(247, 248, 252); /* ex: .statisfied */
+    --app-text: rgb(13, 22, 27);
+    --app-muted: rgba(13, 22, 27, 0.6);
+    --app-border: rgb(213, 215, 217);
+}
+
+/* Surcharge automatique quand <html data-bs-theme="dark"> */
+html[data-bs-theme="dark"] {
+    --app-bg: #0b0f14;
+    --app-surface: #0f1620;
+    --app-text: rgba(255, 255, 255, 0.92);
+    --app-muted: rgba(255, 255, 255, 0.65);
+    --app-border: rgba(255, 255, 255, 0.14);
 }
 
 /*--------------------------------------------------------------
@@ -112,17 +127,17 @@ h6,
 
 .space-between {
     height: 0px;
-    border-top: 1px solid rgb(213, 215, 217);
+    border-top: 1px solid var(--app-border);
 }
 
 .color-btn-logout {
-    color: rgba(26, 38, 45, 0.6) !important;
+    color: var(--app-muted) !important;
 }
 
 .color-btn-logout:hover,
 .color-btn-logout:focus,
 .color-btn-logout:active {
-    color: rgb(26, 38, 45) !important;
+    color: var(--app-muted) !important;
     background-color: rgb(237, 239, 240) !important;
     text-decoration: none;
 }
@@ -178,7 +193,6 @@ h6,
 .show-program,
 .cpkw17 {
     position: relative;
-    background-color: rgb(255, 255, 255);
 }
 
 .nvtq2t {
@@ -465,19 +479,29 @@ h6,
     }
 }
 
+/* Textes dans les blocs de contenu (tu as plusieurs classes concernées) */
+.title-program,
+.content-program,
+.show-title-program,
+.payment-terms-program,
+.content-news,
+.content-about,
+.text-news,
+.content-legal {
+    color: var(--app-text);
+}
+
 .title-program {
     letter-spacing: 0em;
     line-height: 1.25;
     text-transform: none;
     font-weight: 500 !important;
     margin: 0px;
-    color: rgb(13, 22, 27);
     font-size: 27px;
 }
 
 .content-program {
     margin-top: 12px;
-    color: rgb(13, 22, 27);
     overflow-wrap: anywhere;
     word-break: normal;
     white-space: normal;
@@ -570,13 +594,12 @@ h6,
 
 .statisfied {
     position: relative;
-    background-color: rgb(247, 248, 252);
+    background-color: var(--app-surface);
     overflow: hidden;
 }
 
 .show-title-program {
     margin: 0px;
-    color: rgb(13, 22, 27);
     font-size: 36px;
 }
 
@@ -632,7 +655,6 @@ h6,
     line-height: 1.75;
     text-transform: none;
     margin: 0px;
-    color: rgb(13, 22, 27);
     font-weight: 500 !important;
     font-size: 16px;
 }
@@ -675,7 +697,6 @@ h6,
 
 .statisfied {
     position: relative;
-    background-color: rgb(247, 248, 252);
     overflow: hidden;
 }
 
@@ -1005,7 +1026,6 @@ h6,
     font-weight: 500 !important;
     text-align: center;
     margin-top: 12px;
-    color: rgb(13, 22, 27);
     white-space: pre-wrap;
     overflow-wrap: anywhere;
     white-space: initial;
@@ -1142,7 +1162,6 @@ h6,
     text-transform: none;
     font-weight: 500 !important;
     margin-top: 8px;
-    color: rgb(13, 22, 27);
 }
 
 /*--------------------------------------------------------------
@@ -1151,7 +1170,7 @@ h6,
 .footer,
 .legal {
     position: relative;
-    background-color: rgb(255, 255, 255);
+    background-color: var(--app-bg);
     overflow: hidden;
 }
 
@@ -1184,7 +1203,7 @@ h6,
     letter-spacing: 0em;
     line-height: 1.75;
     text-transform: none;
-    color: rgba(13, 22, 27, 0.4);
+    color: var(--app-muted) !important;
     font-weight: 400 !important;
 }
 
@@ -1196,11 +1215,16 @@ h6,
     display: inline-flex;
     flex-wrap: nowrap;
     align-items: center;
-    background-color: rgb(255, 255, 255);
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 0px 1px;
+    background-color: var(--app-surface);
+        box-shadow: 0 0 0 1px var(--app-border);
+    color: var(--app-text);
     border-radius: 4px;
     padding: 6px 12px;
     margin-top: 48px;
+}
+
+.copy-footer .greater-icon path {
+    stroke: currentColor;
 }
 
 .logo__mark {
@@ -1218,7 +1242,7 @@ h6,
     font-family: sans-serif;
     font-size: 14px;
     letter-spacing: unset;
-    color: rgb(110, 116, 119);
+    color: var(--app-muted);
     font-weight: 400 !important;
 }
 
@@ -1236,7 +1260,7 @@ h6,
 .vertical-bar {
     width: 1px;
     height: 16px;
-    background: rgb(213, 215, 217);
+    background: var(--app-border);
     margin: 0px 12px;
 }
 
@@ -1247,14 +1271,12 @@ h6,
     text-transform: none;
     font-weight: 500 !important;
     margin-top: 12px;
-    color: rgb(13, 22, 27);
     white-space: pre-wrap;
     overflow-wrap: anywhere;
     white-space: initial;
 }
 
 .content-legal a {
-    color: rgb(13, 22, 27);
     text-decoration: underline;
 }
 
