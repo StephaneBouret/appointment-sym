@@ -40,9 +40,10 @@ h6,
 
 :root {
     --bs-body-font-family: "Roboto", sans-serif;
-        /* Couleurs "app" (mode clair par défaut) */
+    /* Couleurs "app" (mode clair par défaut) */
     --app-bg: #ffffff;
-    --app-surface: rgb(247, 248, 252); /* ex: .statisfied */
+    --app-surface: rgb(247, 248, 252);
+    /* ex: .statisfied */
     --app-text: rgb(13, 22, 27);
     --app-muted: rgba(13, 22, 27, 0.6);
     --app-border: rgb(213, 215, 217);
@@ -320,8 +321,7 @@ html[data-bs-theme="dark"] {
     background-color: transparent;
 }
 
-.d2hxcr:hover
- {
+.d2hxcr:hover {
     --tw-border-opacity: 1;
     border-color: rgb(75 85 99 / var(--tw-border-opacity, 1));
     --tw-bg-opacity: 1;
@@ -1014,7 +1014,7 @@ html[data-bs-theme="dark"] {
     font-size: 36px;
     font-weight: 400 !important;
     margin: 0px;
-    color: rgb(13, 22, 27);
+    color: var(--app-text);
 }
 
 .content-news,
@@ -1165,6 +1165,78 @@ html[data-bs-theme="dark"] {
 }
 
 /*--------------------------------------------------------------
+# About page
+--------------------------------------------------------------*/
+.img-about {
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    .img-about {
+        width: 15%;
+    }
+}
+
+.about-img {
+    -o-object-fit: cover;
+    object-fit: cover;
+    -o-object-position: center center;
+    object-position: center center;
+    margin: 0px auto;
+    border-radius: 9999px;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+}
+
+.content-about-me {
+    margin-top: 12px;
+    color: var(--app-text);
+    overflow-wrap: anywhere;
+    word-break: normal;
+    text-align: center;
+    font-size: 18px;
+    letter-spacing: 0em;
+    line-height: 1.75;
+    text-transform: none;
+    font-weight: 400 !important;
+}
+
+.social-about {
+    display: flex;
+    margin-top: 24px;
+    justify-content: center;
+    text-align: center;
+}
+
+.social-about-gap {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.social-about-icon {
+    font-size: 18px;
+    letter-spacing: 0em;
+    line-height: 1.75;
+    text-transform: none;
+    font-weight: 400 !important;
+    text-decoration: none;
+}
+
+.kYhbwl {
+    transform: scale(1.1);
+    transition-duration: 0.15s;
+}
+
+.ijPsOS {
+    fill: rgb(13, 22, 27);
+}
+
+.kYhbwl:hover {
+    transform: scale(1.5);
+}
+
+/*--------------------------------------------------------------
 # footer && legal notice
 --------------------------------------------------------------*/
 .footer,
@@ -1216,7 +1288,7 @@ html[data-bs-theme="dark"] {
     flex-wrap: nowrap;
     align-items: center;
     background-color: var(--app-surface);
-        box-shadow: 0 0 0 1px var(--app-border);
+    box-shadow: 0 0 0 1px var(--app-border);
     color: var(--app-text);
     border-radius: 4px;
     padding: 6px 12px;

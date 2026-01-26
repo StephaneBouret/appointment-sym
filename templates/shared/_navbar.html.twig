@@ -10,21 +10,19 @@
 		<div class="collapse navbar-collapse" id="navbarColor04">
 			<ul class="navbar-nav me-auto">
 				<li class="nav-item">
+					<a class="nav-link" href="{{ path('app_about') }}">👨‍💻 Qui suis-je ?</a>
+				</li>
+				<li class="nav-item">
 					<a href="#" class="nav-link">
 						📣 Contact
 					</a>
 				</li>
 			</ul>
-            <div class="d-flex align-items-center" data-controller="theme">
-                <button type="button"
-                    class="btn btn-link nav-link px-2"
-                    aria-label="Basculer le thème"
-                    title="Basculer le thème"
-                    data-action="theme#toggle"
-                    data-theme-target="button">
-                <i class="bi bi-moon-stars" data-theme-target="icon" aria-hidden="true"></i>
-                </button>
-            </div>
+			<div class="d-flex align-items-center" data-controller="theme">
+				<button type="button" class="btn btn-link nav-link px-2" aria-label="Basculer le thème" title="Basculer le thème" data-action="theme#toggle" data-theme-target="button">
+					<i class="bi bi-moon-stars" data-theme-target="icon" aria-hidden="true"></i>
+				</button>
+			</div>
 		</div>
 	</div>
 </nav>
