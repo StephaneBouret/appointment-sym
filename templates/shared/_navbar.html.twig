@@ -18,6 +18,33 @@
 					</a>
 				</li>
 			</ul>
+			<ul class="navbar-nav q6csu5">
+				{% if app.user %}
+					{% if is_granted('ROLE_ADMIN') %}
+						<li class="nav-item">
+							<a href="{{ path('admin') }}" class="nav-link">Administration</a>
+						</li>
+					{% endif %}
+					<div class="btn-group">
+						<button class="dropdown-toggle btn-dropdown-user" type="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+							<div class="sc-gravatar">
+								<img src="{{ vich_uploader_asset(app.user.avatar, 'imageFile') }}" class="sc-img-gravatar">
+							</div>
+						</button>
+						<ul class="dropdown-menu dropdown-menu-lg-end py-0">
+                            {# Profile sub-menu #}
+							<div class="space-between"></div>
+							<li class="py-2 px-2">
+								<a class="dropdown-item dropdown-user color-btn-logout" href="{{ path('app_logout') }}">Se déconnecter</a>
+							</li>
+						</ul>
+					</div>
+				{% else %}
+					<li class="nav-item me-2">
+						<a href="{{ path('app_login') }}" class="btn btn-primary btn-connect">Se connecter</a>
+					</li>
+				{% endif %}
+			</ul>
 			<div class="d-flex align-items-center" data-controller="theme">
 				<button type="button" class="btn btn-link nav-link px-2" aria-label="Basculer le thème" title="Basculer le thème" data-action="theme#toggle" data-theme-target="button">
 					<i class="bi bi-moon-stars" data-theme-target="icon" aria-hidden="true"></i>

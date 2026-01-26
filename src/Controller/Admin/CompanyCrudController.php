@@ -29,7 +29,7 @@ class CompanyCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            // ->setEntityPermission('ROLE_ADMIN')
+            ->setEntityPermission('ROLE_ADMIN')
             ->setPageTitle('index', 'Entreprise :')
             ->setPageTitle('new', 'Créer une entreprise')
             ->setPageTitle('edit', fn (Company $company) => (string) $company->getName())

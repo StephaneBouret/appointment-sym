@@ -27,7 +27,7 @@ class ContactCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            // ->setEntityPermission('ROLE_ADMIN')
+            ->setEntityPermission('ROLE_ADMIN')
             ->setPageTitle('index', 'Contacts :')
             ->setPageTitle('detail', fn (Contact $contact) => (string) $contact->getEmail())
             ->setEntityLabelInSingular('un contact')

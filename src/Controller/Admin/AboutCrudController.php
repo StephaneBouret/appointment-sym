@@ -24,7 +24,7 @@ class AboutCrudController extends AbstractCrudController
     public function configureCrud(Crud $crud): Crud
     {
         return $crud
-            // ->setEntityPermission('ROLE_ADMIN')
+            ->setEntityPermission('ROLE_ADMIN')
             ->setPageTitle('index', 'Formateurs :')
             ->setPageTitle('new', 'Créer un formateur')
             ->setPageTitle('edit', fn(About $about) => (string) $about->getFullname())
