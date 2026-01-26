@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nous contacter{% endblock %}
+
+{% block body %}
+	<div class="bg-container-contact100">
+		<div class="container-contact100">
+			<div class="wrap-contact100">
+				<div class="contact100-form-title">
+					<span>Me contacter</span>
+				</div>
+				{{ form_start(form, {'attr': {'class': 'contact100-form'}}) }}
+				<div class="wrap-input100">
+					{{ form_errors(form.firstname) }}
+					{{ form_widget(form.firstname) }}
+					<span class="focus-input100"></span>
+				</div>
+				<div class="wrap-input100">
+					{{ form_errors(form.lastname) }}
+					{{ form_widget(form.lastname) }}
+					<span class="focus-input100"></span>
+				</div>
+				<div class="wrap-input100">
+					{{ form_errors(form.email) }}
+					{{ form_widget(form.email) }}
+					<span class="focus-input100"></span>
+				</div>
+				<div class="wrap-input100">
+					{{ form_errors(form.phone) }}
+					{{ form_widget(form.phone) }}
+					<span class="focus-input100"></span>
+				</div>
+				<div class="wrap-input100">
+					{{ form_errors(form.content) }}
+					{{ form_widget(form.content) }}
+					<span class="focus-input100"></span>
+				</div>
+				<div class="d-flex justify-content-center flex-wrap w-100">
+					<button class="btn btn-md btn-dark" type="submit">
+						<span>Nous contacter</span>
+					</button>
+				</div>
+				{{ form_end(form) }}
+			</div>
+		</div>
+	</div>
+{% endblock %}

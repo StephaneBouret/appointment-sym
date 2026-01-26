@@ -1,0 +1,8 @@
+<h1>Demande de contact</h1>
+<p>Bonjour,</p>
+<p>Vous venez de recevoir une demande de contact.</p>
+<p>Prénom et nom du demandeur : {{ contact.firstname }} {{ contact.lastname }}</p>
+<p>Email du demandeur : {{ contact.email }}</p>
+<p>Numéro du demandeur : {{ contact.phone|phone_number_format('NATIONAL') }}</p>
+<p>Contenu de la demande : {{ contact.content }}</p>
+<p><a href="{{ absolute_url(path('admin')) }}">Back office</a></p>
