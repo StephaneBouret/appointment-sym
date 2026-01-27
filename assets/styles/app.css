@@ -138,7 +138,7 @@ html[data-bs-theme="dark"] {
 .color-btn-logout:hover,
 .color-btn-logout:focus,
 .color-btn-logout:active {
-    color: var(--app-muted) !important;
+    /* color: var(--app-muted) !important; */
     background-color: rgb(237, 239, 240) !important;
     text-decoration: none;
 }
@@ -1722,6 +1722,34 @@ form:invalid button.btn-dark[type=submit],
 
 .text-muted a {
     color: #53595c !important;
+}
+
+/*--------------------------------------------------------------
+# Entropy indicator colors
+--------------------------------------------------------------*/
+.text-very-weak {
+    color: #842029;
+    font-weight: 600;
+}
+
+.text-weak {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+.text-medium {
+    color: #fd7e14;
+    font-weight: 600;
+}
+
+.text-strong {
+    color: #20c997;
+    font-weight: 600;
+}
+
+.text-very-strong {
+    color: #198754;
+    font-weight: 600;
 }
 
 /* =========================
