@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier mon profil
+{% endblock %}
+
+{% block body %}
+	<div class="container pt-5">
+		<section class="account">
+			<h1>Votre profil</h1>
+			<div class="row mb-5">
+				<p>Bienvenue
+					<b>{{ user.firstname }}</b>
+					dans votre compte.<br/>
+					C'est dans cet espace que vous allez pouvoir gérer toutes vos informations personnelles.
+				</p>
+				<div class="col-lg-12">
+					<ul class="nav nav-tabs">
+						<li class="nav-item">
+							<a class="nav-link active" aria-current="page" href="{{ path('app_profile') }}">Compte</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" href="{{ path('app_edit_password') }}">Connexion</a>
+						</li>
+					</ul>
+				</div>
+				<div class="col-lg-12 mt-4">
+					<div class="tab-content">
+						<div class="row">
+							<div class="details d-flex flex-wrap">
+								<div class="col-12 px-0 px-md-2">
+									<h2 class="text-h6 mb-3">Informations personnelles</h2>
+									<p>Mettez à jour vos informations personnelles et votre avatar.</p>
+								</div>
+								<div class="col-12 col-md-6 mb-md-0 mb-3 px-0 px-md-2">
+									<div class="avatar">
+										<div class="card">
+											<div class="card-header">
+												<div class="d-flex justify-content-between">
+													<div class="card-title">Options</div>
+												</div>
+											</div>
+											<div class="card-body">
+												{{ form_errors(formAvatar) }}
+												{{ form_start(formAvatar, {'attr': {'class': 'w-100'}}) }}
+												{{ form_row(formAvatar.imageFile, {'row_attr': {'class': 'mb-3'}}) }}
+												<button type="submit" class="btn btn-warning">Modifier</button>
+												{{ form_end(formAvatar) }}
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-12 col-md-6 px-0 px-md-2">
+									{{ form_errors(form) }}
+									{{ form_start(form, {'attr': {'class': 'w-100'}}) }}
+									{{ form_row(form.firstname, {'row_attr': {'class': 'mb-3'}}) }}
+									{{ form_row(form.lastname, {'row_attr': {'class': 'mb-3'}}) }}
+									{{ form_row(form.email, {'row_attr': {'class': 'mb-3'}}) }}
+									{{ form_row(form.adress, {'row_attr': {'class': 'mb-3'}}) }}
+									<div class="row">
+										<div class="col-md-6">
+											{{ form_row(form.postalCode, {'row_attr': {'class': 'mb-3'}}) }}
+										</div>
+										<div class="col-md-6">
+											{{ form_row(form.city, {'row_attr': {'class': 'mb-3'}}) }}
+										</div>
+									</div>
+									{{ form_row(form.phone, {'row_attr': {'class': 'mb-3'}}) }}
+									<div class="row">
+										<div class="col-md-6">
+											<button type="submit" class="btn btn-warning">Modifier</button>
+										</div>
+									</div>
+									{{ form_end(form) }}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 px-0 px-md-2 mb-5">
+				<div class="text-muted mt-2">
+					<a class="text-link-grey text-sm" data-bs-toggle="modal" data-bs-target="#delete_account" href="#">Supprimer mon compte</a>
+				</div>
+			</div>
+			<!-- Modal -->
+			<div class="modal fade" id="delete_account" tabindex="-1" aria-labelledby="delete_accountLabel" aria-hidden="true" data-controller="delete-account">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header modal-delete-header">
+							<div class="modal-title modal-delete-title" id="delete_accountLabel">
+								Supprimer le compte
+							</div>
+							<button type="button" class="btn-close btn-transparent-grey" data-bs-dismiss="modal" aria-label="Close"></button>
+						</div>
+						<form method="post" action="{{ path('app_user_delete', {'id': app.user.id}) }}">
+							<div class="modal-body modal-body-delete pt-3">
+								<div class="mb-8">Si vous supprimez votre compte, vous ne pourrez plus accéder au contenu ni le récupérer plus tard.</div>
+								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ app.user.id) }}">
+								<div class="custom-control custom-checkbox">
+									<input class="custom-control-input" type="checkbox" value="1" name="confirm" data-delete-account-target="confirm" data-action="change->delete-account#toggle" id="confirm">
+									<label class="custom-control-label" for="confirm">J'ai lu et compris les répercussions.</label>
+								</div>
+							</div>
+							<div class="modal-footer modal-footer-delete">
+								<button type="button" class="btn btn-md btn-secondary" data-bs-dismiss="modal">
+									<span>Conserver le compte</span>
+								</button>
+								<button type="submit" class="btn btn-md btn-danger" data-delete-account-target="button" disabled>
+									<span>Supprimer le compte</span>
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+	{% include "shared/_footer_second.html.twig" %}
+{% endblock %}

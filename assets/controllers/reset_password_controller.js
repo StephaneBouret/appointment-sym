@@ -12,7 +12,13 @@ export default class extends Controller {
     this.onInput = this.onInput.bind(this);
 
     // On récupère l'input password même si UX TogglePassword l'a recréé
-    this.passwordEl = this.element.querySelector('input[type="password"]');
+    // On veut dans credentials, celui du nouveau mot de pass (proche de l'entropy)
+    if (this.hasEntropyTarget) {
+        const container = this.entropyTarget.closest('.w-100') ?? this.element;
+        this.passwordEl = container.querySelector('input[type="password"]');
+    } else {
+        this.passwordEl = this.element.querySelector('input[type="password"]');
+    }
 
     if (!this.passwordEl) {
       // On évite de planter la page

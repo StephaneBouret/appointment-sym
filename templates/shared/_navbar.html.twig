@@ -31,8 +31,12 @@
 								<img src="{{ vich_uploader_asset(app.user.avatar, 'imageFile') }}" class="sc-img-gravatar">
 							</div>
 						</button>
-						<ul class="dropdown-menu dropdown-menu-lg-end py-0">
-                            {# Profile sub-menu #}
+						<ul
+							class="dropdown-menu dropdown-menu-lg-end py-0">
+							{# Profile sub-menu #}
+							<li class="py-2 px-2">
+								<a class="dropdown-item dropdown-user color-btn-logout" href="{{path('app_profile')}}">Profil</a>
+							</li>
 							<div class="space-between"></div>
 							<li class="py-2 px-2">
 								<a class="dropdown-item dropdown-user color-btn-logout" href="{{ path('app_logout') }}">Se déconnecter</a>
