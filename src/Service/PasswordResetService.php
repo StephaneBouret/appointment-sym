@@ -17,8 +17,7 @@ class PasswordResetService
         protected EntityManagerInterface $em,
         protected UrlGeneratorInterface $urlGenerator,
         protected SendMailService $email
-    ) {
-    }
+    ) {}
 
     public function processPasswordReset(User $user): void
     {
@@ -63,8 +62,9 @@ class PasswordResetService
     public function updatePassword(User $user, string $plainPassword, UserPasswordHasherInterface $hasher): void
     {
         $hashedPassword = $hasher->hashPassword($user, $plainPassword);
-        $user->setPassword($hashedPassword)
-            ->setResetToken(null)
+        $user->setPassword($hashedPassword);
+        $user->invalidateTrustedDevices();
+        $user->setResetToken(null)
             ->setCreatedTokenAt(null);
 
         $this->em->flush();
