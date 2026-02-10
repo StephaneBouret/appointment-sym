@@ -4,6 +4,7 @@ import ResetPassword from './controllers/reset_password_controller.js';
 import DeleteAccountController from './controllers/delete_account_controller.js';
 import AddressAutocompleteController from './controllers/address_autocomplete_controller.js';
 import RegisterController from './controllers/register_controller.js';
+import AppointmentTypeController from './controllers/appointment_type_controller.js';
 
 const app = startStimulusApp();
 // register any custom, 3rd party controllers here
@@ -13,3 +14,4 @@ app.register('reset-password', ResetPassword);
 app.register('delete-account', DeleteAccountController);
 app.register('address-autocomplete', AddressAutocompleteController);
 app.register('register', RegisterController);
+app.register('appointment-type', AppointmentTypeController);

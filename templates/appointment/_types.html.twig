@@ -1,0 +1,31 @@
+<div class="container my-5">
+	<div class="row">
+		{% for type in types %}
+			<div class="col-md-4 mb-4 h-100">
+				<div class="card shadow-sm fgfump h-100" data-action="click->appointment-type#showDetail" data-url="{{ path('app_appointment_type_detail', {id: type.id}) }}">
+					<div class="f6416l">
+						<img src="{{ vich_uploader_asset(type) }}" alt="{{ type.name }}" class="q19ai9">
+					</div>
+					<div class="card-body d-flex flex-column">
+						<h2 class="card-title hfos1d">
+							<span class="hih6mu">
+								{{ type.name }}
+							</span>
+						</h2>
+						<p class="card-text">{{ type.introduction|u.truncate(80, '...') }}</p>
+						<ul class="list-unstyled mb-2">
+							<li>
+								<strong>Durée :</strong>
+								{{ type.duration }}
+								min</li>
+							<li>
+								<strong>Tarif :</strong>
+								{{ type.price|amount }}</li>
+						</ul>
+						<span class="btn btn-outline-primary g5av1p">Voir le détail</span>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+</div>

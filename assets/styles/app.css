@@ -2231,6 +2231,255 @@ form:invalid button.btn-dark[type=submit],
     background-image: url(../img/check.svg);
 }
 
+/*--------------------------------------------------------------
+# Appointment List page
+--------------------------------------------------------------*/
+/* La carte prend toute la hauteur de la colonne */
+.fgfump.card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Le body pousse le CTA en bas */
+.fgfump .card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.hfos1d {
+    color: #054652 !important;
+    margin: 0 24px .5rem 0;
+    line-height: 1.25;
+    /* line-height cohérent et stable */
+    display: block;
+}
+
+.hih6mu {
+    font-family: 'AirbnbCereal', 'Helvetica Neue', sans-serif;
+    font-weight: 500;
+    font-size: 1.125rem;
+    /* ≈ 18px : stable à tous les breakpoints */
+    line-height: 1.25;
+    /* ≈ 22.5px */
+    /* coupe sur 2 lignes */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* passe à 3 si tu veux plus d'air */
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    /* évite les surprises */
+    white-space: normal;
+    /* au lieu de pre-line */
+    min-height: calc(2 * 1.25em);
+    /* garantit la même hauteur partout */
+}
+
+.f6416l {
+    background: linear-gradient(to bottom, #5BAEBE, #9FD0BD);
+    /* vert clair vers vert foncé */
+    padding: 20px;
+    text-align: center;
+}
+
+.q19ai9 {
+    display: block;
+    -o-object-fit: contain;
+    object-fit: contain;
+    -o-object-position: center center;
+    object-position: center center;
+    margin: 0 auto;
+    aspect-ratio: unset;
+    width: 60%;
+    height: auto;
+    min-height: 225px;
+}
+
+.g5av1p {
+    border-color: #5BAEBE !important;
+    color: #5BAEBE !important;
+    margin-top: auto;
+    align-self: flex-start;
+}
+
+.g5av1p:hover {
+    color: #FFFFFF !important;
+    background-color: #5BAEBE !important;
+    border-color: #5BAEBE !important;
+}
+
+.skhvxm {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 56px);
+    justify-content: space-between;
+}
+
+@media (min-width: 800px) {
+    .skhvxm {
+        justify-content: flex-start;
+        min-height: 839px;
+        height: auto;
+    }
+}
+
+.sodj8n {
+    -webkit-margin-before: 0;
+    margin-block-start: 0;
+    -webkit-margin-after: 0;
+    margin-block-end: 0;
+    -webkit-margin-start: auto;
+    margin-inline-start: auto;
+    -webkit-margin-end: auto;
+    margin-inline-end: auto;
+    max-width: 662px;
+}
+
+.eblipi {
+    color: #054652;
+    display: flex;
+    flex-direction: row;
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: auto;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    -webkit-padding-before: 12px;
+    padding-block-start: 12px;
+    -webkit-padding-after: 16px;
+    padding-block-end: 16px;
+    -webkit-padding-start: 24px;
+    padding-inline-start: 24px;
+    -webkit-padding-end: 24px;
+    padding-inline-end: 24px;
+    -webkit-margin-end: 0;
+    margin-inline-end: 0;
+    -webkit-margin-start: 0;
+    margin-inline-start: 0;
+    -webkit-margin-after: 0;
+    margin-block-end: 0;
+    -webkit-margin-before: 0;
+    margin-block-start: 0;
+    width: 100%;
+}
+
+@media (min-width: 800px) {
+    .eblipi {
+        text-align: center;
+    }
+}
+
+.zyartt {
+    font: 500 30px / 32px 'AirbnbCereal', 'Helvetica Neue', sans-serif;
+    white-space: pre-line;
+    width: 662px;
+}
+
+@media (min-width: 800px) {
+    .zyartt {
+        font: 500 40px / 42px 'AirbnbCereal', 'Helvetica Neue', sans-serif;
+    }
+}
+
+.f3a07x {
+    -webkit-padding-before: 8px;
+    padding-block-start: 8px;
+    -webkit-padding-after: 8px;
+    padding-block-end: 8px;
+    -webkit-padding-start: 0;
+    padding-inline-start: 0;
+    -webkit-padding-end: 0;
+    padding-inline-end: 0;
+    width: 100%;
+}
+
+.ueb12c {
+    border: none;
+    border-top: 1px solid #dedede;
+    margin: 0;
+    height: 8px;
+    background-color: #ededed;
+    border-top-width: 0;
+    opacity: 1;
+}
+
+@media screen and (min-width: 800px) {
+    .ueb12c {
+        border-radius: 16px;
+    }
+}
+
+@media (min-width: 800px) {
+    .dhz2jj {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 662px;
+    }
+}
+
+.qzvfbm {
+    color: #054652;
+    display: flex;
+    flex-direction: row;
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: auto;
+    flex-wrap: nowrap;
+    -webkit-padding-before: 16px;
+    padding-block-start: 16px;
+    -webkit-padding-after: 8px;
+    padding-block-end: 8px;
+    -webkit-padding-start: 24px;
+    padding-inline-start: 24px;
+    -webkit-padding-end: 24px;
+    padding-inline-end: 24px;
+    -webkit-margin-before: 0;
+    margin-block-start: 0;
+    -webkit-margin-after: 0;
+    margin-block-end: 0;
+    -webkit-margin-start: 0;
+    margin-inline-start: 0;
+    -webkit-margin-end: 0;
+    margin-inline-end: 0;
+}
+
+.jus8s4 {
+    font: 700 22px / 24px 'AirbnbCereal', 'Helvetica Neue', sans-serif;
+    white-space: pre-line;
+}
+
+.n8b3tj,
+.orwcqk {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 24px;
+    padding-right: 24px;
+    border: 0px;
+    background: none;
+    margin-bottom: 0;
+}
+
+.svik0o {
+    z-index: 2;
+    min-height: 96px;
+    padding: 24px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.tj8cbo {
+    color: #FFFFFF !important;
+    background-color: #5BAEBE !important;
+    border-color: #5BAEBE !important;
+}
+
+.btod86 {
+    color: #5BAEBE !important;
+}
+
 /* =========================
    Login — Dark mode ready
    ========================= */
@@ -2298,4 +2547,10 @@ html[data-bs-theme="dark"] .toggle-password-button {
 
 html[data-bs-theme="dark"] .avatar .card {
     background-color: var(--app-surface);
+}
+
+html[data-bs-theme="dark"] .hfos1d,
+html[data-bs-theme="dark"] .eblipi,
+html[data-bs-theme="dark"] .qzvfbm {
+    color: #5BAEBE !important;
 }

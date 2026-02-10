@@ -1,0 +1,61 @@
+<div class="skhvxm">
+	<section class="sodj8n">
+		<h1 class="eblipi">
+			<span class="zyartt">{{ type.name }}</span>
+		</h1>
+		<div aria-hidden="true" class="f3a07x">
+			<hr class="ueb12c">
+		</div>
+	</section>
+	<div>
+		<div class="dhz2jj">
+			<h2 class="qzvfbm">
+				<span class="jus8s4">Description et prérequis :</span>
+			</h2>
+			<p class="n8b3tj">{{ type.introduction }}</p>
+		</div>
+	</div>
+	<div>
+		<div class="dhz2jj">
+			<div aria-hidden="true" class="f3a07x">
+				<hr class="ueb12c">
+			</div>
+			<div class="orwcqk">
+				{{ type.description | raw }}
+			</div>
+		</div>
+	</div>
+	<div>
+		<div class="dhz2jj">
+			<div aria-hidden="true" class="f3a07x">
+				<hr class="ueb12c">
+			</div>
+			<div class="orwcqk">
+				<ul class="list-unstyled mb-0">
+					<li>
+						<strong>Durée :</strong>
+						{{ type.duration }}
+						min</li>
+					<li>
+						<strong>Tarif :</strong>
+						{{ type.price|amount }}</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div>
+		<div class="dhz2jj">
+			<div aria-hidden="true" class="f3a07x">
+				<hr class="ueb12c">
+			</div>
+		</div>
+	</div>
+	<div class="svik0o">
+		<button type="button" class="btn btn-link btod86" data-action="click->appointment-type#reloadRecap">
+			← Retour
+		</button>
+		{# <button type="button" class="btn btn-primary tj8cbo" data-action="click->appointment-type#showForm" data-url="{{ path('app_appointment_ajax_form', {id: type.id}) }}">
+			Réserver
+		</button> #}
+	</div>
+</div>
