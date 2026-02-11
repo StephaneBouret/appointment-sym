@@ -6,7 +6,11 @@ use App\Entity\User;
 use App\Entity\About;
 use App\Entity\Company;
 use App\Entity\Contact;
+use App\Entity\Appointment;
+use App\Entity\Unavailability;
+use App\Entity\UnavailableDay;
 use App\Entity\AppointmentType;
+use App\Entity\ScheduleSetting;
 use App\Controller\Admin\UserCrudController;
 use Symfony\Component\HttpFoundation\Response;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -43,7 +47,11 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-user', User::class);
         yield MenuItem::linkToCrud('Contacts', 'fa-regular fa-envelope', Contact::class);
         yield MenuItem::subMenu('Gestion RDVs', 'fa-solid fa-calendar-check')->setSubItems([
+            MenuItem::linkToCrud('Rendez-vous', 'fa fa-calendar-check', Appointment::class),
             MenuItem::linkToCrud('Types de rendez-vous', 'fas fa-calendar', AppointmentType::class),
+            MenuItem::linkToCrud('Paramètres de planning', 'fa fa-clock', ScheduleSetting::class),
+            MenuItem::linkToCrud('Indisponibilités horaires', 'fa fa-ban', Unavailability::class),
+            MenuItem::linkToCrud('Jours d\'indisponibilité', 'fa fa-calendar-xmark', UnavailableDay::class),
         ]);
         yield MenuItem::linkToUrl('Retour au site', 'fas fa-home', $this->generateUrl('app_home'));
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
