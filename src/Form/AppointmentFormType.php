@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Appointment;
 use App\Entity\EvaluatedPerson;
+use App\Form\EvaluatedPersonType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Event\PreSetDataEvent;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;

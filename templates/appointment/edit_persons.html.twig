@@ -1,0 +1,75 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	Modifier les informations - RDV
+	{{ appointment.number ?? appointment.id }}
+{% endblock %}
+
+{% block body %}
+	<div class="container mb-5">
+		<h5 class="ahrnxrrwh">
+			<span class="rr9wdqka1">{{ appointment.type.name }}</span>
+			<span class="mt-1">
+				<strong>Durée :</strong>
+				{{ appointment.type.duration }}
+				min
+			</span>
+		</h5>
+		{{ form_start(form, {
+            'attr': {
+                'data-controller': 'ajax-form names-formatter'
+            }
+        }) }}
+		{{ form_errors(form) }}
+		<h5 class="mt-4 mb-3">Personne évaluée</h5>
+		<div class="evaluated-person-block">
+			<button class="btn-reset evaluated-person-header collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMainPerson" aria-expanded="false" aria-controls="collapseMainPerson">
+				<h6 class="evaluated-person-title">
+					<i class="bi bi-person evaluated-person-icon"></i>
+					Personne principale
+				</h6>
+				<i class="bi bi-chevron-down chevron"></i>
+			</button>
+			<div id="collapseMainPerson" class="collapse collapse-md-open">
+				{{ form_row(form.evaluatedPerson) }}
+			</div>
+		</div>
+		{% if form.partner is defined and appointment.type.isCouple() %}
+			<div class="evaluated-person-block">
+				<button class="btn-reset evaluated-person-header collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePartner" aria-expanded="false" aria-controls="collapsePartner">
+					<h6 class="evaluated-person-title">
+						<i class="bi bi-heart evaluated-person-icon"></i>
+						Partenaire
+					</h6>
+					<i class="bi bi-chevron-down chevron"></i>
+				</button>
+				<div id="collapsePartner" class="collapse collapse-md-open">
+					{{ form_row(form.partner) }}
+				</div>
+			</div>
+		{% endif %}
+		<div class="x6r3cy81b mt-4">
+			<div class="qqzl966qj">
+				<span class="oz6fza55s">
+					<span class="in6imj8sc">
+						<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="hrs7k1fab">
+							<g color="accentTxtInverted">
+								<g color="currentColor">
+									<path fill="currentColor" d="M8.5 12a1 1 0 1 1-2 0 1 1 0 0 1 2 0M13 12a1 1 0 1 1-2 0 1 1 0 0 1 2 0M8.5 16a1 1 0 1 1-2 0 1 1 0 0 1 2 0"></path>
+									<path fill="currentColor" fill-rule="evenodd" d="M21 11a.75.75 0 0 1-1.5 0V9.25h-15V17A2.5 2.5 0 0 0 7 19.5h4a.75.75 0 0 1 0 1.5H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4zm-4-6.5H7A2.5 2.5 0 0 0 4.5 7v.75h15V7A2.5 2.5 0 0 0 17 4.5" clip-rule="evenodd"></path>
+									<path fill="currentColor" fill-rule="evenodd" d="M16.5 19.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6m0 1.5a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9" clip-rule="evenodd"></path>
+									<path fill="currentColor" fill-rule="evenodd" d="M16.5 14.25a.75.75 0 0 1 .75.75v1.19l.28.28a.75.75 0 1 1-1.06 1.06l-.5-.5a.75.75 0 0 1-.22-.53V15a.75.75 0 0 1 .75-.75" clip-rule="evenodd"></path>
+								</g>
+							</g>
+						</svg>
+					</span>
+					<span class="pmdrn4qjx">
+						<button class="cw6dqx7z9" type="submit">Enregistrer</button>
+					</span>
+				</span>
+			</div>
+			<a href="{{ path('app_appointment_list') }}" class="okw0dv">Annuler</a>
+		</div>
+		{{ form_end(form) }}
+	</div>
+{% endblock %}

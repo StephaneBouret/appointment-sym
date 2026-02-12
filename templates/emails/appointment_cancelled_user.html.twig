@@ -1,0 +1,15 @@
+<h2>Annulation de votre rendez-vous</h2>
+<p>Bonjour {{ user.firstname }} {{ user.lastname }}</p>
+<p>Votre rendez-vous "{{ type.name|default('Rendez-vous') }}", prévu le <strong>{{ whenParis }}</strong> a bien été annulé.</p>
+
+<p>{{ policyMessage }}</p>
+
+{% if refundCents is not null %}
+    <p>Montant remboursé : <strong>{{ refundCents|amount }}</strong> ({{ refundPercent }}%).</p>
+{% endif %}
+
+<p>Vous pouvez consulter l'historique de vos rendez-vous ici :
+    <a href="{{ listUrl }}">Mes rendez-vous</a>
+</p>
+
+<p>Bien cordialement, <br>Potentiel Consulting</p>

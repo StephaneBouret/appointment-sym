@@ -1,0 +1,8 @@
+<p>Bonjour {{ user.fullName ?? user.email }},</p>
+<p>Votre rendez-vous <strong>{{ appointment.type.name }}</strong> est confirmé :</p>
+<ul>
+<li>Date : {{ appointment.startAt|date('d/m/Y') }}</li>
+<li>Heure : {{ appointment.startAt|date('H:i') }}-{{ appointment.endAt|date('H:i') }}</li>
+</ul>
+<p>À bientôt,</p>
+<p>L'Univers des Nombres</p>
