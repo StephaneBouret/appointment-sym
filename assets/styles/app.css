@@ -2256,7 +2256,7 @@ form:invalid button.btn-dark[type=submit],
 }
 
 .hih6mu {
-    font-family: 'AirbnbCereal', 'Helvetica Neue', sans-serif;
+    font-family: 'Roboto', 'Helvetica Neue', sans-serif;
     font-weight: 500;
     font-size: 1.125rem;
     /* ≈ 18px : stable à tous les breakpoints */
@@ -2371,14 +2371,14 @@ form:invalid button.btn-dark[type=submit],
 }
 
 .zyartt {
-    font: 500 30px / 32px 'AirbnbCereal', 'Helvetica Neue', sans-serif;
+    font: 500 30px / 32px 'Roboto', 'Helvetica Neue', sans-serif;
     white-space: pre-line;
     width: 662px;
 }
 
 @media (min-width: 800px) {
     .zyartt {
-        font: 500 40px / 42px 'AirbnbCereal', 'Helvetica Neue', sans-serif;
+        font: 500 40px / 42px 'Roboto', 'Helvetica Neue', sans-serif;
     }
 }
 
@@ -2445,7 +2445,7 @@ form:invalid button.btn-dark[type=submit],
 }
 
 .jus8s4 {
-    font: 700 22px / 24px 'AirbnbCereal', 'Helvetica Neue', sans-serif;
+    font: 700 22px / 24px 'Roboto', 'Helvetica Neue', sans-serif;
     white-space: pre-line;
 }
 
@@ -2478,6 +2478,750 @@ form:invalid button.btn-dark[type=submit],
 
 .btod86 {
     color: #5BAEBE !important;
+}
+
+/*--------------------------------------------------------------
+# FullCalendar
+--------------------------------------------------------------*/
+/* 0) Sécurise la toolbar */
+.fc .fc-header-toolbar {
+    display: flex !important;
+}
+
+/* 1) Boutons : utilise les styles Bootstrap existants, mais affine l'espace */
+.fc .fc-toolbar-chunk .btn {
+    padding: .375rem .6rem;
+    line-height: 1.2;
+}
+
+/* 2) Titre plus compact */
+.fc .fc-toolbar-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* 3) Aujourd'hui en douce */
+.fc .fc-day-today {
+    background-color: rgba(13, 110, 253, .06);
+}
+
+/* 4) Now indicator (ligne rouge), un peu plus visible */
+.fc .fc-timegrid-now-indicator-line {
+    border-color: #dc3545;
+    border-width: 2px;
+}
+
+.fc .fc-timegrid-now-indicator-arrow {
+    border-top-color: #dc3545;
+}
+
+/* 5) Slots libres (tes events "disponibles") : vert doux */
+.fc .fc-event {
+    border-radius: .35rem;
+}
+
+.fc .fc-daygrid-event,
+.fc .fc-timegrid-event {
+    transition: background-color .15s ease, color .15s ease, border-color .15s ease;
+}
+
+.fc .fc-timegrid-event:hover {
+    -webkit-filter: brightness(0.98);
+    filter: brightness(0.98);
+}
+
+/* Couleurs cohérentes avec ton JS :
+   - par défaut vert doux
+   - sélection : bleu "primary"
+   Les couleurs de base sont posées via JS, on ne les force pas ici.
+*/
+
+/* 6) Créneaux passés (déjà géré côté JS), éventuellement un peu plus "gris" au texte */
+.fc .fc-event[style*="background-color: #e9ecef"] {
+    color: #6c757d !important;
+}
+
+/* 7) Bordures colonnes de la grille : plus subtiles */
+.fc .fc-scrollgrid,
+.fc .fc-timegrid-col,
+.fc .fc-timegrid-slot {
+    border-color: #e9ecef;
+}
+
+/* 8) En "month view" : rounds et hover doux */
+.fc .fc-daygrid-day-frame:hover {
+    background-color: rgba(0, 0, 0, .02);
+}
+
+/* 9) Si tu veux rafraîchir l'apparence des boutons actifs */
+.fc .btn-primary.active,
+.fc .btn-primary:active {
+    -webkit-filter: brightness(0.95);
+    filter: brightness(0.95);
+}
+
+.fc-selected-notice .fc-selected-text {
+    font-weight: 600;
+}
+
+/* 10) Mobile: toolbar en colonne, boutons compacts */
+@media (max-width: 576px) {
+
+    /* cache le conteneur du calendrier */
+    .fc .fc-view-harness {
+        display: none !important;
+    }
+
+    .fc .fc-header-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: .5rem;
+    }
+
+    .fc .fc-toolbar-chunk {
+        display: flex;
+        justify-content: space-between;
+        gap: .5rem;
+    }
+
+    .fc .fc-toolbar-title {
+        font-size: 1rem;
+        line-height: 1.2;
+    }
+
+    /* Boutons plus petits */
+    .fc .fc-toolbar-chunk .btn {
+        padding: .25rem .5rem;
+        font-size: .9rem;
+        line-height: 1.2;
+    }
+
+    /* On cache les vues moins utiles pour mobile (on garde Semaine) */
+    .fc .fc-dayGridMonth-button,
+    .fc .fc-timeGridDay-button {
+        display: none;
+    }
+
+    /* Grille plus dense et lisible */
+    .fc .fc-col-header-cell-cushion,
+    .fc .fc-timegrid-axis-cushion {
+        font-size: .85rem;
+        padding: .25rem .25rem;
+    }
+
+    .fc .fc-timegrid-slot-label {
+        font-size: .8rem;
+        padding-right: .25rem;
+    }
+
+    .fc .fc-timegrid-slot {
+        height: 2.2rem;
+        /* réduit la hauteur des lignes */
+    }
+
+    /* Un léger fond pour le week-end (optionnel) */
+    .fc .fc-day-sat .fc-timegrid-col-frame,
+    .fc .fc-day-sun .fc-timegrid-col-frame {
+        background-color: rgba(108, 117, 125, .03);
+    }
+
+    /* Autorise le scroll horizontal si nécessaire (petits écrans) */
+    #calendar,
+    .fc {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* on garde la bannière "aucun créneau" et la liste */
+    .fc-empty-notice {
+        display: block !important;
+    }
+
+    .fc-slot-list {
+        display: block !important;
+    }
+
+    /* Petits ajustements d'espacement quand la grille est cachée */
+    .fc-empty-notice {
+        margin-top: .5rem;
+    }
+
+    .fc-slot-list {
+        margin-top: .5rem;
+    }
+}
+
+/* 11) Desktop: un peu de confort */
+@media (min-width: 577px) {
+    .fc .fc-toolbar-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    .fc .fc-timegrid-now-indicator-line {
+        border-color: #dc3545;
+        border-width: 2px;
+    }
+
+    .fc .fc-timegrid-now-indicator-arrow {
+        border-top-color: #dc3545;
+    }
+
+    .fc .fc-scrollgrid,
+    .fc .fc-timegrid-col,
+    .fc .fc-timegrid-slot {
+        border-color: #e9ecef;
+    }
+
+    .fc .fc-daygrid-day-frame:hover {
+        background-color: rgba(0, 0, 0, .02);
+    }
+}
+
+.ahrnxrrwh {
+    color: #054652;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: auto;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    -webkit-padding-before: 12px;
+    padding-block-start: 12px;
+    -webkit-padding-after: 16px;
+    padding-block-end: 16px;
+    -webkit-padding-start: 24px;
+    padding-inline-start: 24px;
+    -webkit-padding-end: 24px;
+    padding-inline-end: 24px;
+    -webkit-margin-before: 0;
+    margin-block-start: 0;
+    -webkit-margin-after: 0;
+    margin-block-end: 0;
+    -webkit-margin-start: 0;
+    margin-inline-start: 0;
+    -webkit-margin-end: 0;
+    margin-inline-end: 0;
+    width: 100%;
+}
+
+@media (min-width: 800px) {
+    .ahrnxrrwh {
+        text-align: center;
+        justify-content: center;
+        -webkit-padding-before: 16px;
+        padding-block-start: 16px;
+    }
+}
+
+.rr9wdqka1 {
+    font: 500 30px / 32px 'Roboto', 'Helvetica Neue', sans-serif;
+    white-space: pre-line;
+}
+
+@media (min-width: 800px) {
+    .rr9wdqka1 {
+        font: 500 40px / 42px 'Roboto', 'Helvetica Neue', sans-serif;
+    }
+}
+
+.x6r3cy81b {
+    display: flex;
+    flex-direction: column;
+}
+
+@media (min-width: 800px) {
+    .x6r3cy81b {
+        flex-direction: row;
+    }
+}
+
+.qqzl966qj {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    max-width: 100%;
+    padding: 0 24px;
+    min-height: 48px;
+    font: 500 16px / 20px 'Roboto', 'Helvetica Neue', sans-serif;
+    border-radius: 9999px;
+    border: 0 solid #0000;
+    background: #5BAEBE;
+    color: #fff;
+}
+
+.qqzl966qj:hover {
+    background: #4997A7;
+    text-decoration: none;
+    color: #fff;
+}
+
+.oz6fza55s {
+    gap: 8px;
+    color: currentColor;
+    justify-content: center;
+    max-width: 100%;
+    display: flex;
+    position: relative;
+}
+
+.in6imj8sc {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.hrs7k1fab {
+    aspect-ratio: 1;
+    display: inline-flex;
+    position: relative;
+    color: #FFFFFF;
+    width: 24px;
+}
+
+.okw0dv {
+    display: flex;
+    align-items: center;
+    vertical-align: middle;
+    border: 0px;
+    border-radius: 0.375rem;
+    background-color: transparent;
+    font-size: 1rem;
+    line-height: 1.5;
+    text-align: center;
+    color: #0d6efd;
+    padding: 0.375rem 0.75rem;
+}
+
+.pmdrn4qjx {
+    white-space: nowrap;
+    justify-content: flex-start;
+    align-items: center;
+    min-width: 0;
+    display: inline-flex;
+}
+
+.cw6dqx7z9 {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    border: 0;
+    background: none;
+    color: #ffffff;
+}
+
+/* --------------------------------------------------------------
+# Accordéon doux mobile pour les blocs "Personne" / "Partenaire"
+-------------------------------------------------------------- */
+/* Bouton-titre cliquable (réinitialise le style d'un <button>) */
+.btn-reset {
+    background: none;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    color: inherit;
+    text-align: left;
+    width: 100%;
+    cursor: pointer;
+}
+
+/* En-tête : icône + chevron qui pivote */
+.evaluated-person-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    padding-bottom: .25rem;
+    border-bottom: 1px dashed rgba(0, 0, 0, .12);
+    margin-bottom: 1rem;
+}
+
+.evaluated-person-title {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    margin: 0;
+    /* supprime le margin du h6 par défaut */
+    font-weight: 600;
+    color: #0d6efd;
+}
+
+.evaluated-person-icon {
+    font-size: 1.2rem;
+    color: #0d6efd;
+}
+
+/* Chevron (Bootstrap Icons) */
+.chevron {
+    transition: transform .2s ease-in-out;
+    font-size: 1rem;
+    opacity: .8;
+}
+
+/* Sur mobile, le bouton a la classe .collapsed quand la zone est fermée */
+.btn-reset.collapsed .chevron {
+    transform: rotate(0deg);
+}
+
+.btn-reset:not(.collapsed) .chevron {
+    transform: rotate(180deg);
+}
+
+/* Cartes */
+.evaluated-person-block {
+    border: 1px solid rgba(0, 0, 0, .1);
+    border-radius: .5rem;
+    padding: 1rem;
+    /* un peu moins de padding sur mobile */
+    background-color: #f8f9fa;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+    transition: box-shadow .2s ease-in-out;
+}
+
+.evaluated-person-block:hover {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .08);
+}
+
+.evaluated-person-block+.evaluated-person-block {
+    margin-top: 1rem;
+}
+
+/* Aide sous champ */
+.evaluated-person-block small.form-text {
+    margin-top: .25rem;
+    display: block;
+}
+
+/* ----- Comportement "toujours ouvert" à partir de md ----- */
+@media (min-width: 768px) {
+    .evaluated-person-block {
+        padding: 1.5rem;
+    }
+
+    .evaluated-person-block+.evaluated-person-block {
+        margin-top: 1.75rem;
+    }
+
+    /* La magie : le contenu collapse est forcé ouvert sur md+ */
+    .collapse-md-open {
+        display: block !important;
+        height: auto !important;
+        visibility: visible !important;
+    }
+
+    /* Sur desktop, on neutralise l'effet chevron et bordure d'en-tête */
+    .evaluated-person-header {
+        border-bottom: none;
+        margin-bottom: 1rem;
+    }
+
+    .chevron {
+        display: none;
+    }
+}
+
+/*--------------------------------------------------------------
+# Purchase checkout
+--------------------------------------------------------------*/
+.ykzkxt {
+    width: 100%;
+    padding-right: 20px !important;
+    padding-left: 20px !important;
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 1440px;
+}
+
+.ykzkxt.d6i7ks {
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+}
+
+@media (min-width: 576px) {
+    .ykzkxt {
+        padding-right: 32px !important;
+        padding-left: 32px !important;
+    }
+}
+
+@media (min-width: 992px) {
+    .ykzkxt {
+        padding-right: 48px !important;
+        padding-left: 48px !important;
+    }
+}
+
+.spacer-section-checkout {
+    margin-bottom: 1.25rem;
+}
+
+.bkicbc {
+    font-size: 1.125rem;
+    margin-bottom: 0;
+    font-weight: 600;
+    line-height: 1.35;
+    color: #06040E;
+}
+
+.n46nkd {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 1.25rem;
+}
+
+@media (min-width: 576px) {
+    .n46nkd {
+        gap: 1.25rem;
+    }
+}
+
+@media (min-width: 992px) {
+    .n46nkd:not(.embedded-checkout *) {
+        grid-template-columns: minmax(0, 372px) minmax(0, 940px);
+        grid-gap: 2em;
+    }
+}
+
+@media (min-width: 992px) {
+    .n46nkd.right:not(.embedded-checkout *) {
+        grid-template-columns: minmax(0, 940px) minmax(0, 280px);
+    }
+}
+
+@media (min-width: 1200px) {
+    .n46nkd.right:not(.embedded-checkout *) {
+        grid-template-columns: minmax(0, 940px) minmax(0, 372px);
+    }
+}
+
+.n46nkd .main-content {
+    display: grid;
+    grid-auto-rows: -webkit-min-content;
+    grid-auto-rows: min-content;
+    grid-template-columns: minmax(0, 940px);
+    order: 2;
+    position: relative;
+}
+
+@media (min-width: 992px) {
+    .n46nkd.right:not(.embedded-checkout *) .main-content {
+        order: 1;
+    }
+}
+
+.gap-y-8 {
+    gap: 2rem 0 !important;
+}
+
+.xo2a4n {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid #D6D6D7;
+    border-radius: 0.5rem;
+    padding: var(--bs-card-cap-padding-y, .5rem) var(--bs-card-cap-padding-x, 1rem);
+}
+
+@media (max-width: 575.98px) {
+    .xo2a4n {
+        margin-left: -20px;
+        margin-right: -20px;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+}
+
+.pb-7,
+.py-7 {
+    padding-bottom: 28px !important;
+}
+
+.mr-3 {
+    margin-right: 12px !important;
+}
+
+.my-6 {
+    margin-bottom: 24px !important;
+}
+
+.gap-y-2 {
+    gap: 0.5rem 0 !important;
+}
+
+.font-weight-normal {
+    font-weight: 400 !important;
+}
+
+.badge-grey {
+    background-color: #EDEDED;
+    color: #59585A !important;
+}
+
+.badge span {
+    line-height: 1rem;
+}
+
+.ml-2 {
+    margin-left: 8px !important;
+}
+
+.d8l2ev {
+    font-size: 1rem;
+    margin-bottom: 0;
+    font-weight: 600;
+    line-height: 1.35;
+    color: #06040E;
+}
+
+.card-header .card-subtitle {
+    max-width: 48rem;
+    word-break: break-word !important;
+    word-wrap: break-word !important;
+    margin-top: 4px !important;
+    color: #59585A !important;
+    margin-bottom: 0px !important;
+}
+
+.gy38mz {
+    color: #59585A !important;
+    background-color: transparent !important;
+}
+
+.gy38mz:hover {
+    color: #212529 !important;
+    background-color: #EDEDED !important;
+    border-color: #EDEDED !important;
+}
+
+.uxfpfc {
+    color: #212529
+}
+
+.n46nkd .wcxpat {
+    display: flex;
+    gap: 1.25rem;
+    flex-direction: column;
+    order: 1;
+}
+
+@media (min-width: 992px) {
+    .n46nkd.right:not(.embedded-checkout *) .wcxpat {
+        order: 2;
+    }
+}
+
+.zxl51y {
+    flex: 1 1 auto !important;
+    min-height: 1px !important;
+    padding: 20px !important;
+}
+
+@media (min-width: 576px) {
+    .zxl51y {
+        padding-top: 16px !important;
+        padding-bottom: 16px !important;
+        padding-right: 20px !important;
+        padding-left: 20px !important;
+    }
+}
+
+.sb9j1v {
+    font-size: 0.9375rem;
+    margin-bottom: 0;
+    font-weight: 600;
+    line-height: 1.35;
+    color: #06040E;
+}
+
+.kw41uk {
+    color: #fff !important;
+    background-color: #06040E !important;
+    border-color: #06040E !important;
+    font-size: 0.875rem !important;
+}
+
+.mt-10,
+.my-10 {
+    margin-top: 40px !important;
+}
+
+.etq508 {
+    padding: 0 0;
+    margin-bottom: 0;
+    background-color: transparent;
+    border-bottom: 1px solid #D6D6D7;
+    padding-top: 20px !important;
+    padding-right: 20px !important;
+    padding-left: 20px !important;
+    border-bottom: none;
+}
+
+@media (min-width: 576px) {
+    .etq508 {
+        padding-top: 24px !important;
+        padding-right: 28px !important;
+        padding-left: 28px !important;
+    }
+}
+
+.etq508:first-child {
+    border-radius: calc(0.5rem - 1px) calc(0.5rem - 1px) 0 0;
+}
+
+.wwz44q>.xo2a4n:not(:last-child) {
+    margin-bottom: 1.25rem;
+}
+
+.ixxz17 {
+    flex: 1 1 auto;
+    min-height: 1px;
+    padding: 20px !important;
+}
+
+@media (min-width: 576px) {
+    .ixxz17 {
+        padding-top: 24px !important;
+        padding-bottom: 24px !important;
+        padding-right: 28px !important;
+        padding-left: 28px !important;
+    }
+}
+
+.hp7ucm {
+    padding: 4px;
+    margin: 0 -4px;
+    border-radius: 8px;
+}
+
+.space-y-1>*:not(:last-child) {
+    margin-bottom: 4px !important;
+}
+
+.a3awwl {
+    background-color: transparent !important;
+    border-color: transparent !important;
+    color: #59585A !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.a3awwl:hover {
+    color: #212529 !important;
+    background-color: #EDEDED !important;
+    border-color: rgba(0, 0, 0, 0) !important;
 }
 
 /* =========================
@@ -2553,4 +3297,95 @@ html[data-bs-theme="dark"] .hfos1d,
 html[data-bs-theme="dark"] .eblipi,
 html[data-bs-theme="dark"] .qzvfbm {
     color: #5BAEBE !important;
+}
+
+/* =========================
+   Evaluated person — Dark mode
+   ========================= */
+
+html[data-bs-theme="dark"] .evaluated-person-block {
+    background-color: var(--app-surface);
+    border-color: var(--app-border);
+    color: var(--app-text);
+    /* shadow plus soft en dark */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .35);
+}
+
+html[data-bs-theme="dark"] .evaluated-person-block:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, .5);
+}
+
+/* Bordure dashed de l'en-tête */
+html[data-bs-theme="dark"] .evaluated-person-header {
+    border-bottom-color: var(--app-border);
+}
+
+/* Aide sous champ */
+html[data-bs-theme="dark"] .evaluated-person-block small.form-text {
+    color: var(--app-muted);
+}
+
+/* =========================
+   Checkout — Dark mode
+   ========================= */
+
+html[data-bs-theme="dark"] .bkicbc,
+html[data-bs-theme="dark"] .sb9j1v {
+    color: var(--app-text);
+}
+
+/* Cartes checkout (wrappers) */
+html[data-bs-theme="dark"] .xo2a4n,
+html[data-bs-theme="dark"] .wcxpat {
+    background-color: var(--app-surface);
+    border: 1px solid var(--app-border);
+    border-radius: 12px;
+    color: var(--app-text);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .35);
+}
+
+/* Titres de section "Compte", "Paiement" */
+html[data-bs-theme="dark"] .d8l2ev {
+    color: var(--app-text);
+}
+
+/* Sous-titres */
+html[data-bs-theme="dark"] .card-subtitle {
+    color: var(--app-muted);
+}
+
+/* Séparateurs */
+html[data-bs-theme="dark"] hr {
+    border-color: var(--app-border);
+    opacity: 1;
+}
+
+/* Texte "Total" etc. */
+html[data-bs-theme="dark"] .text-grey-dark {
+    color: var(--app-text) !important;
+}
+
+/* Badge devise */
+html[data-bs-theme="dark"] .badge-grey {
+    background-color: var(--app-border);
+    color: var(--app-text);
+}
+
+/* Lien "Créer un compte" */
+html[data-bs-theme="dark"] .uxfpfc {
+    color: var(--app-text);
+    text-decoration-color: var(--app-border);
+}
+
+/* Bouton "Se déconnecter" (btn + classe custom) */
+html[data-bs-theme="dark"] .gy38mz {
+    background-color: transparent;
+    border: 1px solid var(--app-border);
+    color: var(--app-text);
+}
+
+/* Bouton "Payer maintenant" : lisible même disabled */
+html[data-bs-theme="dark"] .kw41uk:disabled {
+    opacity: .65;
+    cursor: not-allowed;
 }

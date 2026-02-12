@@ -15,6 +15,13 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"> {% block stylesheets %}{% endblock %}
 
 		{% block javascripts %}
+			{# FullCalendar JS (global build) #}
+			<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.20/index.global.min.js"></script>
+			<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.20/index.global.min.js"></script>
+			<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@6.1.20/index.global.min.js"></script>
+			<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@6.1.20/index.global.min.js"></script>
+			<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/bootstrap5@6.1.20/index.global.min.js"></script>
+			<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.20/locales/fr.global.min.js"></script>
 			{% block importmap %}
 				{{ importmap('app') }}
 			{% endblock %}
@@ -22,7 +29,7 @@
 	</head>
 	<body>
 		{% include "shared/_navbar.html.twig" %}
-        {% include "partials/_flash.html.twig" %}
+		{% include "partials/_flash.html.twig" %}
 		{% block body %}{% endblock %}
 		<a href="#" class="back-to-top d-flex align-items-center justify-content-center">
 			<i class="fa-solid fa-arrow-up"></i>

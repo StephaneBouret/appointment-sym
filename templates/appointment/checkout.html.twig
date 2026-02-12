@@ -1,0 +1,124 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiement RDV
+{% endblock %}
+
+{% block body %}
+<div class="ykzkxt d6i7ks">
+	<div class="d-flex">
+		<div class="w-100">
+			<div class="d-md-flex justify-content-md-between align-items-center spacer-section-checkout">
+				<div class="flex-fill mb-6 mb-md-0">
+					<h1 class="pr-md-6 bkicbc">Paiement du rendez-vous</h1>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="n46nkd right">
+		<div class="main-content">
+			<div class="d-flex flex-column gap-y-8">
+				<div class="xo2a4n pb-7">
+					<div class="card-header">
+						<div class="d-flex justify-content-between align-items-center">
+							<div class="d-flex flex-column">
+								<div class="d8l2ev">Compte</div>
+								{% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+									<div class="card-subtitle">Vous devez vous connecter pour confirmer votre commande</div>
+									<div class="d-flex align-items-center">
+										<a href="{{ path('app_login', { target: app.request.uri }) }}" class="btn btn-dark me-2">Connexion</a>
+										<span class="me-2">ou</span>
+										<a href="{{ path('app_register', { target: app.request.uri }) }}" class="uxfpfc">Créer un compte</a>
+									</div>
+								{% else %}
+									<div class="card-subtitle">{{ user.email }}</div>
+								{% endif %}
+							</div>
+							{% if user %}
+								<a class="btn btn gy38mz" href="{{ path('app_logout') }}">Se déconnecter</a>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+				<div class="xo2a4n pb-7">
+					<div class="card-header">
+						<div class="d-flex justify-content-between align-items-center">
+							<div class="d-flex flex-column mr-2 w-100">
+								<div class="d8l2ev">Paiement</div>
+								{% if not user %}
+									<div class="card-subtitle">Vous devez vous connecter pour confirmer votre commande</div>
+								{% else %}
+									<div class="card-body">
+										<hr class="my-6">
+										<dl class="d-flex flex-column gap-y-2">
+											<div class="d-flex justify-content-between">
+												<dt class="font-weight-normal">
+													{{ type.name }}
+													-
+													{{ appointment.startAt|date('d/m/Y H:i', "Europe/Paris") }}
+													→
+													{{ appointment.endAt|date('H:i', "Europe/Paris") }}
+												</dt>
+												<dd class="text-muted">{{ type.price | amount }}</dd>
+											</div>
+											<dl class="d-flex justify-content-between mt-1">
+												<dt class="text-grey-dark">Total</dt>
+												<dd class="text-grey-dark">
+													<div class="d-flex align-items-center">
+														<span class="badge badge-grey">
+															<span>EUR</span>
+														</span>
+														<span class="ml-2">{{ type.price | amount }}</span>
+													</div>
+												</dd>
+											</dl>
+										</dl>
+										<hr class="my-6">
+										{{ form_start(confirmationForm, {
+                                            action: path('app_appointment_confirm', { id: appointment.id }),
+                                            method: 'POST'
+                                        }) }}
+										<div class="justify-content-between btn-row-full-width-sm space-y-4 align-items-center mt-10 btn-row btn-row-left flex-nowrap-sm-down" data-controller="appointment-checkout">
+											{{ form_widget(confirmationForm.agreeTerms, {
+													label : 'Je reconnais que la prestation de service commencera avant la fin du délai légal de rétractation et je renonce expressément à mon droit de rétractation conformément à l\'article L221-28 du Code de la consommation. <a href="'~path('app_terms')~'">Voir les conditions de remboursement</a>',
+													label_html: true,
+                                                    attr: {
+                                                        'data-appointment-checkout-target': 'agree',
+                                                        'data-action': 'change->appointment-checkout#toggle'
+                                                    }
+												}) }}
+												<button type="submit" id="complete_button" class="btn btn-md kw41uk mt-3" disabled data-appointment-checkout-target="submit">
+													<span>Payer maintenant</span>
+												</button>
+											</div>
+											{{ form_end(confirmationForm) }}
+										</div>
+									{% endif %}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="wcxpat">
+				<div class="xo2a4n">
+					<div class="zxl51y">
+						<div class="d-flex align-items-start flex-column">
+                            {% if type.imageName is defined %}
+                                <img class="thumb thumb-lg d-md-none mr-3" src="{{ vich_uploader_asset(type, 'imageFile') }}">
+                                <img class="img-fluid rounded d-none d-md-block" src="{{ vich_uploader_asset(type, 'imageFile') }}">
+                            {% endif %}
+							<div class="w-100">
+                                <h3 class="sb9j1v mt-md-4 mb-1">{{ type.name }}</h3>
+                                <div class="d-flex flex-column">{{ type.price | amount }}</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+
+{# {% block importmap %}
+	{{ importmap(['app', 'appointment']) }}
+{% endblock %} #}
