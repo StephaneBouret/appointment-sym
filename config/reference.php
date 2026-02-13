@@ -1739,6 +1739,9 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         digits?: int|Param, // Default: 4
  *     },
  * }
+ * @psalm-type NucleosDompdfConfig = array{
+ *     defaults?: array<string, scalar|null|Param>,
+ * }
  * @psalm-type ConfigType = array{
  *     imports?: ImportsConfig,
  *     parameters?: ParametersConfig,
@@ -1757,6 +1760,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *     liip_imagine?: LiipImagineConfig,
  *     vich_uploader?: VichUploaderConfig,
  *     scheb_two_factor?: SchebTwoFactorConfig,
+ *     nucleos_dompdf?: NucleosDompdfConfig,
  *     "when@dev"?: array{
  *         imports?: ImportsConfig,
  *         parameters?: ParametersConfig,
@@ -1778,6 +1782,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         liip_imagine?: LiipImagineConfig,
  *         vich_uploader?: VichUploaderConfig,
  *         scheb_two_factor?: SchebTwoFactorConfig,
+ *         nucleos_dompdf?: NucleosDompdfConfig,
  *     },
  *     "when@prod"?: array{
  *         imports?: ImportsConfig,
@@ -1797,6 +1802,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         liip_imagine?: LiipImagineConfig,
  *         vich_uploader?: VichUploaderConfig,
  *         scheb_two_factor?: SchebTwoFactorConfig,
+ *         nucleos_dompdf?: NucleosDompdfConfig,
  *     },
  *     "when@test"?: array{
  *         imports?: ImportsConfig,
@@ -1817,6 +1823,7 @@ use Symfony\Component\Config\Loader\ParamConfigurator as Param;
  *         liip_imagine?: LiipImagineConfig,
  *         vich_uploader?: VichUploaderConfig,
  *         scheb_two_factor?: SchebTwoFactorConfig,
+ *         nucleos_dompdf?: NucleosDompdfConfig,
  *     },
  *     ...<string, ExtensionType|array{ // extra keys must follow the when@%env% pattern or match an extension alias
  *         imports?: ImportsConfig,

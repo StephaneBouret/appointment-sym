@@ -34,6 +34,14 @@ services:
         arguments:
             $defaultFrom: "%env(MAILER_DEFAULT_FROM)%"
 
+    App\EventDispatcher\AppointmentEmailCancelledSubscriber:
+        arguments:
+            $defaultFrom: "%env(MAILER_DEFAULT_FROM)%"
+
+    App\EventDispatcher\AppointmentEmailRescheduledSubscriber:
+        arguments:
+            $defaultFrom: "%env(MAILER_DEFAULT_FROM)%"
+
     App\Google\GoogleService:
         arguments:
             $googleKey: "%env(GOOGLE_API_KEY)%"

@@ -8,7 +8,10 @@ use App\Repository\AppointmentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Attribute as Vich;
 
+#[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: AppointmentRepository::class)]
 class Appointment
 {
@@ -63,6 +66,19 @@ class Appointment
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Url(message: 'Veuillez saisir une URL valide (https://...).')]
     private ?string $visioUrl = null;
+
+    #[Assert\File(
+        extensions: ['pdf'],
+        extensionsMessage: 'Merci de télécharger un PDF valide'
+    )]
+    #[Vich\UploadableField(mapping: 'appointment_pdf', fileNameProperty: 'pdfName')]
+    private ?File $pdfFile = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $pdfName = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $pdfUpdatedAt = null;
 
     public function __construct()
     {
@@ -266,5 +282,39 @@ class Appointment
         $this->visioUrl = $visioUrl;
 
         return $this;
+    }
+
+    public function setPdfFile(?File $file = null): void
+    {
+        $this->pdfFile = $file;
+
+        if (null !== $file) {
+            $this->pdfUpdatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getPdfFile(): ?File
+    {
+        return $this->pdfFile;
+    }
+
+    public function getPdfName(): ?string
+    {
+        return $this->pdfName;
+    }
+
+    public function setPdfName(?string $pdfName): void
+    {
+        $this->pdfName = $pdfName;
+    }
+
+    public function getPdfUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->pdfUpdatedAt;
+    }
+
+    public function setPdfUpdatedAt(?\DateTimeImmutable $date): void
+    {
+        $this->pdfUpdatedAt = $date;
     }
 }

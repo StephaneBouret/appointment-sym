@@ -11,7 +11,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Event\PreSetDataEvent;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\GroupSequence;
 
 final class AppointmentEditPersonsType extends AbstractType
 {

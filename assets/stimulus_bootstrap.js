@@ -9,6 +9,8 @@ import AjaxFormController from './controllers/ajax_form_controller.js';
 import CalendarController from './controllers/calendar_controller.js';
 import NamesFormatter from './controllers/names_formatter_controller.js';
 import AppointmentCheckoutController from './controllers/appointment_checkout_controller.js';
+import AppointmentCancelController from './controllers/appointment-cancel_controller.js';
+import AppointmentRescheduleController from './controllers/appointment_reschedule_controller.js';
 
 const app = startStimulusApp();
 // register any custom, 3rd party controllers here
@@ -23,3 +25,5 @@ app.register('ajax-form', AjaxFormController);
 app.register('calendar', CalendarController);
 app.register('names-formatter', NamesFormatter);
 app.register("appointment-checkout", AppointmentCheckoutController);
+app.register('appointment-cancel', AppointmentCancelController);
+app.register('appointment-reschedule', AppointmentRescheduleController);

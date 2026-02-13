@@ -1,0 +1,96 @@
+{# Contexte: variable "a" = Appointment #}
+{% set nowParis = "now"|date("U", "Europe/Paris") %}
+{% set startParis = a.startAt|date("U", "Europe/Paris") %}
+{% set diffHours = (startParis - nowParis) / 3600 %}
+{% set minNotice = rescheduleMinNoticeHours|default(24) %}
+<div class="d-flex align-items-center gap-2">
+	{% if startParis > nowParis %}
+		{# --- Annuler (uniquement si confirmé) --- #}
+		{% if a.status == constant('App\\Enum\\AppointmentStatus::CONFIRMED') %}
+			<div data-controller="appointment-cancel" data-appointment-cancel-appointment-id-value="{{ a.id }}" data-appointment-cancel-start-at-utc-iso-value="{{ a.startAt|date('Y-m-d\\TH:i:s\\Z', 'UTC') }}" data-appointment-cancel-amount-cents-value="{{ a.type.price ?? 0 }}" data-appointment-cancel-csrf-value="{{ csrf_token('cancel_appointment_' ~ a.id) }}" data-appointment-cancel-cancel-url-value="{{ path('app_appointment_cancel') }}">
+				<button type="button" class="btn btn-outline-danger btn-sm text-nowrap" data-action="appointment-cancel#open">
+					Annuler le RDV
+				</button>
+
+				{# --- Modale de confirmation --- #}
+				<div class="modal fade" tabindex="-1" aria-hidden="true" data-appointment-cancel-target="modal">
+					<div class="modal-dialog modal-dialog-centered">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" data-appointment-cancel-target="title"></h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+							</div>
+							<div class="modal-body" data-appointment-cancel-target="body"></div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-light" data-bs-dismiss="modal">Retour</button>
+								<button type="button" class="btn btn-danger" data-appointment-cancel-target="confirmBtn" data-action="appointment-cancel#confirm">
+									<span class="spinner-border spinner-border-sm d-none" aria-hidden="true" data-appointment-cancel-target="spinner"></span>
+									<span>Confirmer l'annulation</span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				{# --- Modale de succès --- #}
+				<div class="modal fade" tabindex="-1" aria-hidden="true" data-appointment-cancel-target="successModal">
+					<div class="modal-dialog modal-dialog-centered">
+						<div class="modal-content">
+							<div class="modal-header bg-success text-white">
+								<h5 class="modal-title">Annulation confirmée</h5>
+								<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+							</div>
+							<div class="modal-body" data-appointment-cancel-target="successBody"></div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-light" data-bs-dismiss="modal">Fermer</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endif %}
+		{# --- Modifier --- #}
+		{% if a.status != constant('App\\Enum\\AppointmentStatus::CANCELED') %}
+			<a href="{{ path('app_appointment_edit_persons', {'id': a.id}) }}" class="btn btn-outline-primary btn-sm text-nowrap">
+				Modifier les infos évaluées
+			</a>
+		{% endif %}
+		{# --- Replanifier (si non annulé) --- #}
+		{% if a.status != constant('App\\Enum\\AppointmentStatus::CANCELED') and diffHours >= minNotice %}
+			<div data-controller="appointment-reschedule" data-appointment-reschedule-appointment-id-value="{{ a.id }}" data-appointment-reschedule-type-id-value="{{ a.type.id }}" data-appointment-reschedule-endpoint-value="{{ path('api_fixed_slots_range') }}" data-appointment-reschedule-reschedule-url-value="{{ path('app_appointment_reschedule') }}" data-appointment-reschedule-csrf-value="{{ csrf_token('reschedule_appointment_' ~ a.id) }}" data-appointment-reschedule-open-delay-hours-value="{{ openingDelayHours|default(48) }}" data-appointment-reschedule-open-days-value="{{ openDaysCsv|default('1,2,3,4,5') }}" data-appointment-reschedule-time-zone-value="Europe/Paris">
+				<button type="button" class="btn btn-outline-primary btn-sm text-nowrap" data-action="appointment-reschedule#open">
+					Replanifier
+				</button>
+				{# Modale de replanification #}
+				<div class="modal fade" tabindex="-1" aria-hidden="true" data-appointment-reschedule-target="modal">
+					<div class="modal-dialog modal-dialog-centered modal-lg">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title">Choisissez un nouveau créneau</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+							</div>
+
+							<div class="modal-body">
+								<div class="alert alert-warning d-none" data-appointment-reschedule-target="emptyNotice"></div>
+
+								<div class="d-flex align-items-center gap-2 small text-muted mb-2">
+									<span class="spinner-border spinner-border-sm d-none" aria-hidden="true" data-appointment-reschedule-target="spinner"></span>
+									<span data-appointment-reschedule-target="hint">Chargement des créneaux…</span>
+								</div>
+
+								<div class="reschedule-slot-list" data-appointment-reschedule-target="list"></div>
+							</div>
+
+							<div class="modal-footer">
+								<button type="button" class="btn btn-light" data-bs-dismiss="modal">Retour</button>
+								<button type="button" class="btn btn-primary" disabled data-appointment-reschedule-target="confirmBtn" data-action="appointment-reschedule#confirm">
+									Confirmer le report
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		{% endif %}
+	{% endif %}
+</div>
