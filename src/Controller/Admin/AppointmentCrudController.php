@@ -6,27 +6,31 @@ use App\Entity\Appointment;
 use App\Entity\AppointmentType;
 use App\Enum\AppointmentStatus;
 use App\Form\EvaluatedPersonType;
-use Doctrine\ORM\EntityManagerInterface;
 use App\Repository\AppointmentRepository;
-use Vich\UploaderBundle\Form\Type\VichFileType;
+use App\Service\AppointmentExportService;
+use Doctrine\ORM\EntityManagerInterface;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
-use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
-use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
-use EasyCorp\Bundle\EasyAdminBundle\Filter\NullFilter;
-use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
-use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
-use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
-use EasyCorp\Bundle\EasyAdminBundle\Filter\DateTimeFilter;
-use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
+use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\MoneyField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\ChoiceFilter;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\DateTimeFilter;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\NullFilter;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use Vich\UploaderBundle\Form\Type\VichFileType;
 
 class AppointmentCrudController extends AbstractCrudController
 {
@@ -68,7 +72,54 @@ class AppointmentCrudController extends AbstractCrudController
             );
     }
 
-    // TODO configureActions
+    public function configureActions(Actions $actions): Actions
+    {
+        $hasUnsent = $this->appointmentRepository->count(['isSent' => false]) > 0;
+
+        $exportCsv = Action::new('exportCsv', 'Exporter CSV', 'fa fa-file-csv')
+            ->linkToCrudAction('exportCsv')
+            ->displayIf(fn() => $hasUnsent)
+            ->addCssClass('btn btn-success')
+            ->createAsGlobalAction();
+
+        $exportAllCsv = Action::new('exportCsvAll', 'Réexporter CSV (tout)', 'fa fa-file-export')
+            ->linkToCrudAction('exportCsvAll')
+            ->addCssClass('btn btn-outline-primary')
+            ->createAsGlobalAction();
+
+        $exportIcs = Action::new('exportIcs', 'Exporter ICS', 'fa fa-calendar')
+            ->linkToCrudAction('exportIcs')
+            ->displayIf(fn() => $hasUnsent)
+            ->addCssClass('btn btn-success')
+            ->createAsGlobalAction();
+
+        $exportAllIcs = Action::new('exportIcsAll', 'Réexporter ICS (tout)', 'fa fa-calendar')
+            ->linkToCrudAction('exportIcsAll')
+            ->addCssClass('btn btn-outline-primary')
+            ->createAsGlobalAction();
+
+        $generatePdf = Action::new('generatePdf', 'Générer PDF')
+            ->linkToUrl(function (Appointment $appointment) {
+                return $this->adminUrl
+                    ->setRoute('app_appointment_pdf_admin', ['id' => $appointment->getId()])
+                    ->generateUrl();
+            })
+            ->setIcon('fa fa-file-pdf')
+            ->addCssClass('btn btn-secondary')
+            ->displayIf(fn(Appointment $appointment) => $appointment->getStatus() === AppointmentStatus::CONFIRMED);
+
+        return $actions
+            ->add(Crud::PAGE_INDEX, Action::DETAIL)
+            ->add(Crud::PAGE_INDEX, $exportCsv)
+            ->add(Crud::PAGE_INDEX, $exportAllCsv)
+            ->add(Crud::PAGE_INDEX, $exportIcs)
+            ->add(Crud::PAGE_INDEX, $exportAllIcs)
+            ->add(Crud::PAGE_INDEX, $generatePdf)
+            ->remove(Crud::PAGE_INDEX, Action::NEW)
+            ->remove(Crud::PAGE_INDEX, Action::DELETE)
+            ->remove(Crud::PAGE_DETAIL, Action::EDIT)
+            ->remove(Crud::PAGE_DETAIL, Action::DELETE);
+    }
 
     public function configureFields(string $pageName): iterable
     {
@@ -81,17 +132,17 @@ class AppointmentCrudController extends AbstractCrudController
                     'placeholder' => 'https://dicord.gg/... ou lien Teams'
                 ]);
 
-            // yield Field::new('pdfFile', 'Support PDF')
-            //     ->setFormType(VichFileType::class)
-            //     ->setFormTypeOptions([
-            //         'required' => false,
-            //         'allow_delete' => true,
-            //         'delete_label' => 'Supprimer le fichier existant',
-            //         'download_uri' => true,
-            //         'download_label' => 'Télécharger le fichier actuel',
-            //         'asset_helper' => true,
-            //     ])
-            //     ->onlyOnForms();
+            yield Field::new('pdfFile', 'Support PDF')
+                ->setFormType(VichFileType::class)
+                ->setFormTypeOptions([
+                    'required' => false,
+                    'allow_delete' => true,
+                    'delete_label' => 'Supprimer le fichier existant',
+                    'download_uri' => true,
+                    'download_label' => 'Télécharger le fichier actuel',
+                    'asset_helper' => true,
+                ])
+                ->onlyOnForms();
 
             return;
         }
@@ -128,8 +179,8 @@ class AppointmentCrudController extends AbstractCrudController
             ])
             ->onlyOnDetail();
 
-        // yield TextField::new('pdfName', 'Support PDF')
-        //     ->onlyOnIndex();
+        yield TextField::new('pdfName', 'Support PDF')
+            ->onlyOnIndex();
 
         yield TextField::new('number', 'Numéro')->onlyOnIndex();
 
@@ -241,31 +292,31 @@ class AppointmentCrudController extends AbstractCrudController
         }
     }
 
-    // public function exportCsv(AppointmentExportService $exporter): StreamedResponse
-    // {
-    //     $list = $this->appointmentRepository->findForCalendarExport(includePending: false, onlyNotSent: true);
-    //     $resp = $exporter->streamCsv($list, 'confirmed');
-    //     $this->appointmentRepository->markAsSent($list);
-    //     return $resp;
-    // }
+    public function exportCsv(AppointmentExportService $exporter): StreamedResponse
+    {
+        $list = $this->appointmentRepository->findForCalendarExport(includePending: false, onlyNotSent: true);
+        $resp = $exporter->streamCsv($list, 'confirmed');
+        $this->appointmentRepository->markAsSent($list);
+        return $resp;
+    }
 
-    // public function exportCsvAll(AppointmentExportService $exporter): StreamedResponse
-    // {
-    //     $list = $this->appointmentRepository->findForCalendarExport(includePending: false, onlyNotSent: false);
-    //     return $exporter->streamCsv($list, 'all'); // Pas de markAsSent
-    // }
+    public function exportCsvAll(AppointmentExportService $exporter): StreamedResponse
+    {
+        $list = $this->appointmentRepository->findForCalendarExport(includePending: false, onlyNotSent: false);
+        return $exporter->streamCsv($list, 'all'); // Pas de markAsSent
+    }
 
-    // public function exportIcs(AppointmentExportService $exporter): StreamedResponse
-    // {
-    //     $list = $this->appointmentRepository->findForCalendarExport(includePending: false, onlyNotSent: true);
-    //     $resp = $exporter->streamIcs($list, 'confirmed');
-    //     $this->appointmentRepository->markAsSent($list);
-    //     return $resp;
-    // }
+    public function exportIcs(AppointmentExportService $exporter): StreamedResponse
+    {
+        $list = $this->appointmentRepository->findForCalendarExport(includePending: false, onlyNotSent: true);
+        $resp = $exporter->streamIcs($list, 'confirmed');
+        $this->appointmentRepository->markAsSent($list);
+        return $resp;
+    }
 
-    // public function exportIcsAll(AppointmentExportService $exporter): StreamedResponse
-    // {
-    //     $list = $this->appointmentRepository->findForCalendarExport(includePending: false, onlyNotSent: false);
-    //     return $exporter->streamIcs($list, 'all'); // pas de markAsSent
-    // }
+    public function exportIcsAll(AppointmentExportService $exporter): StreamedResponse
+    {
+        $list = $this->appointmentRepository->findForCalendarExport(includePending: false, onlyNotSent: false);
+        return $exporter->streamIcs($list, 'all'); // pas de markAsSent
+    }
 }
