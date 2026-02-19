@@ -12,6 +12,7 @@ use App\Entity\UnavailableDay;
 use App\Entity\AppointmentType;
 use App\Entity\ScheduleSetting;
 use App\Controller\Admin\UserCrudController;
+use App\Entity\Setting;
 use Symfony\Component\HttpFoundation\Response;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -53,6 +54,7 @@ class DashboardController extends AbstractDashboardController
             MenuItem::linkToCrud('Indisponibilités horaires', 'fa fa-ban', Unavailability::class),
             MenuItem::linkToCrud('Jours d\'indisponibilité', 'fa fa-calendar-xmark', UnavailableDay::class),
         ]);
+        yield MenuItem::linkToCrud('Maintenance', 'fas fa-cogs', Setting::class);
         yield MenuItem::linkToUrl('Retour au site', 'fas fa-home', $this->generateUrl('app_home'));
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
     }
