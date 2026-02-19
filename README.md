@@ -22,10 +22,11 @@ git clone https://github.com/StephaneBouret/appointment-sym.git appointment-sym
 cd appointment-sym
 ```
 
-## 2️⃣ Installer les dépendances PHP
+## 2️⃣ Installer les dépendances PHP et JS
 
 ```bash
 composer install
+php bin/console importmap:install
 ```
 
 ## 3️⃣ Configurer l'environnement
