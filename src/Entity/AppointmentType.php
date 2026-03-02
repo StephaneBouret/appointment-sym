@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Attribute as Vich;
 
 #[ORM\Entity(repositoryClass: AppointmentTypeRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 #[Vich\Uploadable]
 class AppointmentType
 {
@@ -309,5 +310,24 @@ class AppointmentType
     public function isCouple(): bool
     {
         return (int) ($this->participants ?? 1) === 2;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
+    public function touchUpdatedAt(): void
+    {
+        $this->updatedAt = new \DateTimeImmutable();
     }
 }
