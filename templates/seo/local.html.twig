@@ -15,7 +15,7 @@
 
 		<p>
 			La numérologie permet de mieux comprendre son chemin de vie et ses cycles personnels.
-						France Tuncq propose des séances personnalisées pour les personnes habitant
+															France Tuncq propose des séances personnalisées pour les personnes habitant
 			{{ city }}
 			et ses environs.
 		</p>
@@ -61,11 +61,9 @@
 				<h3>Peut-on réserver une séance de numérologie depuis
 					{{ city }}
 					?</h3>
-				<p>
-					Oui, les personnes situées à
+				<p>Oui, les personnes situées à
 					{{ city }}
-					et dans les environs peuvent réserver une séance avec France Tuncq.
-				</p>
+					et dans les environs peuvent réserver une séance avec France Tuncq.</p>
 			</div>
 
 			<div class="mb-3">
@@ -83,51 +81,51 @@
 
 	<script type="application/ld+json">
 		{
-		  "@context": "https://schema.org",
-		  "@type": "WebPage",
-		  "name": "{{ seoTitle|e('js') }}",
-		  "url": "{{ absolute_url(path('seo_local_page', {slug: slug})) }}",
-		  "inLanguage": "fr-FR",
-		  "about": {
-		    "@type": "Service",
-		    "name": "Consultation de numérologie",
-		    "provider": {
-		      "@type": "LocalBusiness",
-		      "name": "France Tuncq"
-		    },
-		    "areaServed": {
-		      "@type": "City",
-		      "name": "{{ city|e('js') }}"
-		    }
-		  }
-		}
+								  "@context": "https://schema.org",
+								  "@type": "WebPage",
+								  "name": "{{ seoTitle|e('js') }}",
+								  "url": "{{ absolute_url(path('seo_local_page', {slug: slug})) }}",
+								  "inLanguage": "fr-FR",
+								  "about": {
+								    "@type": "Service",
+								    "name": "Consultation de numérologie",
+								    "provider": {
+								      "@type": "LocalBusiness",
+								      "name": "France Tuncq"
+								    },
+								    "areaServed": {
+								      "@type": "City",
+								      "name": "{{ city|e('js') }}"
+								    }
+								  }
+								}
 	</script>
 
 	<script type="application/ld+json">
 		{
-		  "@context": "https://schema.org",
-		  "@type": "BreadcrumbList",
-		  "itemListElement": [
-		    {
-		      "@type": "ListItem",
-		      "position": 1,
-		      "name": "Accueil",
-		      "item": "{{ absolute_url(path('app_home')) }}"
-		    },
-		    {
-		      "@type": "ListItem",
-		      "position": 2,
-		      "name": "Numérologie",
-		      "item": "{{ absolute_url(path('app_numerologie')) }}"
-		    },
-		    {
-		      "@type": "ListItem",
-		      "position": 3,
-		      "name": "{{ city|e('js') }}",
-		      "item": "{{ absolute_url(path('seo_local_page', {slug: slug})) }}"
-		    }
-		  ]
-		}
+								  "@context": "https://schema.org",
+								  "@type": "BreadcrumbList",
+								  "itemListElement": [
+								    {
+								      "@type": "ListItem",
+								      "position": 1,
+								      "name": "Accueil",
+								      "item": "{{ absolute_url(path('app_home')) }}"
+								    },
+								    {
+								      "@type": "ListItem",
+								      "position": 2,
+								      "name": "Numérologie",
+								      "item": "{{ absolute_url(path('app_numerologie')) }}"
+								    },
+								    {
+								      "@type": "ListItem",
+								      "position": 3,
+								      "name": "{{ city|e('js') }}",
+								      "item": "{{ absolute_url(path('seo_local_page', {slug: slug})) }}"
+								    }
+								  ]
+								}
 	</script>
 
 	<script type="application/ld+json">
@@ -138,12 +136,12 @@
 		    {
 		      "@type": "Question",
 		      "name": "Peut-on réserver une séance de numérologie depuis
-		{{ city|e('js') }}
+		{{ city|trim|e('js') }}
 		?",
 		      "acceptedAnswer": {
 		        "@type": "Answer",
 		        "text": "Oui, les personnes situées à
-		{{ city|e('js') }}
+		{{ city|trim|e('js') }}
 		et dans les environs peuvent réserver une séance avec France Tuncq."
 		      }
 		    },
