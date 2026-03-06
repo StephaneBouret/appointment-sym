@@ -1,0 +1,92 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	{{ seoTitle }}
+	- Séances avec France Tuncq
+{% endblock %}
+
+
+{% block meta_description %}
+	{{ seoMeta }}
+{% endblock %}
+
+{% block body %}
+	<div class="container py-4">
+		<h1>{{ seoTitle }}</h1>
+
+		<p>
+			La numérologie permet de mieux comprendre son chemin de vie et ses cycles personnels.
+												France Tuncq propose des séances personnalisées pour les personnes habitant
+			{{ city }}
+			et ses environs.
+		</p>
+
+		<h2>Prendre rendez-vous</h2>
+		<p>
+			Choisissez votre type de séance et réservez en ligne.
+		</p>
+
+		<p class="mt-3">
+			En savoir plus sur la numérologie :
+			<a href="{{ path('app_numerologie') }}">découvrir la numérologie</a>.
+		</p>
+
+		<a href="{{ path('app_appointment_types') }}" class="btn btn-primary">
+			Voir les rendez-vous
+		</a>
+	</div>
+{% endblock %}
+
+{% block structured_data %}
+{{ parent() }}
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "{{ seoTitle|e('js') }}",
+  "url": "{{ absolute_url(path('seo_local_page', {slug: slug})) }}",
+  "inLanguage": "fr-FR",
+  "about": {
+    "@type": "Service",
+    "name": "Consultation de numérologie",
+    "provider": {
+      "@type": "LocalBusiness",
+      "name": "France Tuncq"
+    },
+    "areaServed": {
+      "@type": "City",
+      "name": "{{ city|e('js') }}"
+    }
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Accueil",
+      "item": "{{ absolute_url(path('app_home')) }}"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Numérologie",
+      "item": "{{ absolute_url(path('app_numerologie')) }}"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "{{ city|e('js') }}",
+      "item": "{{ absolute_url(path('seo_local_page', {slug: slug})) }}"
+    }
+  ]
+}
+</script>
+
+{% endblock %}

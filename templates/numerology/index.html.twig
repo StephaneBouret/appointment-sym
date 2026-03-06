@@ -1,0 +1,120 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	Numérologie — France Tuncq
+{% endblock %}
+
+{% block meta_description %}
+	Comprendre votre chemin de vie grâce à la numérologie : nombres clés, cycles et accompagnement. Consultations avec France Tuncq à La Plaine-sur-Mer et à distance.
+{% endblock %}
+
+{% block body %}
+	<div class="container py-4">
+
+		<h1>La numérologie : comprendre son chemin de vie</h1>
+
+		<p>
+			La numérologie est un outil de connaissance de soi. Elle permet d'éclairer vos talents,
+						        vos défis et vos cycles personnels à partir de vos nombres clés.
+		</p>
+
+		<h2>À quoi sert la numérologie&nbsp;?</h2>
+		<p>
+			Une séance de numérologie permet de mieux comprendre certaines étapes de votre vie,
+						de mettre en lumière vos ressources personnelles et d'identifier les grands cycles
+						de votre parcours.
+		</p>
+
+		<h2>Consultations et séances</h2>
+		<p>
+			Vous pouvez choisir un type de séance et réserver directement en ligne.
+		</p>
+
+		<a href="{{ path('app_appointment_types') }}" class="btn btn-primary">
+			Prendre rendez-vous
+		</a>
+
+		<hr class="my-4">
+
+		<h2>Numérologie près de chez vous</h2>
+		<p>
+			Retrouvez les pages locales dédiées à la numérologie autour de La Plaine-sur-Mer,
+						Pornic, Saint-Brévin-les-Pins, Saint-Nazaire et Nantes.
+		</p>
+
+		<ul>
+			{% for city in cities %}
+				<li>
+					<a href="{{ path(city.route, city.params) }}">
+						Numérologie / Numérologue —
+						{{ city.name }}
+					</a>
+				</li>
+			{% endfor %}
+		</ul>
+
+		<hr class="my-4">
+
+		<section>
+			<h2>Questions fréquentes sur la numérologie</h2>
+			<div class="mb-4">
+				<h3>Qu'est-ce que la numérologie&nbsp;?</h3>
+				<p>
+					La numérologie est une approche de connaissance de soi fondée sur l'étude
+										des nombres liés à votre identité et à votre parcours de vie.
+				</p>
+			</div>
+
+			<div class="mb-4">
+				<h3>Comment se déroule une séance de numérologie&nbsp;?</h3>
+				<p>
+					Une séance permet d'explorer vos nombres clés, votre chemin de vie
+										et certaines périodes importantes afin d'éclairer vos talents,
+										vos défis et vos cycles personnels.
+				</p>
+			</div>
+		</section>
+
+	</div>
+
+	{% include "shared/_footer.html.twig" %}
+{% endblock %}
+
+{% block structured_data %}
+	{{ parent() }}
+
+		<script type="application/ld+json">
+		{
+		  "@context": "https://schema.org",
+		  "@type": "WebPage",
+		  "name": "Numérologie — France Tuncq",
+		  "url": "{{ absolute_url(path('app_numerologie')) }}",
+		  "inLanguage": "fr-FR"
+		}
+	</script>
+
+    <script type="application/ld+json">
+		{
+		  "@context": "https://schema.org",
+		  "@type": "FAQPage",
+		  "mainEntity": [
+		    {
+		      "@type": "Question",
+		      "name": "Qu'est-ce que la numérologie ?",
+		      "acceptedAnswer": {
+		        "@type": "Answer",
+		        "text": "La numérologie est une approche de connaissance de soi fondée sur l'étude des nombres liés à votre identité et à votre parcours de vie."
+		      }
+		    },
+		    {
+		      "@type": "Question",
+		      "name": "Comment se déroule une séance de numérologie ?",
+		      "acceptedAnswer": {
+		        "@type": "Answer",
+		        "text": "Une séance permet d'explorer vos nombres clés, votre chemin de vie et certaines périodes importantes afin d'éclairer vos talents, vos défis et vos cycles personnels."
+		      }
+		    }
+		  ]
+		}
+	</script>
+{% endblock %}

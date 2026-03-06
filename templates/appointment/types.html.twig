@@ -1,7 +1,15 @@
 {% extends "base.html.twig" %}
 
 {% block title %}
-	Choix du rendez-vous
+Prendre rendez-vous en numérologie — France Tuncq
+{% endblock %}
+
+{% block meta_description %}
+Choisissez votre séance de numérologie avec France Tuncq : chemin de vie, analyse personnelle et accompagnement. Réservation simple en ligne.
+{% endblock %}
+
+{% block og_image %}
+{{ app.request.schemeAndHttpHost ~ asset('images/og-rendezvous.jpg') }}
 {% endblock %}
 
 {% block body %}

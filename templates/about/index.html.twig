@@ -1,6 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Qui suis-je ?
+{% block title %}
+France Tuncq — Numérologue à La Plaine-sur-Mer
+{% endblock %}
+
+{% block meta_description %}
+Découvrez le parcours de France Tuncq, numérologue à La Plaine-sur-Mer. Une approche de la numérologie tournée vers la connaissance de soi et l'accompagnement personnel.
+{% endblock %}
+
+{% block og_image %}
+{{ app.request.schemeAndHttpHost ~ asset('images/og-about.jpg') }}
 {% endblock %}
 
 {% block body %}
@@ -44,4 +53,19 @@
 		</section>
 	</div>
 	{% include "shared/_footer.html.twig" %}
+{% endblock %}
+
+{% block structured_data %}
+{{ parent() }}
+
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "Person",
+ "name": "France Tuncq",
+ "jobTitle": "Numérologue",
+ "url": "https://francetuncq.fr/about"
+}
+</script>
+
 {% endblock %}

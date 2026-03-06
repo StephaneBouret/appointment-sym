@@ -1,6 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil
+{% block title %}
+France Tuncq — Numérologie & connaissance de soi
+{% endblock %}
+
+{% block meta_description %}
+Découvrez la numérologie pour mieux vous comprendre : chemin de vie, nombres clés et accompagnement. Prenez rendez-vous en ligne avec France Tuncq.
+{% endblock %}
+
+{% block og_image %}
+{{ app.request.schemeAndHttpHost ~ asset('images/og-home.jpg') }}
 {% endblock %}
 
 {% block body %}

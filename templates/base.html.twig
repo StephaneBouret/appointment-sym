@@ -1,18 +1,111 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="UTF-8">
+		<meta
+		charset="UTF-8">
+		{# ✅ Title #}
 		<title>
-			{% block title %}Welcome!
+			{% block title %}France Tuncq - Numérologie et coaching
 			{% endblock %}
 		</title>
-		{# <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>"> #}
+		{# ✅ Meta description #}
+		<meta name="description" content="{% block meta_description %} Numérologie et accompagnement personnalisé avec France Tuncq. Prenez rendez-vous en ligne. {% endblock %}">
+		{# ✅ Robots #}
+		<meta name="robots" content="{% block meta_robots %}index,follow{% endblock %}">
+		{# ✅ Canonical (évite contenu dupliqué) #}
+		<link rel="canonical" href="{{ app.request.schemeAndHttpHost ~ app.request.pathInfo }}">
+		{# Favicons #}
 		<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('favicon/apple-touch-icon.png') }}">
 		<link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon/favicon-32x32.png') }}">
 		<link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon/favicon-16x16.png') }}">
 		<link rel="manifest" href="{{ asset('favicon/site.webmanifest') }}">
 		<link rel="shortcut icon" href="{{ asset('favicon/favicon.ico') }}">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0"> {% block stylesheets %}{% endblock %}
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		{# ✅ OpenGraph #}
+		<meta property="og:title" content="{% block og_title %}{{ block('title') }}{% endblock %}">
+		<meta property="og:description" content="{% block og_description %}{{ block('meta_description') }}{% endblock %}">
+		<meta property="og:type" content="{% block og_type %}website{% endblock %}">
+		<meta property="og:url" content="{{ app.request.schemeAndHttpHost ~ app.request.requestUri }}">
+		<meta property="og:image" content="{% block og_image %}{{ app.request.schemeAndHttpHost ~ asset('images/og-default.jpg') }}{% endblock %}">
+		<meta property="og:image:width" content="1200">
+		<meta property="og:image:height" content="630">
+		<meta property="og:site_name" content="{% block og_site_name %}France Tuncq{% endblock %}">
+		<meta property="og:locale" content="fr_FR">
+
+		{# ✅ Twitter Cards #}
+        <meta name="twitter:card" content="{% block twitter_card %}summary_large_image{% endblock %}">
+		<meta name="twitter:title" content="{% block twitter_title %}{{ block('title') }}{% endblock %}">
+		<meta name="twitter:description" content="{% block twitter_description %}{{ block('meta_description') }}{% endblock %}">
+		<meta name="twitter:image" content="{% block twitter_image %}{{ block('og_image') }}{% endblock %}">
+
+        {% block stylesheets %}{% endblock %}
+
+        {# ✅ Données structurées JSON-LD (site-wide) #}
+        {% block structured_data %}
+            <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@graph": [
+                    {
+                        "@type": "WebSite",
+                        "@id": "https://francetuncq.fr/#website",
+                        "url": "https://francetuncq.fr/",
+                        "name": "France Tuncq",
+                        "inLanguage": "fr-FR"
+                    },
+                    {
+                        "@type": "LocalBusiness",
+                        "@id": "https://francetuncq.fr/#localbusiness",
+                        "name": "France Tuncq",
+                        "url": "https://francetuncq.fr/",
+                        "telephone": "+33634560579",
+                        "address": {
+                            "@type": "PostalAddress",
+                            "streetAddress": "1B, La Fendoire",
+                            "postalCode": "44770",
+                            "addressLocality": "La Plaine-sur-Mer",
+                            "addressCountry": "FR"
+			            },
+                         "geo": {
+                            "@type": "GeoCoordinates",
+                            "latitude": 47.141336,
+                            "longitude": -2.179555
+                        },
+                        "openingHoursSpecification": [
+                            {
+                                "@type": "OpeningHoursSpecification",
+                                "dayOfWeek": [
+                                    "Monday",
+                                    "Tuesday",
+                                    "Wednesday",
+                                    "Thursday",
+                                    "Friday"
+                                ],
+                                "opens": "09:00",
+                                "closes": "12:00"
+                            },
+                            {
+                                "@type": "OpeningHoursSpecification",
+                                "dayOfWeek": [
+                                "Monday",
+                                "Tuesday",
+                                "Wednesday",
+                                "Thursday",
+                                "Friday"
+                                ],
+                                "opens": "14:00",
+                                "closes": "19:00"
+                            }
+                        ],
+                        "areaServed": "FR",
+                        "priceRange": "€€"
+                    }
+                ]
+            }
+            </script>
+        {% endblock %}
 
 		{% block javascripts %}
 			{# FullCalendar JS (global build) #}
@@ -22,7 +115,8 @@
 			<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@6.1.20/index.global.min.js"></script>
 			<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/bootstrap5@6.1.20/index.global.min.js"></script>
 			<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.20/locales/fr.global.min.js"></script>
-			{% block importmap %}
+
+            {% block importmap %}
 				{{ importmap('app') }}
 			{% endblock %}
 		{% endblock %}
@@ -30,7 +124,9 @@
 	<body>
 		{% include "shared/_navbar.html.twig" %}
 		{% include "partials/_flash.html.twig" %}
+
 		{% block body %}{% endblock %}
+
 		<a href="#" class="back-to-top d-flex align-items-center justify-content-center">
 			<i class="fa-solid fa-arrow-up"></i>
 		</a>
