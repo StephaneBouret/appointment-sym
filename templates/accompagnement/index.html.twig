@@ -1,0 +1,112 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Accompagnement individuel et transition de vie — France Tuncq
+{% endblock %}
+
+{% block meta_description %}
+	Accompagnement individuel avec France Tuncq à La Plaine-sur-Mer et à distance : transition de vie, connaissance de soi, clarification personnelle et professionnelle.
+{% endblock %}
+
+{% block body %}
+	<div class="container py-5">
+		<header class="mb-5">
+			<h1>Accompagnement individuel et transition de vie</h1>
+			<p class="lead mt-3">
+				Un espace pour faire le point, mieux se comprendre et retrouver une direction plus juste dans une période de changement, de doute ou de réorientation.
+			</p>
+		</header>
+
+		<section class="mb-5">
+			<h2>À qui s'adresse cet accompagnement&nbsp;?</h2>
+			<p>
+				Cet accompagnement s'adresse aux personnes qui traversent une période de transition personnelle ou professionnelle, qui ressentent un besoin de clarification, ou qui souhaitent mieux comprendre leurs ressources, leurs freins et leurs aspirations profondes.
+			</p>
+			<p>
+				Il peut s'agir d'un changement de cap, d'une remise en question, d'un épuisement, d'un besoin de réalignement ou tout simplement d'une envie de redonner du sens à son parcours.
+			</p>
+		</section>
+
+		<section class="mb-5">
+			<h2>Une approche centrée sur la connaissance de soi</h2>
+			<p>
+				Mon accompagnement repose sur l'écoute, la qualité de présence, le discernement et un travail de mise en lumière de votre fonctionnement, de vos élans et de vos points d'appui.
+			</p>
+			<p>
+				J'utilise, lorsque cela est pertinent, la symbolique des nombres comme outil complémentaire de lecture. Elle vient soutenir la réflexion et ouvrir des perspectives, sans jamais se substituer à votre liberté, à votre vécu ni à votre responsabilité.
+			</p>
+		</section>
+
+		<section class="mb-5">
+			<h2>Ce que cet accompagnement peut vous aider à clarifier</h2>
+			<ul>
+				<li>mieux comprendre une période de transition</li>
+				<li>identifier vos ressources et vos potentiels</li>
+				<li>mettre en lumière certains schémas récurrents</li>
+				<li>retrouver un axe personnel ou professionnel</li>
+				<li>prendre du recul avant une décision importante</li>
+				<li>avancer avec plus de cohérence et de sens</li>
+			</ul>
+		</section>
+
+		<section class="mb-5">
+			<h2>Modalités</h2>
+			<p>
+				Les séances sont proposées sur rendez-vous, à La Plaine-sur-Mer ou à distance selon les besoins.
+			</p>
+			<p>
+				Chaque rencontre est pensée comme un temps d'écoute, d'exploration et de clarification, dans un cadre respectueux, confidentiel et profondément humain.
+			</p>
+		</section>
+
+		<section class="mb-5">
+			<h2>Prendre rendez-vous ou échanger</h2>
+			<p>
+				Si vous souhaitez simplement poser une question ou vérifier
+								si cet accompagnement correspond à votre situation,
+								vous pouvez également me contacter directement par téléphone.
+			</p>
+			<div class="d-flex gap-3 mt-3 flex-wrap">
+
+				<a href="/rendez-vous/types" class="btn btn-primary">
+					📆 Prendre rendez-vous
+				</a>
+
+				<a href="tel:+33634560579" class="btn btn-outline-primary">
+					📞 Appeler
+				</a>
+
+			</div>
+		</section>
+	</div>
+
+	{% include "shared/_footer.html.twig" %}
+{% endblock %}
+
+{% block structured_data %}
+	{{ parent() }}
+
+	<script type="application/ld+json">
+		{
+							"@context": "https://schema.org",
+							"@type": "WebPage",
+							"name": "Accompagnement individuel et transition de vie — France Tuncq",
+							"url": "{{ absolute_url(path('app_accompagnement_individuel')) }}",
+							"inLanguage": "fr-FR",
+							"description": "Accompagnement individuel avec France Tuncq à La Plaine-sur-Mer et à distance : transition de vie, connaissance de soi, clarification personnelle et professionnelle."
+						}
+	</script>
+
+	<script type="application/ld+json">
+		{
+							"@context": "https://schema.org",
+							"@type": "Service",
+							"name": "Accompagnement individuel",
+							"provider": {
+								"@type": "LocalBusiness",
+								"name": "France Tuncq"
+							},
+							"areaServed": "FR",
+							"serviceType": "Accompagnement individuel et transition de vie"
+						}
+	</script>
+{% endblock %}

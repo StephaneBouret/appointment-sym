@@ -9,42 +9,42 @@ use Symfony\Component\Routing\Attribute\Route;
 class LocalSeoController extends AbstractController
 {
     private const PAGES = [
-        'numerologie-la-plaine-sur-mer' => [
+        'accompagnement-la-plaine-sur-mer' => [
             'city' => 'La Plaine-sur-Mer',
-            'title' => 'Numérologie et coaching à La Plaine-sur-Mer',
-            'meta' => 'Séances de numérologie à La Plaine-sur-Mer avec France Tuncq. Chemin de vie, nombres clés et accompagnement personnalisé.',
+            'title' => 'Accompagnement individuel à La Plaine-sur-Mer',
+            'meta' => 'Accompagnement individuel à La Plaine-sur-Mer avec France Tuncq : transition de vie, connaissance de soi, clarification personnelle et professionnelle.',
             'note' => 'Consultations proposées à La Plaine-sur-Mer et dans les communes voisines de la Côte de Jade.',
         ],
-        'numerologue-pornic' => [
+        'accompagnement-pornic' => [
             'city' => 'Pornic',
-            'title' => 'Numérologie et coaching à Pornic',
-            'meta' => 'Séances de numérologie près de Pornic avec France Tuncq. Lecture personnalisée, chemin de vie et cycles.',
-            'note' => 'Cette page s\'adresse aux personnes recherchant une séance de numérologie autour de Pornic et de son secteur.',
+            'title' => 'Accompagnement individuel près de Pornic',
+            'meta' => 'Accompagnement individuel près de Pornic avec France Tuncq : transition de vie, connaissance de soi et rendez-vous à distance ou en présentiel.',
+            'note' => 'Cette page s\'adresse aux personnes situées à Pornic et dans les environs.',
         ],
-        'numerologue-saint-brevin' => [
+        'accompagnement-saint-brevin' => [
             'city' => 'Saint-Brévin-les-Pins',
-            'title' => 'Numérologie et coaching à Saint-Brévin-les-Pins',
-            'meta' => 'Séances de numérologie près de Saint-Brévin-les-Pins avec France Tuncq. Chemin de vie, nombres clés, accompagnement.',
-            'note' => 'Les séances peuvent intéresser les personnes situées à Saint-Brévin-les-Pins et dans ses environs.',
+            'title' => 'Accompagnement individuel près de Saint-Brévin-les-Pins',
+            'meta' => 'Accompagnement individuel près de Saint-Brévin-les-Pins avec France Tuncq : accompagnement personnel, transition de vie et recherche de sens.',
+            'note' => 'Les séances peuvent intéresser les personnes de Saint-Brévin-les-Pins et de son secteur.',
         ],
-        'numerologue-saint-nazaire' => [
+        'accompagnement-saint-nazaire' => [
             'city' => 'Saint-Nazaire',
-            'title' => 'Numérologie et coaching à Saint-Nazaire',
-            'meta' => 'Séances de numérologie près de Saint-Nazaire avec France Tuncq. Chemin de vie, nombres clés, accompagnement.',
-            'note' => 'Une page dédiée aux personnes recherchant un accompagnement en numérologie autour de Saint-Nazaire.',
+            'title' => 'Accompagnement individuel près de Saint-Nazaire',
+            'meta' => 'Accompagnement individuel près de Saint-Nazaire avec France Tuncq : clarification, connaissance de soi et transitions personnelles ou professionnelles.',
+            'note' => 'Une page dédiée aux personnes recherchant un accompagnement autour de Saint-Nazaire.',
         ],
-        'numerologue-nantes' => [
+        'accompagnement-nantes' => [
             'city' => 'Nantes',
-            'title' => 'Numérologie et coaching à Nantes',
-            'meta' => 'Séances de numérologie près de Nantes avec France Tuncq. Chemin de vie, nombres clés et rendez-vous en ligne.',
-            'note' => 'Cette page est pensée pour les personnes de Nantes souhaitant découvrir la numérologie ou réserver une séance.',
+            'title' => 'Accompagnement individuel près de Nantes',
+            'meta' => 'Accompagnement individuel près de Nantes avec France Tuncq : transition de vie, connaissance de soi et rendez-vous en ligne.',
+            'note' => 'Cette page est pensée pour les personnes de Nantes souhaitant bénéficier d\'un accompagnement individuel.',
         ],
     ];
 
     #[Route(
         '/{slug}',
         name: 'seo_local_page',
-        requirements: ['slug' => 'numerologie-la-plaine-sur-mer|numerologue-pornic|numerologue-saint-brevin|numerologue-saint-nazaire|numerologue-nantes']
+        requirements: ['slug' => 'accompagnement-la-plaine-sur-mer|accompagnement-pornic|accompagnement-saint-brevin|accompagnement-saint-nazaire|accompagnement-nantes']
     )]
     public function local(string $slug): Response
     {

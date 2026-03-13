@@ -5,14 +5,18 @@
 		charset="UTF-8">
 		{# ✅ Title #}
 		<title>
-			{% block title %}France Tuncq - Numérologie et coaching{% endblock %}
+			{% block title %}France Tuncq - Accompagnement individuel et transition de vie
+			{% endblock %}
 		</title>
 		{# ✅ Meta description #}
-		<meta name="description" content="{% block meta_description %}Numérologie et accompagnement personnalisé avec France Tuncq. Prenez rendez-vous en ligne.{% endblock %}">
+		<meta
+		name="description" content="{% block meta_description %}Accompagnement individuel avec France Tuncq : transition de vie, connaissance de soi et clarification personnelle à La Plaine-sur-Mer et à distance.{% endblock %}">
 		{# ✅ Robots #}
-		<meta name="robots" content="{% block meta_robots %}index,follow{% endblock %}">
+		<meta
+		name="robots" content="{% block meta_robots %}index,follow{% endblock %}">
 		{# ✅ Canonical (évite contenu dupliqué) #}
-		<link rel="canonical" href="{{ app.request.schemeAndHttpHost ~ app.request.pathInfo }}">
+		<link
+		rel="canonical" href="{{ app.request.schemeAndHttpHost ~ app.request.pathInfo }}">
 		{# Favicons #}
 		<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('favicon/apple-touch-icon.png') }}">
 		<link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon/favicon-32x32.png') }}">
@@ -20,7 +24,8 @@
 		<link rel="manifest" href="{{ asset('favicon/site.webmanifest') }}">
 		<link rel="shortcut icon" href="{{ asset('favicon/favicon.ico') }}">
 
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta
+		name="viewport" content="width=device-width, initial-scale=1.0">
 
 		{# ✅ OpenGraph #}
 		<meta property="og:title" content="{% block og_title %}{{ block('title') }}{% endblock %}">
@@ -31,80 +36,107 @@
 		<meta property="og:image:width" content="1200">
 		<meta property="og:image:height" content="630">
 		<meta property="og:site_name" content="{% block og_site_name %}France Tuncq{% endblock %}">
-		<meta property="og:locale" content="fr_FR">
+		<meta
+		property="og:locale" content="fr_FR">
 
 		{# ✅ Twitter Cards #}
-        <meta name="twitter:card" content="{% block twitter_card %}summary_large_image{% endblock %}">
+		<meta name="twitter:card" content="{% block twitter_card %}summary_large_image{% endblock %}">
 		<meta name="twitter:title" content="{% block twitter_title %}{{ block('title') }}{% endblock %}">
 		<meta name="twitter:description" content="{% block twitter_description %}{{ block('meta_description') }}{% endblock %}">
-		<meta name="twitter:image" content="{% block twitter_image %}{{ block('og_image') }}{% endblock %}">
+		<meta name="twitter:image" content="{% block twitter_image %}{{ block('og_image') }}{% endblock %}"> {% block stylesheets %}{% endblock %}
 
-        {% block stylesheets %}{% endblock %}
-
-        {# ✅ Données structurées JSON-LD (site-wide) #}
-        {% block structured_data %}
-            <script type="application/ld+json">
-            {
-                "@context": "https://schema.org",
-                "@graph": [
-                    {
-                        "@type": "WebSite",
-                        "@id": "https://francetuncq.fr/#website",
-                        "url": "https://francetuncq.fr/",
-                        "name": "France Tuncq",
-                        "inLanguage": "fr-FR"
-                    },
-                    {
-                        "@type": "LocalBusiness",
-                        "@id": "https://francetuncq.fr/#localbusiness",
-                        "name": "France Tuncq",
-                        "url": "https://francetuncq.fr/",
-                        "telephone": "+33634560579",
-                        "address": {
-                            "@type": "PostalAddress",
-                            "streetAddress": "1B, La Fendoire",
-                            "postalCode": "44770",
-                            "addressLocality": "La Plaine-sur-Mer",
-                            "addressCountry": "FR"
-			            },
-                         "geo": {
-                            "@type": "GeoCoordinates",
-                            "latitude": 47.141336,
-                            "longitude": -2.179555
-                        },
-                        "openingHoursSpecification": [
-                            {
-                                "@type": "OpeningHoursSpecification",
-                                "dayOfWeek": [
-                                    "Monday",
-                                    "Tuesday",
-                                    "Wednesday",
-                                    "Thursday",
-                                    "Friday"
-                                ],
-                                "opens": "09:00",
-                                "closes": "12:00"
-                            },
-                            {
-                                "@type": "OpeningHoursSpecification",
-                                "dayOfWeek": [
-                                "Monday",
-                                "Tuesday",
-                                "Wednesday",
-                                "Thursday",
-                                "Friday"
-                                ],
-                                "opens": "14:00",
-                                "closes": "19:00"
-                            }
-                        ],
-                        "areaServed": "FR",
-                        "priceRange": "€€"
-                    }
-                ]
-            }
-            </script>
-        {% endblock %}
+		{# ✅ Données structurées JSON-LD (site-wide) #}
+		{% block structured_data %}
+			<script type="application/ld+json">
+				{
+								        "@context": "https://schema.org",
+								        "@graph": [
+								            {
+								                "@type": "WebSite",
+								                "@id": "https://francetuncq.fr/#website",
+								                "url": "https://francetuncq.fr/",
+								                "name": "France Tuncq",
+								                "inLanguage": "fr-FR"
+								            },
+								            {
+								                "@type": "LocalBusiness",
+								                "@id": "https://francetuncq.fr/#localbusiness",
+								                "name": "France Tuncq",
+								                "url": "https://francetuncq.fr/",
+								                "telephone": "+33634560579",
+								                "description": "Accompagnement individuel et transition de vie avec France Tuncq à La Plaine-sur-Mer et à distance.",
+								                "address": {
+								                    "@type": "PostalAddress",
+								                    "streetAddress": "1B, La Fendoire",
+								                    "postalCode": "44770",
+								                    "addressLocality": "La Plaine-sur-Mer",
+								                    "addressCountry": "FR"
+								                },
+								                "geo": {
+								                    "@type": "GeoCoordinates",
+								                    "latitude": 47.141336,
+								                    "longitude": -2.179555
+								                },
+								                "openingHoursSpecification": [
+								                    {
+								                        "@type": "OpeningHoursSpecification",
+								                        "dayOfWeek": [
+								                            "Monday",
+								                            "Tuesday",
+								                            "Wednesday",
+								                            "Thursday",
+								                            "Friday"
+								                        ],
+								                        "opens": "09:00",
+								                        "closes": "12:00"
+								                    },
+								                    {
+								                        "@type": "OpeningHoursSpecification",
+								                        "dayOfWeek": [
+								                            "Monday",
+								                            "Tuesday",
+								                            "Wednesday",
+								                            "Thursday",
+								                            "Friday"
+								                        ],
+								                        "opens": "14:00",
+								                        "closes": "19:00"
+								                    }
+								                ],
+								                "areaServed": "FR",
+								                "priceRange": "€€",
+								                "hasOfferCatalog": {
+								                    "@type": "OfferCatalog",
+								                    "name": "Services",
+								                    "itemListElement": [
+								                        {
+								                            "@type": "Offer",
+								                            "itemOffered": {
+								                                "@type": "Service",
+								                                "name": "Accompagnement individuel"
+								                            }
+								                        },
+								                        {
+								                            "@type": "Offer",
+								                            "itemOffered": {
+								                                "@type": "Service",
+								                                "name": "Coaching de transition de vie"
+								                            }
+								                        },
+								                        {
+								                            "@type": "Offer",
+								                            "itemOffered": {
+								                                "@type": "Service",
+								                                "name": "Consultation de numérologie"
+								                            }
+								                        }
+								                    ]
+								                }
+								            }
+								        ]
+								    }
+			</script>
+		{% endblock %}
 
 		{% block javascripts %}
 			{# FullCalendar JS (global build) #}
@@ -115,7 +147,7 @@
 			<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/bootstrap5@6.1.20/index.global.min.js"></script>
 			<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.20/locales/fr.global.min.js"></script>
 
-            {% block importmap %}
+			{% block importmap %}
 				{{ importmap('app') }}
 			{% endblock %}
 		{% endblock %}
@@ -125,6 +157,17 @@
 		{% include "partials/_flash.html.twig" %}
 
 		{% block body %}{% endblock %}
+
+		{# CTA mobile sticky #}
+		<div class="mobile-sticky-cta d-md-none">
+			<a href="tel:+33634560579" class="mobile-sticky-call">
+				📞 Appeler
+			</a>
+
+			<a href="{{ path('app_appointment_types') }}" class="mobile-sticky-book">
+				📆 RDV
+			</a>
+		</div>
 
 		<a href="#" class="back-to-top d-flex align-items-center justify-content-center">
 			<i class="fa-solid fa-arrow-up"></i>
