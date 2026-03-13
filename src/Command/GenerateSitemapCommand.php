@@ -62,6 +62,7 @@ final class GenerateSitemapCommand extends Command
         $staticRoutes = [
             ['route' => 'app_home', 'changefreq' => 'daily', 'priority' => '1.0'],
             ['route' => 'app_about', 'changefreq' => 'yearly', 'priority' => '0.7'],
+            ['route' => 'app_accompagnement_individuel', 'changefreq' => 'monthly', 'priority' => '0.9'],
             ['route' => 'app_contact', 'changefreq' => 'yearly', 'priority' => '0.6'],
 
             // Légal
@@ -71,12 +72,11 @@ final class GenerateSitemapCommand extends Command
 
             // Pages "métier" publiques
             ['route' => 'app_appointment_types', 'changefreq' => 'weekly', 'priority' => '0.8'],
+            ['route' => 'app_numerologie', 'changefreq' => 'monthly', 'priority' => '0.8'],
 
             // (à toi de voir) : inscription / login -> souvent inutile en SEO
             // ['route' => 'app_register', 'changefreq' => 'yearly', 'priority' => '0.2'],
             // ['route' => 'app_login', 'changefreq' => 'yearly', 'priority' => '0.2'],
-
-            ['route' => 'app_numerologie', 'changefreq' => 'monthly', 'priority' => '0.8'],
         ];
 
         if ($includeAppointmentList) {
@@ -96,11 +96,11 @@ final class GenerateSitemapCommand extends Command
 
         // 2) Pages SEO locales (route unique seo_local_page + slugs whitelistés)
         $localSeoSlugs = [
-            'numerologie-la-plaine-sur-mer',
-            'numerologue-pornic',
-            'numerologue-saint-brevin',
-            'numerologue-saint-nazaire',
-            'numerologue-nantes',
+            'accompagnement-la-plaine-sur-mer',
+            'accompagnement-pornic',
+            'accompagnement-saint-brevin',
+            'accompagnement-saint-nazaire',
+            'accompagnement-nantes',
         ];
 
         foreach ($localSeoSlugs as $slug) {
