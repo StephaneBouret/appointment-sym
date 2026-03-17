@@ -17,6 +17,81 @@ Accompagnement individuel avec France Tuncq : transition de vie, connaissance de
 		{% include "partials/_introduction.html.twig" %}
 		{% include "partials/_appointment.html.twig" %}
 		{% include "partials/_about_me_homepage.html.twig" %}
+
+		<section class="container py-5">
+			<div class="mx-auto" style="max-width: 900px;">
+				<h2 class="mb-4">Questions fréquentes</h2>
+
+				<div class="mb-4">
+					<h3>À qui s'adresse l'accompagnement individuel&nbsp;?</h3>
+					<p>
+						L'accompagnement individuel s'adresse aux personnes qui traversent une période de transition, de doute ou de questionnement, et qui souhaitent mieux comprendre leur situation pour avancer avec plus de clarté.
+					</p>
+				</div>
+
+				<div class="mb-4">
+					<h3>Peut-on appeler avant de réserver&nbsp;?</h3>
+					<p>
+						Oui. Il est tout à fait possible d'appeler avant de réserver une séance afin de poser une question ou de vérifier si l'accompagnement correspond à votre besoin.
+					</p>
+				</div>
+
+				<div class="mb-4">
+					<h3>Les séances sont-elles proposées à distance&nbsp;?</h3>
+					<p>
+						Oui. Les séances peuvent être proposées à La Plaine-sur-Mer ou à distance, selon votre situation et vos préférences.
+					</p>
+				</div>
+			</div>
+		</section>
 		{% include "shared/_footer.html.twig" %}
 	</div>
+{% endblock %}
+
+{% block structured_data %}
+    {{ parent() }}
+
+    <script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "WebPage",
+			"name": "France Tuncq - Accompagnement individuel et transition de vie",
+			"url": "{{ absolute_url(path('app_home')) }}",
+			"inLanguage": "fr-FR",
+			"description": "Accompagnement individuel avec France Tuncq : transition de vie, connaissance de soi et clarification personnelle à La Plaine-sur-Mer et à distance."
+		}
+	</script>
+
+	<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "FAQPage",
+			"mainEntity": [
+				{
+					"@type": "Question",
+					"name": "À qui s'adresse l'accompagnement individuel ?",
+					"acceptedAnswer": {
+						"@type": "Answer",
+						"text": "L'accompagnement individuel s'adresse aux personnes qui traversent une période de transition, de doute ou de questionnement, et qui souhaitent mieux comprendre leur situation pour avancer avec plus de clarté."
+					}
+				},
+				{
+					"@type": "Question",
+					"name": "Peut-on appeler avant de réserver ?",
+					"acceptedAnswer": {
+						"@type": "Answer",
+						"text": "Oui. Il est possible d'appeler avant de réserver une séance afin de poser une question ou de vérifier si l'accompagnement correspond à votre besoin."
+					}
+				},
+				{
+					"@type": "Question",
+					"name": "Les séances sont-elles proposées à distance ?",
+					"acceptedAnswer": {
+						"@type": "Answer",
+						"text": "Oui. Les séances peuvent être proposées à La Plaine-sur-Mer ou à distance, selon la situation et les préférences de chacun."
+					}
+				}
+			]
+		}
+	</script>
 {% endblock %}

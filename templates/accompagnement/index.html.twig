@@ -14,10 +14,13 @@
 			<p class="lead mt-3">
 				Un espace pour faire le point, mieux se comprendre et retrouver une direction plus juste dans une période de changement, de doute ou de réorientation.
 			</p>
+			<p>
+				Un accompagnement individuel permet de prendre du recul sur une situation, de mieux comprendre ses fonctionnements et d'avancer avec plus de clarté et de cohérence.
+			</p>
 		</header>
 
 		<section class="mb-5">
-			<h2>À qui s'adresse cet accompagnement&nbsp;?</h2>
+			<h2>À qui s'adresse un accompagnement individuel&nbsp;?</h2>
 			<p>
 				Cet accompagnement s'adresse aux personnes qui traversent une période de transition personnelle ou professionnelle, qui ressentent un besoin de clarification, ou qui souhaitent mieux comprendre leurs ressources, leurs freins et leurs aspirations profondes.
 			</p>
@@ -54,28 +57,64 @@
 				Les séances sont proposées sur rendez-vous, à La Plaine-sur-Mer ou à distance selon les besoins.
 			</p>
 			<p>
+				Les séances s'adressent aux personnes situées à La Plaine-sur-Mer, dans les environs, ou partout en France à distance.
+			</p>
+			<p>
 				Chaque rencontre est pensée comme un temps d'écoute, d'exploration et de clarification, dans un cadre respectueux, confidentiel et profondément humain.
 			</p>
 		</section>
 
 		<section class="mb-5">
+			<h2>Questions fréquentes</h2>
+
+			<div class="mb-4">
+				<h3>Faut-il être en difficulté pour consulter&nbsp;?</h3>
+				<p>
+					Non. Un accompagnement peut être utile dans une période de questionnement, de transition ou simplement pour mieux se comprendre et clarifier une direction.
+				</p>
+			</div>
+
+			<div class="mb-4">
+				<h3>Combien de séances sont nécessaires&nbsp;?</h3>
+				<p>
+					Une seule séance peut déjà apporter des éclairages importants. Le nombre de séances dépend ensuite de votre situation, de vos besoins et du rythme qui vous convient.
+				</p>
+			</div>
+
+			<div class="mb-4">
+				<h3>Comment se déroule une séance&nbsp;?</h3>
+				<p>
+					La séance est un temps d'échange, d'écoute et de réflexion. Elle permet de prendre du recul, de mieux comprendre une situation et d'identifier des pistes d'évolution concrètes.
+				</p>
+			</div>
+
+			<div class="mb-4">
+				<h3>Est-ce que cet accompagnement remplace un suivi thérapeutique&nbsp;?</h3>
+				<p>
+					Non. Cet accompagnement s'inscrit dans une démarche de connaissance de soi et de clarification, mais ne remplace pas un suivi médical, psychologique ou thérapeutique.
+				</p>
+			</div>
+		</section>
+
+		<section class="mb-5">
 			<h2>Prendre rendez-vous ou échanger</h2>
 			<p>
-				Si vous souhaitez simplement poser une question ou vérifier
-								si cet accompagnement correspond à votre situation,
-								vous pouvez également me contacter directement par téléphone.
+				Si vous souhaitez simplement poser une question ou vérifier si cet accompagnement correspond à votre situation, vous pouvez également me contacter directement par téléphone.
 			</p>
-			<div class="d-flex gap-3 mt-3 flex-wrap">
 
-				<a href="/rendez-vous/types" class="btn btn-primary">
-					📆 Prendre rendez-vous
+			<div class="d-flex gap-3 mt-3 flex-wrap">
+				<a href="{{ path('app_appointment_types') }}" class="btn btn-primary">
+					📆 Réserver une séance
 				</a>
 
 				<a href="tel:+33634560579" class="btn btn-outline-primary">
 					📞 Appeler
 				</a>
-
 			</div>
+
+			<p class="text-muted mt-3 small">
+				Réservez directement en ligne ou appelez si vous préférez échanger avant la séance.
+			</p>
 		</section>
 	</div>
 
@@ -87,26 +126,67 @@
 
 	<script type="application/ld+json">
 		{
-							"@context": "https://schema.org",
-							"@type": "WebPage",
-							"name": "Accompagnement individuel et transition de vie — France Tuncq",
-							"url": "{{ absolute_url(path('app_accompagnement_individuel')) }}",
-							"inLanguage": "fr-FR",
-							"description": "Accompagnement individuel avec France Tuncq à La Plaine-sur-Mer et à distance : transition de vie, connaissance de soi, clarification personnelle et professionnelle."
-						}
+			"@context": "https://schema.org",
+			"@type": "WebPage",
+			"name": "Accompagnement individuel et transition de vie — France Tuncq",
+			"url": "{{ absolute_url(path('app_accompagnement_individuel')) }}",
+			"inLanguage": "fr-FR",
+			"description": "Accompagnement individuel avec France Tuncq à La Plaine-sur-Mer et à distance : transition de vie, connaissance de soi, clarification personnelle et professionnelle."
+		}
 	</script>
 
 	<script type="application/ld+json">
 		{
-							"@context": "https://schema.org",
-							"@type": "Service",
-							"name": "Accompagnement individuel",
-							"provider": {
-								"@type": "LocalBusiness",
-								"name": "France Tuncq"
-							},
-							"areaServed": "FR",
-							"serviceType": "Accompagnement individuel et transition de vie"
-						}
+			"@context": "https://schema.org",
+			"@type": "Service",
+			"name": "Accompagnement individuel",
+			"provider": {
+				"@type": "LocalBusiness",
+				"name": "France Tuncq"
+			},
+			"areaServed": "FR",
+			"serviceType": "Accompagnement individuel et transition de vie"
+		}
+	</script>
+
+	<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "FAQPage",
+			"mainEntity": [
+				{
+					"@type": "Question",
+					"name": "Faut-il être en difficulté pour consulter ?",
+					"acceptedAnswer": {
+						"@type": "Answer",
+						"text": "Non. Un accompagnement peut être utile dans une période de questionnement, de transition ou simplement pour mieux se comprendre et clarifier une direction."
+					}
+				},
+				{
+					"@type": "Question",
+					"name": "Combien de séances sont nécessaires ?",
+					"acceptedAnswer": {
+						"@type": "Answer",
+						"text": "Une seule séance peut déjà apporter des éclairages importants. Le nombre de séances dépend ensuite de votre situation, de vos besoins et du rythme qui vous convient."
+					}
+				},
+				{
+					"@type": "Question",
+					"name": "Comment se déroule une séance ?",
+					"acceptedAnswer": {
+						"@type": "Answer",
+						"text": "La séance est un temps d'échange, d'écoute et de réflexion. Elle permet de prendre du recul, de mieux comprendre une situation et d'identifier des pistes d'évolution concrètes."
+					}
+				},
+				{
+					"@type": "Question",
+					"name": "Est-ce que cet accompagnement remplace un suivi thérapeutique ?",
+					"acceptedAnswer": {
+						"@type": "Answer",
+						"text": "Non. Cet accompagnement s'inscrit dans une démarche de connaissance de soi et de clarification, mais ne remplace pas un suivi médical, psychologique ou thérapeutique."
+					}
+				}
+			]
+		}
 	</script>
 {% endblock %}
