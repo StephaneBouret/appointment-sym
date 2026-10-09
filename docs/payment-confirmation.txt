@@ -1,0 +1,256 @@
+CONFIRMATION DES PAIEMENTS — PROCEDURE DE RECETTE ET DE LIVRAISON
+
+Périmètre : correctif local, dernière passe du 7 octobre 2026. Aucun déploiement effectué.
+Les commandes de recette Stripe, d'exploitation et de migration ci-dessous
+sont des instructions pour une intervention future, pas des actions exécutées.
+
+1. Fonctionnement
+
+POST /rendez-vous/confirm/{id} valide le formulaire Symfony, son jeton CSRF
+avec session et la case d'acceptation. Il enregistre sur le rendez-vous un
+montant en centimes, EUR, une clé aléatoire d'idempotence, une date d'acceptation
+et une échéance. Le prix est alors figé pour cette tentative.
+
+GET /rendez-vous/pay/{id} exige la propriété du rendez-vous, l'état PENDING,
+l'acceptation persistée et une échéance non dépassée. Il crée le PaymentIntent
+ou récupère celui déjà associé. Tous les paramètres de création restent
+identiques après une erreur réseau ; la même clé d'idempotence Stripe est
+réutilisée. La clé est conservée avant l'appel Stripe, et la référence Stripe
+est conservée avant de donner le client_secret au navigateur.
+
+L'échéance initiale est fixée à 30 minutes depuis la création du rendez-vous.
+Pour une tentative préparée, payment.expiresAt gouverne le paiement ET le
+nettoyage : --minutes ne peut ni avancer ni retarder cette échéance persistée.
+Les anciens PENDING sans échéance conservent le repli createdAt + --minutes
+(30 par défaut) pour le nettoyage. L'acceptation d'un paiement n'est possible
+que dans la fenêtre PENDING_MINUTES ; elle fige ensuite cette échéance.
+Le dry-run sélectionne les mêmes candidats puis relit chaque ligne sous
+verrou, sans modifier son statut, et ne compte que les annulations éligibles.
+Sa prévision reste celle de l'instant observé, pas une réservation du résultat
+d'une commande ultérieure pendant laquelle les données peuvent évoluer.
+
+GET /rendez-vous/terminate/{id} ne lit aucune preuve dans les paramètres du
+navigateur : il interroge Stripe avec l'identifiant enregistré côté serveur.
+
+POST /stripe/webhook vérifie Stripe-Signature sur le corps brut, avec la
+tolérance de signature du SDK. Seul payment_intent.succeeded déclenche la
+confirmation. L'accès est sans session, limité à cette URL exacte, et reste
+possible en maintenance. Les autres routes gardent leurs protections.
+
+Les deux entrées utilisent AppointmentPaymentService. Le contrôle porte sur
+l'association persistée, les métadonnées kind/appointment_id/attempt_key,
+le statut succeeded, amount, amount_received et currency. requires_capture,
+processing, requires_action et tout autre état non succeeded sont refusés.
+
+La transaction verrouille puis recharge le rendez-vous avant chaque décision
+(PESSIMISTIC_WRITE). La confirmation, le numéro et l'état pending de la
+notification sont validés dans la même transaction. Le nettoyage utilise le
+même verrou et revérifie l'état : une ancienne lecture PENDING ne peut pas
+annuler une confirmation intervenue entre-temps. L'identifiant Stripe est
+également unique en base. Cela déduplique par paiement/rendez-vous, même si
+Stripe livre plusieurs événements distincts pour le même paiement.
+
+Une PREMIERE réussite reçue après annulation ou échéance ne réoccupe jamais le créneau.
+Le paiement vérifié est conservé, payment.issue vaut late_payment et un journal
+stripe_payment_review_required signale le dossier à examiner. Aucun
+remboursement automatique ni règle commerciale supplémentaire n'est introduit.
+verifiedAt prouve un paiement contrôlé, pas nécessairement une réservation
+confirmée : examiner aussi status et issue.
+
+Si ce même paiement avait déjà confirmé le rendez-vous AVANT son annulation,
+sa répétition ne crée aucun late_payment et ne reconfirme rien. Après contrôle
+de l'association et du montant, la combinaison verifiedAt + numéro + état de
+notification établi par la confirmation identifie cette répétition. Le numéro,
+la preuve, l'incident éventuel et l'historique de notification sont conservés.
+verifiedAt seul ne suffit jamais : une première réussite tardive reste signalée
+même si elle est reçue à nouveau. Le retour navigateur explique que le paiement
+a déjà été pris en compte mais que le rendez-vous reste annulé.
+
+2. Notifications et exploitation
+
+PaymentNotificationService réclame une notification sous verrou et valide
+l'état sending AVANT d'envoyer l'événement existant. Un second traitement ne
+renvoie pas une notification sending ou sent. Le subscriber client existant
+est réutilisé ; l'envoi administratrice commenté reste commenté.
+
+Après succès : sent et date d'envoi. Après exception : failed, classe d'erreur
+et journal payment_confirmation_notification_failed, sans message SMTP ni
+secret. Le rendez-vous reste confirmé. Une notification devenue obsolète
+après annulation est suppressed. Un arrêt du processus pendant l'envoi laisse
+un état sending observable.
+
+Le webhook valide durablement confirmation et notification pending puis répond
+sans appeler le transport de courrier. Le retour navigateur peut encore tenter
+l'envoi après validation de la transaction. La commande existante traite les
+pending/failed : sa planification est NECESSAIRE aux confirmations réalisées
+uniquement par webhook (onglet fermé, aucun retour navigateur).
+
+Inspection sans envoi :
+  php bin/console app:payments:notifications --env=prod
+
+Envoi des pending/failed (ENVOIE des courriels, planification obligatoire,
+par exemple toutes les cinq minutes, une fois le transport validé) :
+  php bin/console app:payments:notifications --retry --limit=100 --env=prod
+
+Après contrôle humain des journaux de transport et des processus en cours,
+reprise EXPLICITE d'un sending bloqué depuis plus d'une heure :
+  php bin/console app:payments:notifications --retry-uncertain=ID --env=prod
+
+SMTP n'offre pas une garantie d'envoi exactement une fois en cas de rupture
+après acceptation du message par le serveur. Une reprise après erreur ambiguë
+peut produire un doublon. Ne pas relancer un sending sans rapprochement.
+sent signifie accepté par le transport, pas lu ni forcément délivré en boîte.
+
+Les champs de preuve, d'incident et d'état de notification sont aussi visibles
+en lecture seule dans le détail administratif d'un rendez-vous.
+La colonne « Montant de référence » utilise le montant figé, avec repli sur
+le tarif du type pour les dossiers historiques. Elle ne constitue pas une
+preuve de paiement des rendez-vous manuels ou anciens. Son tri est désactivé
+car ce montant est une propriété calculée, pas une colonne Doctrine directe.
+Surveiller les erreurs stripe_payment_unassociated (dont anciens paiements),
+stripe_payment_review_required et payment_confirmation_notification_failed.
+Un incident métier signé est acquitté en HTTP 204 et demande une intervention ;
+une panne d'infrastructure non traitée produit un 5xx pour réessai Stripe.
+
+3. Tests automatisés isolés
+
+Commande :
+  php -d xdebug.mode=off vendor/phpunit/phpunit/phpunit -c phpunit.payment.xml
+
+Le bootstrap de cette suite ne charge aucun fichier d'environnement.
+Les connexions SQLite sont créées explicitement en mémoire et vérifiées
+avant création de schéma. Le test de câblage du vrai noyau fournit uniquement
+des valeurs fictives, une base en mémoire, null://null pour le courrier et un
+cache sous var/payment-tests. Aucun schéma de développement n'est utilisé.
+Le client HTTP Stripe est bloqué par défaut ; les réponses du SDK sont simulées.
+Le transport NullTransport capture les messages pour les assertions.
+
+La suite couvre la preuve et les états persistés, les propriétaires, le CSRF,
+les signatures brutes/invalides/anciennes, les événements répétés ou distincts,
+la confirmation sans navigateur, l'expiration avant/après confirmation, la
+reprise du courrier, le vrai subscriber et le vrai template de confirmation,
+le câblage des routes et la conservation des lignes historiques par migration.
+
+L'intégration des contrôleurs est exercée avec de vrais formulaires Symfony.
+Le noyau réel est utilisé pour contrôler les services, les méthodes de routes,
+l'accès anonyme au webhook et le maintien de la protection d'administration.
+Cela ne remplace pas une recette navigateur du calendrier et de Stripe Elements.
+
+Limite de cette suite : SQLite ne reproduit pas les verrous de lignes InnoDB.
+Une recette distincte a été exécutée le 7 octobre 2026 sur MySQL 8.4.7/InnoDB
+local, dans une base dédiée neuve avec uniquement des données fictives.
+Le véritable exécuteur Doctrine et cinq scénarios multiprocessus avec attentes
+de verrous observées ont été validés. Voir docs/payment-mysql-recette.txt pour
+la cible, les commandes, les preuves et les limites. Cette recette est séparée
+de phpunit.payment.xml et ne doit jamais être dirigée vers une base utilisateur.
+
+Pour reproduire la recette, sur une base MySQL NOMMEE ET ISOLEE, avec uniquement
+des données fictives, confirmer moteur InnoDB et version. Exercer deux processus
+distincts avec leurs propres connexions : retour + webhook simultanés, deux
+webhooks simultanés, nettoyage + webhook. Vérifier un seul numéro, une seule
+transition, une seule notification normale, et aucun retour à PENDING.
+Si le nettoyage prend le verrou en premier, attendre CANCELED + late_payment ;
+si la confirmation gagne avant l'échéance, attendre CONFIRMED et nettoyage ignoré.
+Ne pas diriger la suite ou une création de schéma vers une base utilisateur.
+
+4. Recette manuelle Stripe TEST (non effectuée ici)
+
+Préparer une application et une base de recette isolées, des comptes fictifs,
+des clés Stripe de TEST et un transport de courrier capturé. Appliquer la
+migration uniquement à cette base après en avoir vérifié la cible.
+
+Configurer dans cet environnement STRIPE_WEBHOOK_SECRET : le secret de la
+destination Stripe test, ou celui de la session stripe listen, selon le cas.
+Ne jamais afficher ni copier le secret dans Git ou un compte rendu.
+La commande éventuelle stripe listen transmet vers l'URL de recette :
+  stripe listen --events payment_intent.succeeded --forward-to http://localhost:8000/stripe/webhook
+Adapter protocole/port à la recette. Ne pas utiliser cette commande sur le site
+réel ; elle peut livrer des événements et faire envoyer des messages.
+
+Tester sur mobile et ordinateur :
+- accéder au retour sans payer : aucune confirmation ;
+- POST sans CSRF/case : rejet ; ouvrir /pay directement : retour au récapitulatif ;
+- tenter les routes d'un autre utilisateur : aucun effet ;
+- payer avec un moyen de test Stripe réussi : numéro, statut et courrier uniques ;
+- recharger /pay avant paiement : même PaymentIntent ;
+- modifier le tarif après préparation : montant attendu et courrier inchangés ;
+- payer puis fermer l'onglet avant le retour : webhook seul confirme, notification
+  pending sans courrier ; la commande planifiée envoie une seule fois ;
+- renvoyer le même événement et un second événement du même PaymentIntent :
+  pas de nouveau numéro ni de nouvelle notification ;
+- refus, authentification non terminée et abandon : aucune confirmation ;
+- simuler une livraison tardive après expiration : incident, créneau non repris ;
+- annuler après confirmation puis répéter webhook et retour : statut annulé,
+  numéro et preuve conservés, aucun faux incident ni nouveau courrier ;
+- nettoyer avec --minutes inférieur puis supérieur au délai : l'échéance
+  persistée prévaut ; comparer dry-run et exécution sur des données stables ;
+- indisponibilité du transport de courrier : réservation confirmée, failed
+  visible, puis --retry après restauration : notification reprise.
+
+5. Livraison future : ordre et paiements en cours
+
+Aucun compte Stripe, serveur ou secret n'a été configuré pendant ce correctif.
+
+Avant la bascule :
+- Valider recette, concurrence InnoDB, sauvegarde et restauration.
+- Fermer temporairement la création de nouvelles réservations/paiements.
+  La maintenance existante laisse passer l'AJAX : ne pas se fier à elle seule
+  pour ce gel ; fermer explicitement les anciennes entrées de paiement au
+  niveau de l'exploitation, ou utiliser une fenêtre de service réellement fermé.
+- Rapprocher les anciens PENDING avec Stripe. L'ancien code créait des
+  PaymentIntents sans conserver leur référence et pouvait en créer plusieurs.
+  Des onglets déjà ouverts peuvent encore payer un ancien client_secret.
+- Attendre/drainer les tentatives en cours et faire traiter les intentions
+  encore actives par l'opérateur Stripe selon leur état. Ne pas simplement
+  réouvrir la création sur un ancien PENDING non rapproché : risque de doublon.
+- Un ancien paiement réussi doit être vérifié manuellement avant toute décision.
+  Ne pas inférer une preuve de l'ancien statut CONFIRMED ni d'un numéro.
+
+Migration additive préparée : DoctrineMigrations\Version20261005090000.
+Toutes les colonnes payment_* sont nullable ; aucune référence n'est inventée,
+aucun statut ni prix historique n'est recalculé. Les anciens rendez-vous
+confirmés/manuels restent utilisables sans preuve Stripe.
+
+Sur la cible explicitement vérifiée, après sauvegarde, contrôler le SQL de
+cette seule migration avec --dry-run, puis l'exécuter au moment de la bascule :
+  php bin/console doctrine:migrations:execute 'DoctrineMigrations\Version20261005090000' --up --dry-run --env=prod
+  php bin/console doctrine:migrations:execute 'DoctrineMigrations\Version20261005090000' --up --env=prod
+Ne pas lancer aveuglément toutes les migrations historiques en attente.
+La recette MySQL locale a exercé le véritable exécuteur Doctrine sur un schéma
+avant correctif. La migration est non transactionnelle car le DDL MySQL valide
+implicitement ses transactions. Un échec partiel impose donc une inspection,
+pas une relance aveugle. Contrôler le SQL et les caractéristiques de la cible
+de livraison ; la base et la configuration du serveur déployé n'ont pas été testées.
+
+Déployer le code et reconstruire le cache selon la procédure habituelle, après
+présence des nouvelles colonnes et configuration des variables nécessaires :
+STRIPE_SECRET_KEY, STRIPE_PUBLIC_KEY (existantes), STRIPE_WEBHOOK_SECRET (nouvelle),
+MAILER_DSN et MAILER_DEFAULT_FROM (existantes). Employer les valeurs du même
+compte et mode Stripe. Le domaine de retour et DEFAULT_URI doivent être HTTPS
+et correspondre au site déployé.
+
+Créer/activer une destination HTTPS vers /stripe/webhook pour l'événement
+payment_intent.succeeded, au format d'événement snapshot PaymentIntent.
+Vérifier sa version d'API contre celle du SDK effectivement livré. Ne pas
+utiliser une destination thin/v2 sans adaptation. La signature protège cette
+route ; aucune exception globale de CSRF/session ne doit être ajoutée.
+
+Planifier obligatoirement l'envoi des notifications et maintenir le nettoyage PENDING,
+avec les paramètres cohérents indiqués plus haut. Configurer la surveillance
+des réponses webhook 5xx, des incidents et des notifications sending/failed.
+Valider le fonctionnement en recette test avant ouverture de la production.
+
+Les anciens PaymentIntents non associés sont journalisés comme unassociated
+et n'entraînent aucune confirmation automatique après la bascule. Leur reprise
+nécessite un rapprochement humain ; ce correctif ne fournit pas d'import
+automatique de preuves anciennes. Ne pas demander au client de repayer un
+dossier non rapproché.
+
+Retour arrière : conserver les colonnes et les preuves (migration down refusée).
+En cas de retour à l'ancien code, garder les paiements fermés : l'ancien
+/terminate confirme sans preuve et ne doit pas être remis en service tel quel.
+
+Documentation officielle consultée :
+https://docs.stripe.com/payments/payment-intents/verifying-status
+https://docs.stripe.com/webhooks
+https://docs.stripe.com/api/idempotent_requests

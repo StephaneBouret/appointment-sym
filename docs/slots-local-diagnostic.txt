@@ -1,0 +1,252 @@
+CALENDRIER LOCAL 8000 — DIAGNOSTIC DU 8 OCTOBRE 2026
+
+Mise à jour après accord explicite : la seule migration autorisée a maintenant
+été appliquée. Voir « EXÉCUTION AUTORISÉE ET RÉSULTAT » en fin de document.
+Le diagnostic et la proposition ci-dessous décrivent l'état avant intervention.
+
+Conclusion démontrée
+Le calendrier vide du 12 au 16 octobre provient d'une erreur serveur masquée,
+due à un schéma de base non mis à jour après le correctif paiement.
+Le serveur tente de sélectionner appointment.payment_intent_id ; la colonne
+n'existe pas. Le JavaScript convertissait tout HTTP non réussi en tableau vide,
+puis affichait le message du délai minimal, même pour une semaine ultérieure.
+Le délai de 48 h explique le 9 octobre, pas la semaine du 12 octobre.
+
+Environnement réellement utilisé
+symfony server:status : serveur HTTPS 127.0.0.1:8000, PHP CGI 8.4.15.
+L'URL HTTP redirige vers HTTPS (certificat de développement local).
+Une sonde HTTP temporaire, limitée au loopback et à cet hôte, a utilisé le
+même autoload_runtime.php et App\Kernel que public/index.php. Elle a démarré
+une transaction READ ONLY, interrogé les métadonnées/réglages/périodes, puis
+fait ROLLBACK. Aucun SELECT de coordonnées client, mot de passe ou secret.
+Résultats : projet C:\Formations\appointment-sym, environnement dev, debug=true,
+connexion effective à appointment_sym, serveur STEF-LEGION, hôte 127.0.0.1,
+port 3306, MySQL 8.4.7, moteur appointment=InnoDB (connexion HTTP 336).
+La sonde a été supprimée après le contrôle ; aucune route de diagnostic laissée.
+Le CLI habituel a également confirmé la même base et le même serveur par SELECT.
+
+Prestation et planning
+La prestation demandée est l'ID 3, « Analyse identité Adulte », durée 75 min.
+Valeurs réellement lues : lundi–vendredi (1,2,3,4,5), 09:00–12:00 et
+14:00–18:00, délai 48 h, mode fixe activé, buffer de 15 min.
+La cadence est donc de 90 min ; le pas libre n'est pas utilisé.
+Aucune journée fermée, période d'indisponibilité ou réservation PENDING/CONFIRMED
+recouvrant le 9 ou la semaine du 12–16 octobre n'a été trouvée.
+Les motifs d'indisponibilité et les données personnelles n'ont pas été lus.
+Aucun réglage ni aucune donnée de planning n'a été changé.
+
+Reproduction navigateur et réponses réelles
+Dans Edge dédié, les assets réels de /rendez-vous/types sur 8000 ont été chargés.
+Le même élément calendar que celui du formulaire, avec les valeurs effectives
+de la prestation/planning, a été monté dans le DOM de cette page. Le vrai
+contrôleur Stimulus et FullCalendar ont chargé la vraie API et navigué entre
+semaines. Aucun formulaire n'a été soumis. La session privée user1@gmail.com
+n'a pas été reprise : la route de disponibilités est accessible sans session,
+et son code ne filtre pas par utilisateur. Ce contrôle reproduit le composant
+et ses requêtes, pas une nouvelle connexion au compte de Stéphane.
+
+Requête du 9 octobre :
+GET /api/fixed-slots-range?type=3&start=2026-10-09&end=2026-10-10
+HTTP 200, corps JSON []. La barrière calculée au 8 octobre est le 10 octobre.
+Le serveur termine avant d'interroger les rendez-vous pour cette fenêtre vide.
+
+Requête de la semaine suivante (end exclus) :
+GET /api/fixed-slots-range?type=3&start=2026-10-12&end=2026-10-17
+HTTP 500, page d'exception Symfony HTML, pas un tableau JSON vide.
+Erreur : SQLSTATE[42S22], Column not found, 1054,
+Champ 'a0_.payment_intent_id' inconnu dans field list.
+Le même défaut a été observé lors de la requête exploratoire type=1
+(profiler 97247e) ; la prestation demandée a ensuite été identifiée et les
+vérifications ont porté sur type=3.
+Chaîne de code : SlotApiController::fixedSlotsRange ->
+SlotService::getAvailableSlots -> AppointmentRepository::findByDate.
+L'hydratation ORM sélectionne les champs embarqués PaymentRecord, même si
+aucun rendez-vous ne se trouve dans la période. L'absence de colonne échoue
+donc avant de pouvoir calculer les disponibilités.
+
+Avant correction : pas d'exception JS non interceptée observée ; le HTTP 500
+était silencieusement changé en []. Le message « Aucun créneau visible avant
+10/10/2026 » restait affiché sur la semaine du 12–16 octobre.
+Après correction : ce HTTP 500 produit un message distinct « Impossible de
+charger les disponibilités. Veuillez réessayer. », avec bouton Réessayer.
+La console journalise l'échec HTTP sans afficher la réponse SQL à l'utilisateur.
+Un vrai 200 [] conserve le message d'absence de disponibilités de la période.
+Précédent, suivant et Réessayer ont été exercés sur 8000 après correction :
+200 [] pour le 9 ; erreur explicite pour le 12–16 ; aucune réservation créée.
+Les créneaux du 12–16 restent indisponibles tant que la migration n'est pas faite.
+
+Comparaison pertinente avec 8097
+8097 utilise la base distincte appointment_payment_browser_20261007_027fa2c4073b,
+avec le schéma final et les données fictives de recette. Une lecture réelle
+de /api/fixed-slots-range?type=1&start=2026-10-12&end=2026-10-17 renvoie 200,
+97 créneaux lors du contrôle. Sa durée/configuration diffère ; ce nombre ne
+doit pas être transposé sur 8000. Aucun réglage de 8097 n'a été copié dans
+appointment_sym. L'écart bloquant démontré est l'absence des colonnes paiement.
+
+Correction et fichiers
+assets/controllers/calendar_controller.js : les erreurs HTTP, JSON invalide
+ou format non tableau passent par l'état d'erreur ; bouton de nouvelle tentative ;
+liste/ancienne sélection effacées en cas d'échec ; distinction entre absence
+de disponibilités et impossibilité de les charger. Les règles métier, dates,
+durées et requêtes serveur restent inchangées.
+tests/Slots/browser.py : vérification du véritable composant dans Edge dédié,
+avec réponses simulées uniquement en mode isolated sur 8097.
+tests/Slots/SlotSchemaTest.php : régression de disponibilité avec schéma complet
+et reproduction d'une colonne manquante, uniquement en SQLite mémoire gardé.
+tests/PaymentBrowser/browser.py : choix optionnel de l'origine du navigateur
+CDP ; comportement 8097 par défaut conservé. Aucun traitement de paiement changé.
+docs/slots-local-diagnostic.txt : ce rapport et l'intervention proposée.
+
+Contrôles réellement exécutés
+php -d xdebug.mode=off vendor/phpunit/phpunit/phpunit -c phpunit.payment.xml tests/Slots/SlotSchemaTest.php
+  OK : 2 tests, 29 assertions. Le schéma complet permet 4 créneaux de 75 minutes
+  par jour sur 5 jours, avec les réglages observés et sans réservation.
+  Retirer payment_intent_id reproduit l'échec ORM même avec zéro réservation.
+  Une première attente de sous-classe d'exception propre à MySQL a été corrigée
+  pour celle remontée par le pilote SQLite ; l'erreur de colonne reste vérifiée.
+  Ce test ne prétend pas valider une migration ou la concurrence MySQL.
+& 'C:\Users\STEF-LEGION\scoop\apps\python\current\python.exe' tests/Slots/browser.py before
+  Défaut reproduit sur l'API réelle 8000 avant correction.
+& 'C:\Users\STEF-LEGION\scoop\apps\python\current\python.exe' tests/Slots/browser.py isolated
+  OK : HTTP 500, JSON illisible, objet au lieu d'un tableau, échec réseau,
+  tableau vide, succès, récupération après erreur par Réessayer ; effacement
+  de la sélection précédente. Ces réponses sont simulées, sans appel Stripe,
+  transport de courrier ou écriture en base habituelle.
+& 'C:\Users\STEF-LEGION\scoop\apps\python\current\python.exe' tests/Slots/browser.py after
+  OK pour la distinction 200 vide / 500 et navigation précédent/suivant/retry
+  sur l'API réelle 8000. Échec serveur toujours présent, schéma non modifié.
+php -d xdebug.mode=off bin/console dbal:run-sql 'SELECT DATABASE() AS db, @@hostname AS server, @@port AS port, VERSION() AS version' --env=dev
+  appointment_sym / STEF-LEGION / 3306 / 8.4.7.
+git --no-optional-locks diff --check : code 0.
+La suite complète et la recette paiement n'ont pas été relancées.
+Les délais initiaux du script de contrôle (instrumentation puis indicateur de
+chargement détaché par FullCalendar) ont été corrigés dans le script ; ils ne
+constituent pas une cause supplémentaire retenue pour le calendrier vide.
+
+Preuves filtrées conservées localement sous :
+C:\Users\STEF-LEGION\AppData\Local\Temp\appointment-payment-browser-20261007
+slots-http-diagnostic.json, slots-before.json, slots-isolated.json, slots-after.json.
+Ne pas exporter tout ce dossier : il contient aussi les secrets de recette
+Stripe et les sessions de la précédente intervention.
+
+INTERVENTION PROPOSÉE — NON EXÉCUTÉE, ACCORD NÉCESSAIRE
+
+La base appointment_sym ne contient aucune des 12 colonnes payment_* et ne
+référence pas DoctrineMigrations\Version20261005090000 dans sa table des versions.
+Appliquer uniquement cette migration déjà validée sur la base MySQL distincte.
+Elle ajoute 12 colonnes nullables et l'index unique sur payment_intent_id ;
+aucune donnée historique n'est réinterprétée, aucun statut, numéro, tarif,
+horaire ou rendez-vous n'est modifié. Doctrine enregistre ensuite cette version.
+Tous les PaymentIntent historiques restent NULL, compatibles avec l'index unique.
+Les ALTER/CREATE INDEX MySQL ne sont pas annulables par un simple ROLLBACK et
+peuvent verrouiller la table pendant l'opération. La migration n'a pas de down
+destructif. Une sauvegarde locale des tables concernées est à préserver avant
+application ; aucune sauvegarde contenant des données client n'est jointe ici.
+
+SQL préparé depuis les métadonnées réelles, NON EXÉCUTÉ :
+ALTER TABLE appointment
+ ADD payment_intent_id VARCHAR(255) DEFAULT NULL,
+ ADD payment_currency VARCHAR(3) DEFAULT NULL,
+ ADD payment_attempt_key VARCHAR(64) DEFAULT NULL,
+ ADD payment_issue VARCHAR(64) DEFAULT NULL,
+ ADD payment_notification_state VARCHAR(16) DEFAULT NULL,
+ ADD payment_notification_error VARCHAR(255) DEFAULT NULL,
+ ADD payment_amount INT DEFAULT NULL,
+ ADD payment_accepted_at DATETIME DEFAULT NULL,
+ ADD payment_expires_at DATETIME DEFAULT NULL,
+ ADD payment_verified_at DATETIME DEFAULT NULL,
+ ADD payment_notification_attempted_at DATETIME DEFAULT NULL,
+ ADD payment_notification_sent_at DATETIME DEFAULT NULL;
+CREATE UNIQUE INDEX uniq_appointment_payment_intent ON appointment (payment_intent_id);
+Cet aperçu est obtenu par comparaison de schémas en mémoire sous transaction
+SQL READ ONLY ; ce n'est pas une exécution de Doctrine Migrations.
+
+Après accord seulement, depuis C:\Formations\appointment-sym :
+1. Recontrôler la cible CLI ET HTTP : appointment_sym sur le serveur local
+   STEF-LEGION, port 3306 ; vérifier que les préconditions n'ont pas changé.
+2. Conserver une sauvegarde locale des tables appointment et
+   doctrine_migration_versions, hors dépôt, sans afficher de données ni secret.
+3. Utiliser l'exécuteur Doctrine pour cette SEULE version, pas migrate latest :
+php -d xdebug.mode=off bin/console doctrine:migrations:execute 'DoctrineMigrations\Version20261005090000' --up --env=dev --no-interaction
+4. Contrôler les colonnes nullables, l'index unique, la version enregistrée et
+   la conservation du nombre/statut des rendez-vous, puis recharger type=3
+   sur les périodes 9 octobre et 12–16 octobre. Vérifier les créneaux réellement
+   rendus et naviguer entre semaines sans soumission de réservation.
+
+À ce stade, aucune migration, mise à jour de donnée/réglage, purge ou fixture
+n'a été exécutée sur appointment_sym. L'index Git et les six fichiers Google
+sont préservés ; le correctif métier du paiement est inchangé.
+La restauration complète des disponibilités de la semaine du 12–16 reste
+conditionnée à votre accord pour cette intervention de schéma et à sa recette.
+
+EXÉCUTION AUTORISÉE ET RÉSULTAT — 8 OCTOBRE 2026
+
+Cible reconfirmée AVANT migration par CLI et par une sonde HTTP temporaire
+utilisant le runtime réel de 8000 : appointment_sym / STEF-LEGION /
+127.0.0.1:3306, MySQL 8.4.7, InnoDB pour les deux tables concernées.
+Connexions CLI 430 et HTTP 431, même UUID serveur. Le projet HTTP est
+C:\Formations\appointment-sym, environnement dev. La table appointment
+contenait exactement 0 ligne ; les 12 colonnes étaient absentes et la version
+autorisée n'était pas enregistrée. Aucun rendez-vous historique n'était donc
+présent pour une comparaison individuelle de statut/numéro/montant.
+
+Sauvegarde AVANT toute migration, hors dépôt, dans un dossier à droits réservés
+à l'utilisateur Windows :
+C:\Users\STEF-LEGION\appointment-sym-backups\20261008-payment-fb7fdd09\appointment-before-payment.sql
+Tables : appointment et doctrine_migration_versions.
+mysqldump 8.4.7 exécuté avec --single-transaction --skip-lock-tables,
+--no-tablespaces --set-gtid-purged=OFF --hex-blob --skip-extended-insert,
+--complete-insert et --default-character-set=utf8mb4. Les accès ont été fournis
+par un fichier d'options privé temporaire, supprimé immédiatement après usage.
+Code de sortie 0 ; taille 6733 octets ; marqueur de fin présent ; les deux
+définitions de table et les nombres de lignes ont été vérifiés sans affichage :
+0 ligne appointment, 18 lignes doctrine_migration_versions.
+SHA-256 : ead4b793bbf21b23794d4a0a88f674298681d8303ed31ab143c5d54ceeee5718.
+Empreinte revérifiée après migration. Aucun essai de restauration n'a été fait.
+Manifestes backup-verified.json, before.json, after-verified.json et preuve
+slots-migrated.json conservés dans ce même dossier privé.
+
+Commande réellement exécutée :
+php -d xdebug.mode=off bin/console doctrine:migrations:execute 'DoctrineMigrations\Version20261005090000' --up --env=dev --no-interaction
+Résultat : code 0 ; une migration exécutée, deux requêtes SQL, 56,9 ms.
+Aucune commande migrate globale ni aucune autre version exécutée.
+
+Vérification effective APRÈS migration (CLI 435, HTTP 436 ; puis CLI 444
+après les contrôles navigateur) :
+- exactement les 12 colonnes payment_* attendues, toutes nullables ;
+- index uniq_appointment_payment_intent sur payment_intent_id, NON_UNIQUE=0 ;
+- une seule nouvelle version enregistrée : DoctrineMigrations\Version20261005090000 ;
+- les 18 lignes de versions précédentes sont intégralement inchangées ;
+- appointment reste vide : 0 avant, 0 après, aucune création/suppression ;
+- empreintes de toutes les anciennes colonnes, de leurs statuts/numéros et
+  montants historiques inchangées (ensemble vide) ;
+- tous les tarifs du catalogue appointment_type sont inchangés, comparaison
+  par empreinte indépendante avant/après. Aucun tarif ni réglage recopié de 8097.
+
+Recette réelle sur 8000 :
+& 'C:\Users\STEF-LEGION\scoop\apps\python\current\python.exe' tests/Slots/browser.py migrated
+Code 0, sans réponses simulées. Le vrai contrôleur et les assets de 8000 sont
+utilisés dans le composant calendrier monté sur /rendez-vous/types, comme lors
+du diagnostic. Aucune connexion supplémentaire au compte privé user1@gmail.com,
+aucun formulaire soumis. La route de disponibilités n'est pas propre au compte.
+GET /api/fixed-slots-range?type=3&start=2026-10-12&end=2026-10-17 : HTTP 200,
+20 créneaux affichés, tous de 75 minutes, répartis sur les cinq jours attendus.
+Horaires chaque jour : 09:00–10:15, 10:30–11:45, 14:00–15:15, 15:30–16:45.
+Navigation testée : semaine du 19–23 (200, 20 créneaux), retour au 12–16
+(200, 20), retour au 9 octobre (200, 0 conformément au délai), puis au 12–16
+(200, 20). Aucune erreur de chargement, erreur JS non interceptée ou erreur
+du contrôleur calendrier observée pendant cette navigation.
+
+Outil ajouté : tests/Slots/local_migration.php, garde de cible, sauvegarde et
+comparaison des empreintes, sans fonction lançant une migration. La migration
+elle-même a été exécutée par bin/console comme indiqué ci-dessus.
+tests/Slots/browser.py complété par le mode migrated et ses assertions.
+La sonde HTTP temporaire a été supprimée après contrôle. Aucun fichier .env,
+aucun secret ou contenu de sauvegarde n'a été affiché ni placé dans le dépôt.
+Contrôles de syntaxe PHP/Python et git diff --check effectués ; pas de nouvelle
+suite générale, les traitements applicatifs du paiement n'ayant pas changé.
+Index SHA-256 inchangé :
+B4B30A42A85A9E73894C13F7BC7168B40DA8DA3326A30BEAB2E959837BDD1CD4.
+Les six fichiers Google sont préservés. Aucun commit, push, déploiement,
+réservation, appel de paiement ou courriel déclenché par cette intervention.
+Le défaut de disponibilités du 12–16 octobre est résolu sur la cible autorisée.

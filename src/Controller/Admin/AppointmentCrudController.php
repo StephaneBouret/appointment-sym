@@ -149,6 +149,14 @@ class AppointmentCrudController extends AbstractCrudController
 
         yield IdField::new('id')->onlyOnIndex();
 
+        // Read-only evidence. A manual confirmation is never labelled as verified payment.
+        yield TextField::new('payment.intentId', 'Référence Stripe')->onlyOnDetail();
+        yield MoneyField::new('payment.amount', 'Montant attendu')->setCurrency('EUR')->onlyOnDetail();
+        yield DateTimeField::new('payment.verifiedAt', 'Paiement vérifié le')->onlyOnDetail();
+        yield TextField::new('payment.issue', 'Paiement à examiner')->onlyOnDetail();
+        yield TextField::new('payment.notificationState', 'Notification de confirmation')->onlyOnDetail();
+        yield TextField::new('payment.notificationError', 'Erreur de notification')->onlyOnDetail();
+
         yield AssociationField::new('user', 'Client')
             ->setRequired(true)
             ->setFormTypeOptions(['placeholder' => '— choisir —']);
@@ -187,13 +195,16 @@ class AppointmentCrudController extends AbstractCrudController
         // Planification (Europe/Paris + immutables)
         yield FormField::addPanel('Planification')->setIcon('fa fa-calendar');
         yield DateTimeField::new('startAt', 'Début')
-            ->setFormTypeOption('widget', 'single-text')
+            ->setFormTypeOption('widget', 'single_text')
+            ->setFormTypeOption('input', 'datetime_immutable')
             ->setFormTypeOption('model_timezone', 'UTC')            // ⬅️ était Europe/Paris
             ->setFormTypeOption('view_timezone', 'Europe/Paris');
         yield DateTimeField::new('endAt', 'Fin')->onlyOnIndex()
+            ->setFormTypeOption('input', 'datetime_immutable')
             ->setFormTypeOption('model_timezone', 'UTC')            // ⬅️ idem
             ->setFormTypeOption('view_timezone', 'Europe/Paris');
         yield DateTimeField::new('endAt', 'Fin')->onlyOnDetail()
+            ->setFormTypeOption('input', 'datetime_immutable')
             ->setFormTypeOption('model_timezone', 'UTC')            // ⬅️ idem
             ->setFormTypeOption('view_timezone', 'Europe/Paris');
 
@@ -243,9 +254,10 @@ class AppointmentCrudController extends AbstractCrudController
             ->setFormTypeOption('model_timezone', 'UTC')            // ⬅️ idem
             ->setFormTypeOption('view_timezone', 'Europe/Paris');
 
-        yield MoneyField::new('type.price', 'Prix')
+        yield MoneyField::new('payableAmount', 'Montant de référence')
             ->setCurrency('EUR')
             ->setStoredAsCents()
+            ->setSortable(false)
             ->onlyOnIndex();
 
         yield IntegerField::new('type.participants', 'Participants')->onlyOnIndex();

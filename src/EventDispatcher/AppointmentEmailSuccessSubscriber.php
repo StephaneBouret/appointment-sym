@@ -31,6 +31,9 @@ class AppointmentEmailSuccessSubscriber implements EventSubscriberInterface
         $myAppointmentsUrl = $this->urlGenerator->generate('app_appointment_list', [], UrlGeneratorInterface::ABSOLUTE_URL);
 
         // 1) Mail à l'utilisateur
+        if (!$user || !$user->getEmail()) {
+            throw new \LogicException('Confirmation recipient missing.');
+        }
         if ($user && $user->getEmail()) {
             $this->sendMail->sendMail(
                 null,

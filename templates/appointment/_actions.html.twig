@@ -3,11 +3,11 @@
 {% set startParis = a.startAt|date("U", "Europe/Paris") %}
 {% set diffHours = (startParis - nowParis) / 3600 %}
 {% set minNotice = rescheduleMinNoticeHours|default(24) %}
-<div class="d-flex align-items-center gap-2">
+<div class="d-flex flex-wrap align-items-center gap-2">
 	{% if startParis > nowParis %}
 		{# --- Annuler (uniquement si confirmé) --- #}
 		{% if a.status == constant('App\\Enum\\AppointmentStatus::CONFIRMED') %}
-			<div data-controller="appointment-cancel" data-appointment-cancel-appointment-id-value="{{ a.id }}" data-appointment-cancel-start-at-utc-iso-value="{{ a.startAt|date('Y-m-d\\TH:i:s\\Z', 'UTC') }}" data-appointment-cancel-amount-cents-value="{{ a.type.price ?? 0 }}" data-appointment-cancel-csrf-value="{{ csrf_token('cancel_appointment_' ~ a.id) }}" data-appointment-cancel-cancel-url-value="{{ path('app_appointment_cancel') }}">
+			<div data-controller="appointment-cancel" data-appointment-cancel-appointment-id-value="{{ a.id }}" data-appointment-cancel-start-at-utc-iso-value="{{ a.startAt|date('Y-m-d\\TH:i:s\\Z', 'UTC') }}" data-appointment-cancel-amount-cents-value="{{ a.payableAmount ?? 0 }}" data-appointment-cancel-csrf-value="{{ csrf_token('cancel_appointment_' ~ a.id) }}" data-appointment-cancel-cancel-url-value="{{ path('app_appointment_cancel') }}">
 				<button type="button" class="btn btn-outline-danger btn-sm text-nowrap" data-action="appointment-cancel#open">
 					Annuler le RDV
 				</button>

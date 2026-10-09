@@ -200,8 +200,8 @@ export default class extends Controller {
                     })
                     .catch((e) => {
                         console.error("[calendar] events load error", e);
-                        this.toggleEmptyNotice(true);
-                        this.renderList([]);
+                        this.toggleEmptyNotice(false);
+                        this.showLoadError();
                         failure(e);
                     }),
 
@@ -228,6 +228,9 @@ export default class extends Controller {
     // ===== Chargement par range (avec clamp barrière) =====
     async loadRangeClamped(info) {
         this.setLoading(true);
+        this.loadErrorEl?.classList.add("d-none");
+        this.toggleEmptyNotice(false);
+        this.listBodyEl?.replaceChildren();
 
         const start =
             info.start < this.barrierStart ? this.barrierStart : info.start;
@@ -243,9 +246,14 @@ export default class extends Controller {
             const resp = await fetch(url.toString(), {
                 headers: { "X-Requested-With": "XMLHttpRequest" },
             });
-            if (!resp.ok) return [];
+            if (!resp.ok) {
+                throw new Error(`Chargement des créneaux impossible (HTTP ${resp.status}).`);
+            }
 
             const data = await resp.json(); // [{start,end}] (RFC3339 avec fuseau)
+            if (!Array.isArray(data)) {
+                throw new Error("Réponse de disponibilités invalide.");
+            }
             // On conserve les ISO TZ-AWARE tel quels, et on pose les couleurs
            return data.map((e) => {
                 const past = isPast(e.end || e.start);
@@ -334,8 +342,8 @@ export default class extends Controller {
         const barrierLabel = this.barrierStart.toLocaleDateString("fr-FR");
         box.innerHTML = `
       <div class="d-flex flex-column flex-sm-row align-items-sm-center gap-2">
-        <div><strong>Aucun créneau visible avant ${barrierLabel}.</strong></div>
-        <div class="text-muted">Essayez une autre semaine.</div>
+        <div><strong>Aucun créneau disponible sur cette période.</strong></div>
+        <div class="text-muted">Créneaux affichés à partir du ${barrierLabel}. Essayez une autre semaine.</div>
         <div class="ms-sm-auto">
           <button type="button" class="btn btn-sm btn-primary fc-next-week">Voir la semaine suivante</button>
         </div>
@@ -581,8 +589,8 @@ export default class extends Controller {
         const barrierLabel = this.barrierStart.toLocaleDateString("fr-FR");
         box.innerHTML = `
       <div class="d-flex flex-column flex-sm-row align-items-sm-center gap-2">
-        <div><strong>Aucun créneau visible avant ${barrierLabel}.</strong></div>
-        <div class="text-muted">Essayez une autre semaine.</div>
+        <div><strong>Aucun créneau disponible sur cette période.</strong></div>
+        <div class="text-muted">Créneaux affichés à partir du ${barrierLabel}. Essayez une autre semaine.</div>
         <div class="ms-sm-auto">
           <button type="button" class="btn btn-sm btn-primary fc-next-week">Voir la semaine suivante</button>
         </div>
@@ -601,5 +609,25 @@ export default class extends Controller {
     toggleEmptyNotice(show) {
         if (this.emptyNoticeEl)
             this.emptyNoticeEl.classList.toggle("d-none", !show);
+    }
+
+    showLoadError() {
+        if (!this.loadErrorEl?.isConnected) {
+            this.loadErrorEl = document.createElement("div");
+            this.loadErrorEl.className = "fc-load-error alert alert-danger mt-2";
+            this.loadErrorEl.setAttribute("role", "alert");
+            this.loadErrorEl.innerHTML = `
+                <p>Impossible de charger les disponibilités. Veuillez réessayer.</p>
+                <button type="button" class="btn btn-outline-danger btn-sm">Réessayer</button>`;
+            this.loadErrorEl.querySelector("button").addEventListener("click", () => this.calendar.refetchEvents());
+            this.element.insertAdjacentElement("afterend", this.loadErrorEl);
+        }
+        this.loadErrorEl.classList.remove("d-none");
+        this.listBodyEl?.replaceChildren();
+        this.resetSelectedEventAppearance();
+        this.selectedEvent = null;
+        this.clearSelectedNotice();
+        if (this.startInput) this.startInput.value = "";
+        this.calendar.removeAllEvents();
     }
 }

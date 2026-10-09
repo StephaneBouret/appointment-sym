@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Isolated suite: controlled kernel, no Dotenv, no external database or transport. -->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="tests/Payment/bootstrap.php" cacheResult="false"
+         failOnWarning="true" failOnRisky="true" failOnNotice="true" failOnPhpunitNotice="true">
+    <testsuites>
+        <testsuite name="Isolated payment"><directory>tests/Payment</directory></testsuite>
+    </testsuites>
+</phpunit>

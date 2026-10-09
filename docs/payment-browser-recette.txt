@@ -1,0 +1,366 @@
+RECETTE NAVIGATEUR DU PAIEMENT — 7 OCTOBRE 2026
+
+Complément ciblé du 8 octobre 2026 : voir section 6 (montant d'annulation
+figé et paiement 3DS mené à son terme). Les sections 1 à 5 décrivent la passe
+du 7 octobre et ses limites à cette date.
+
+Résultat
+Les parcours ci-dessous ont été exécutés dans Edge avec de vrais échanges
+Stripe TEST. Deux paiements fictifs de 150 EUR ont réussi. Aucun paiement
+LIVE, courrier externe, commit, push ou déploiement n'a été effectué.
+Le périmètre commercial et les six fichiers indexés Google sont préservés.
+Un défaut d'affichage mobile a été reproduit et corrigé : les actions des
+rendez-vous débordaient à 431 px dans une fenêtre de 390 px.
+
+1. Cible et isolation effectivement contrôlées
+
+Dépôt : C:\Formations\appointment-sym ; branche main.
+HEAD : 6e29d1b09cd828c0d37216f792c382456ca55748.
+SHA256 de l'index avant/après :
+B4B30A42A85A9E73894C13F7BC7168B40DA8DA3326A30BEAB2E959837BDD1CD4.
+Les empreintes des cinq fichiers Google hors .env sont inchangées ;
+git diff --exit-code sur les six fichiers indexés ne relève aucun écart
+de travail avec l'index. Aucun contenu de .env n'a été affiché.
+
+HTTP : http://127.0.0.1:8097 ; listener : /stripe/webhook.
+MySQL local : 127.0.0.1:3306, serveur STEF-LEGION, version 8.4.7, InnoDB.
+Base créée exclusivement pour cette recette :
+appointment_payment_browser_20261007_027fa2c4073b.
+Contrôle de l'absence de ce nom avant création, puis SELECT DATABASE(),
+identité du serveur, version et moteurs effectifs avant schéma/données.
+Le lanceur refuse une autre base, un autre serveur ou des tables non InnoDB.
+Derniers contrôles : connexion CLI 1268, connexion HTTP 1287, même base.
+La commande notifications l'a également contrôlée : connexions 1218 et 1220.
+Le schéma final est provisionné pour cette recette navigateur. La migration
+historique et la concurrence ont été validées séparément lors de la recette
+MySQL précédente (docs/payment-mysql-recette.txt), pas rejouées ici.
+
+Kernel dédié « recette », sans chargement Dotenv ; variables uniquement dans
+ses processus ; cache, sessions, courriers et secrets hors du dépôt :
+C:\Users\STEF-LEGION\AppData\Local\Temp\appointment-payment-browser-20261007
+Ce dossier est appelé ETAT ci-dessous. Ne pas l'archiver intégralement : il
+contient des clés privées, sessions et sorties privées du serveur.
+stripe-private.json possède une ACL réservée à l'utilisateur Windows.
+Stéphane a saisi les clés TEST dans les invites masquées de ConfigureStripe.ps1.
+Le listener et l'application utilisent ces mêmes clés et le secret reçu du
+listener. Aucun événement LIVE n'est transféré ; le routeur refuse aussi
+les événements dont livemode n'est pas false.
+
+Transport remplacé par une capture locale de l'Email rendu ; aucune connexion
+SMTP ni distribution Messenger externe. Chaque démarrage vérifie ce transport.
+Alice, Bob, administrateur, société, avatars, prestation et créneaux fictifs.
+Prestation locale : « Prestation fictive — recette paiement », 150 EUR, 90 min.
+Outils existants utilisés : PHP 8.4.15, Stripe CLI 1.40.3, Edge, Python standard
+(pilotage CDP sans installation de Playwright/Selenium ou autre dépendance).
+
+2. Scénarios exécutés et preuves
+
+RDV 1, Alice, 12/10/2026 09:00–10:30 Europe/Paris :
+PaymentIntent pi_3UNriLAnaDrTxWUc0osd85PV.
+- Retour /terminate/1 sans paiement : pending, aucun numéro, aucune preuve,
+  aucune notification. Fichier ETAT/proof-direct-return.json.
+- Création par le véritable formulaire puis consentement et page de paiement.
+  Rechargement avant paiement : même PaymentIntent associé en base.
+- Carte TEST refusée : Stripe requires_payment_method / card_declined,
+  amount_received=0 ; RDV pending, numéro et notification absents.
+  ETAT/proof-decline.json et stripe-proof-1-100751.json.
+- Paiement TEST réussi ensuite : Stripe succeeded, livemode=false,
+  amount=15000, amount_received=15000, currency=eur, metadata appointment_id=1.
+  RDV confirmed, numéro 20261007-29598, preuve 10:07:54 UTC, notification sent.
+  Un seul courrier de confirmation capturé pour ce rendez-vous.
+
+RDV 2, Alice, 12/10/2026 11:00–12:30 Europe/Paris :
+PaymentIntent pi_3UNrnkAnaDrTxWUc1YJ3XJLm.
+- Carte TEST demandant une authentification : véritable challenge Stripe
+  affiché (ETAT/proof-3ds-challenge.png), Stripe requires_action.
+- Challenge abandonné sans authentification, onglet de recette fermé de manière
+  contrôlée. Nouvelle interrogation Stripe après abandon : requires_action,
+  amount_received=0 ; RDV pending, aucun numéro, aucune preuve/notification.
+  ETAT/proof-3ds-abandoned.json et stripe-proof-2-101523.json.
+- Bob authentifié avec son propre compte et sa 2FA a tenté les routes checkout,
+  pay et terminate de ce RDV. Redirections respectivement vers /, puis deux fois
+  /rendez-vous/list. Comparaison avant/après : rendez-vous inchangés et aucun
+  courrier ajouté. ETAT/proof-ownership.json. Ces preuves couvrent ces routes,
+  pas un audit général des autorisations de toute l'application.
+
+RDV 3, Alice, 12/10/2026 14:00–15:30 Europe/Paris :
+PaymentIntent pi_3UNrsfAnaDrTxWUc0MdZyKDu.
+Événement réel Stripe : evt_3UNrsfAnaDrTxWUc0PDBgUeW.
+- /terminate/3 bloqué dans le routeur de recette AVANT le contrôleur, avant
+  paiement. Contrôle préalable 451 puis retour effectif du navigateur bloqué
+  à 10:15:36 UTC. Pas de course fondée sur la fermeture rapide d'un onglet.
+- Paiement réel TEST via le PaymentIntent créé par l'application : succeeded,
+  livemode=false, 15000 centimes reçus, eur, metadata appointment_id=3.
+- Livraison du listener à 10:15:36 : RDV confirmed, numéro 20261007-86277,
+  preuve persistée, notification pending et aucun courrier de confirmation
+  pour ce RDV avant la commande. Contrôles de l'état, pas seulement du HTTP 204.
+  ETAT/blocked-return-proof.ndjson, webhook-proof.ndjson,
+  proof-webhook-before-command.json, stripe-proof-3-101621.json.
+- Répétition : récupération de CE même événement depuis Stripe TEST puis
+  nouvelle signature locale avec le secret du listener et POST au vrai
+  contrôleur webhook. Numéro, preuve et pending inchangés ; aucun envoi.
+  C'est un rejeu local d'un événement réel, PAS une seconde livraison
+  commandée depuis Stripe Dashboard. ETAT/proof-replay-before-command.txt.
+- Commande existante : pending -> sent, exactement un courrier capturé ajouté
+  (total toutes catégories 3 -> 4). Second passage : aucun courrier ajouté,
+  total toujours 4. ETAT/proof-notifications-first.txt et second.txt.
+- Annulation par l'interface puis nouveau rejeu : canceled conservé, numéro
+  20261007-86277, preuve et historique sent conservés, payment_issue=null,
+  aucun nouveau courrier lors du rejeu. Le courrier d'annulation normal a été
+  capturé séparément. Aucun remboursement Stripe n'a été exécuté.
+- Blocage levé puis retour navigateur : annulation préservée, message
+  « reste annulé » présent dans la réponse, aucun changement des rendez-vous
+  ni du compteur de courrier. ETAT/proof-canceled-replay.json,
+  proof-replay-after-cancellation.txt, proof-canceled-return.json.
+
+Administration et mobile :
+- Connexion administrateur avec 2FA capturée ; /admin/appointment rend les
+  trois états attendus, les deux numéros et la colonne « Montant de référence »
+  à 150,00 EUR. Capture ETAT/desktop.png en 1440 x 1000.
+- Émulation Edge 390 x 844 : liste, récapitulatif et paiement inspectés.
+  Débordement de la liste reproduit deux fois : clientWidth=390,
+  scrollWidth=431, causé par le groupe d'actions sans retour à la ligne.
+  Ajout de flex-wrap uniquement dans templates/appointment/_actions.html.twig.
+  Après correction : les trois écrans ont clientWidth=scrollWidth=390 ;
+  bouton de paiement visible et non masqué après défilement.
+  ETAT/proof-mobile.json et mobile-{list,checkout,payment}.png.
+  Il s'agit d'émulation, pas d'un essai tactile sur téléphone physique.
+
+État final observé : RDV 1 confirmed/sent ; RDV 2 pending sans numéro ni
+notification ; RDV 3 canceled/sent. Aucun payment_issue. Total capturé :
+9 messages = 6 codes 2FA + 2 confirmations + 1 annulation. Ce total inclut
+les changements de comptes et n'indique pas des doublons de confirmation.
+
+3. Fichiers et contrôles
+
+Seul ajustement applicatif de cette passe :
+templates/appointment/_actions.html.twig : flex-wrap sur le groupe d'actions.
+Nouveaux outils de recette, jamais à utiliser comme serveur de production :
+tests/PaymentBrowser/ConfigureStripe.ps1 (saisie privée + listener TEST),
+Kernel.php (capture locale et isolation), runtime.php (garde de cible),
+prepare.php (création initiale de la base et données fictives),
+router.php (HTTP local et blocage contrôlé du retour),
+console.php (commande réelle de notification et preuves/rejeu),
+browser.py (pilotage d'Edge réservé au profil de recette).
+Nouveau compte rendu : docs/payment-browser-recette.txt.
+Les modifications de paiement et de recette MySQL antérieures sont conservées.
+
+Commandes de validation réellement exécutées depuis le dépôt :
+php -d xdebug.mode=off vendor/phpunit/phpunit/phpunit -c phpunit.payment.xml
+  OK : 51 tests, 466 assertions, code 0. Suite isolée, Stripe simulé,
+  aucun courrier externe. Cette suite SQLite ne prouve pas la concurrence MySQL.
+Get-ChildItem tests/PaymentBrowser -Filter '*.php' | ForEach-Object { php -d xdebug.mode=off -l $_.FullName }
+  OK pour les cinq fichiers PHP.
+Analyse syntaxique PowerShell par Parser.ParseFile de ConfigureStripe.ps1 : OK.
+Analyse Python par ast.parse de browser.py : OK.
+git --no-optional-locks diff --check
+  Code 0, aucune erreur d'espacement.
+git --no-optional-locks diff --exit-code -- .env assets/styles/app.css config/services.yaml src/Google/GoogleService.php templates/home/index.html.twig templates/partials/_google_reviews.html.twig
+  Code 0. Get-FileHash de l'index et des cinq fichiers hors .env : inchangés.
+
+Commandes fonctionnelles réellement utilisées (console.php a affiché chaque
+fois la cible SQL effective avant l'action) :
+php -d xdebug.mode=off tests/PaymentBrowser/prepare.php
+  Provision initial, jamais à relancer sur une base existante.
+php -d xdebug.mode=off tests/PaymentBrowser/console.php complete-fixture-avatars
+  Complément des avatars/société fictifs manquants au premier démarrage.
+php -d xdebug.mode=off tests/PaymentBrowser/console.php status
+php -d xdebug.mode=off tests/PaymentBrowser/console.php stripe-proof 1
+php -d xdebug.mode=off tests/PaymentBrowser/console.php stripe-proof 2
+php -d xdebug.mode=off tests/PaymentBrowser/console.php stripe-proof 3
+php -d xdebug.mode=off tests/PaymentBrowser/console.php block-return 3
+php -d xdebug.mode=off tests/PaymentBrowser/console.php replay 3
+php -d xdebug.mode=off tests/PaymentBrowser/console.php notifications
+  Deux passages consécutifs effectués et comparés.
+php -d xdebug.mode=off tests/PaymentBrowser/console.php unblock-return
+Invoke-RestMethod 'http://127.0.0.1:8097/_recette/status'
+  Même base effectivement utilisée par HTTP.
+
+Pilotage du navigateur réellement utilisé, avec le Python déjà installé :
+& 'C:\Users\STEF-LEGION\scoop\apps\python\current\python.exe' tests/PaymentBrowser/browser.py account bob
+& 'C:\Users\STEF-LEGION\scoop\apps\python\current\python.exe' tests/PaymentBrowser/browser.py ownership-proof
+& 'C:\Users\STEF-LEGION\scoop\apps\python\current\python.exe' tests/PaymentBrowser/browser.py canceled-return-proof
+& 'C:\Users\STEF-LEGION\scoop\apps\python\current\python.exe' tests/PaymentBrowser/browser.py mobile-review
+Les actions account alice/admin, new-reservation, checkout, card success/decline/3ds,
+navigate, evaluate, desktop et screenshot ont également servi aux parcours.
+canceled-return-proof nécessite Alice ; ownership-proof nécessite Bob.
+Ces aides sont liées aux identifiants fictifs 1, 2 et 3 de cette recette.
+
+Incidents de préparation, corrigés uniquement dans le dispositif de recette :
+avatars/société fictifs manquants ; droits de lecture des clés privées par le
+processus serveur initial ; gestion des redirections 2FA du kernel dédié.
+Le formulaire chargé directement comme fragment échouait au contrôle CSRF :
+les réservations valides ont ensuite suivi le catalogue complet avec son JS.
+Navigation du challenge 3DS bloquée dans l'onglet headless : fermeture de ce
+seul onglet puis nouvelle connexion, état Stripe recontrôlé après abandon.
+Dépréciation PHP 8.4 existante dans SendMailService (paramètre optionnel avant
+paramètre requis) observée ; non bloquante, non corrigée hors périmètre.
+Aucun nouveau défaut du traitement de paiement n'a été observé.
+
+4. Poursuite par Stéphane — environnement déjà prêt
+
+Depuis un PowerShell normal de Stéphane :
+Set-Location C:\Formations\appointment-sym
+
+Application actuellement démarrée sur http://127.0.0.1:8097/_recette.
+Courrier et codes 2FA : http://127.0.0.1:8097/_recette/mail.
+Comptes alice@example.test, bob@example.test, admin@example.test ; mots de
+passe fictifs à consulter PRIVÉMENT dans le fichier local, sans les envoyer :
+notepad "$env:LOCALAPPDATA\Temp\appointment-payment-browser-20261007\accounts-private.json"
+Garder la fenêtre du listener déjà ouverte. Si elle a été fermée :
+pwsh -NoProfile -File C:\Formations\appointment-sym\tests\PaymentBrowser\ConfigureStripe.ps1
+Sélectionner le même bac à sable Stripe ; saisir pk_test et sk_test dans les
+invites masquées. Attendre « Secret du listener enregistré sans affichage ».
+Le script lance exclusivement :
+stripe --config "$env:LOCALAPPDATA\Temp\appointment-payment-browser-20261007\stripe.toml" --project-name appointment-payment-recette listen --skip-update --events payment_intent.succeeded --forward-to http://127.0.0.1:8097/stripe/webhook
+Sa clé est transmise temporairement par le script, jamais par argument affiché.
+Ne pas lancer une seconde instance pendant que le listener fonctionne.
+
+Si le serveur HTTP est arrêté, le relancer dans un autre PowerShell normal :
+php -d xdebug.mode=off -d display_errors=0 -S 127.0.0.1:8097 -t public tests/PaymentBrowser/router.php
+Ne pas remplacer ce lanceur par public/index.php ou le bin/console habituel :
+ils n'établissent pas cette isolation. Aucun changement de configuration
+habituelle n'est nécessaire. Le port 8097 doit être libre pour un redémarrage.
+
+Pour une nouvelle vérification manuelle : se connecter comme Alice, partir de
+/rendez-vous/types, choisir la prestation fictive et un créneau disponible.
+Utiliser un NOUVEAU rendez-vous : l'ancien challenge ou l'échéance de 30 min
+peut être périmé. Ne pas réinitialiser les preuves des RDV précédents.
+Cartes TEST officielles utilisées, date future et CVC fictif :
+4242 4242 4242 4242 : succès ; 4000 0000 0000 0002 : refus ;
+4000 0025 0000 3155 : authentification 3DS.
+Référence : https://docs.stripe.com/testing
+
+Pour recommencer « webhook seul », relever l'ID réel du NOUVEAU rendez-vous
+dans /_recette/status. Dans les commandes ci-dessous remplacer ID_REEL par
+ce nombre ; ne pas reprendre automatiquement 3, désormais annulé.
+php -d xdebug.mode=off tests/PaymentBrowser/console.php block-return ID_REEL
+Ouvrir /rendez-vous/terminate/ID_REEL : doit afficher le blocage 451.
+Revenir au paiement, payer avec la carte TEST succès. Garder le retour bloqué.
+php -d xdebug.mode=off tests/PaymentBrowser/console.php stripe-proof ID_REEL
+php -d xdebug.mode=off tests/PaymentBrowser/console.php status
+Vérifier succeeded côté Stripe, confirmed + numéro + notification pending
+côté application, aucune confirmation de ce RDV dans /_recette/mail.
+php -d xdebug.mode=off tests/PaymentBrowser/console.php notifications
+php -d xdebug.mode=off tests/PaymentBrowser/console.php notifications
+Vérifier un courrier, puis aucun supplémentaire. Cette commande doit être
+planifiée pour les confirmations assurées uniquement par webhook ; aucune
+planification de production n'a été créée pendant cette recette.
+php -d xdebug.mode=off tests/PaymentBrowser/console.php unblock-return
+
+5. Limites et validations restantes
+
+Les scénarios fonctionnels demandés ont été exercés avec les nuances ci-dessus.
+À faire par Stéphane : appréciation visuelle et tactile sur son navigateur/
+téléphone réel, et validation utilisateur de l'administration et des courriers
+capturés. Le serveur est volontairement limité au loopback : aucun accès LAN
+au téléphone n'est préparé. L'émulation 390 px est la preuve mobile disponible.
+Le challenge 3DS abandonné a été testé ; l'ergonomie du challenge et un succès
+avec authentification 3DS complète n'ont pas été validés sur appareil physique.
+La livraison initiale du webhook est réellement venue de Stripe TEST ; les
+répétitions ont été re-signées localement. La fonction de relivraison depuis
+le Dashboard vers un endpoint distant n'a pas été testée et aucun endpoint
+public n'a été créé pour cette recette locale.
+Ni livrabilité SMTP, ni paiement/remboursement LIVE, ni comportement de
+production ne sont validés par ces essais. Le serveur PHP local est séquentiel :
+la preuve de concurrence reste celle de la recette MySQL multiprocessus séparée.
+Les artefacts ETAT restent locaux ; aucune clé, session, mot de passe ou corps
+de journal privé n'est incorporé dans ce compte rendu.
+
+6. Dernier contrôle ciblé — 8 octobre 2026
+
+Deux points seulement : montant de la modale d'annulation et succès 3DS.
+La base dédiée précédente a été conservée, sans purge ni nouvelle fixture
+globale. Connexion réelle CLI contrôlée avant écriture : connexion 54, puis
+67/123 pour les essais de prix ; HTTP 125, puis 136 ; MySQL 8.4.7/InnoDB,
+serveur STEF-LEGION, base appointment_payment_browser_20261007_027fa2c4073b.
+Le serveur local, Edge dédié et le listener TEST ont été redémarrés.
+
+Montant d'annulation
+assets/controllers/appointment-cancel_controller.js, méthode open(), lit
+amountCentsValue pour « Montant payé » et calcule l'estimation par multiplication
+du pourcentage de remboursement. confirm() ne transmet que l'identifiant du
+RDV : ce montant du DOM sert à l'affichage, pas à une instruction de paiement.
+Correction applicative limitée à templates/appointment/_actions.html.twig :
+data-appointment-cancel-amount-cents-value="{{ a.payableAmount ?? 0 }}".
+Le getter Appointment::getPayableAmount() utilise payment.amount, puis le prix
+de la prestation lorsqu'aucun montant n'a été figé. Stimulus est inchangé.
+
+Test réel dans Edge, connecté comme Alice, sur le RDV 1 déjà payé 150 EUR :
+- Avant correction : passage temporaire de la prestation à 18000 centimes ;
+  modale ouverte sans confirmer l'annulation ; « Montant payé : 180,00 EUR »,
+  « Remboursement estimé : 90,00 EUR » pour la tranche à 50 %. Défaut reproduit.
+- Après correction, même opération : attribut DOM=15000 ; « Montant payé :
+  150,00 EUR », « Remboursement estimé : 75,00 EUR » malgré le tarif à 180 EUR.
+- Dans les deux essais, tarif rétabli à 15000 centimes dans un bloc finally,
+  puis relu en base ; états des RDV et compteur de courriers inchangés.
+  Aucune annulation ni aucun remboursement n'ont été déclenchés.
+Preuves locales : ETAT/proof-cancel-price-before.json,
+proof-cancel-price-after.json et cancel-amount-{18000,15000}.png.
+
+Commandes exécutées (la première documente la reproduction AVANT correction) :
+php -d xdebug.mode=off tests/PaymentBrowser/console.php price-modal-proof before 18000
+php -d xdebug.mode=off tests/PaymentBrowser/console.php price-modal-proof after 15000
+Résultat : code 0 dans les deux cas, montant observé conforme à la valeur
+attendue de chaque étape, restauration à 150 EUR et absence d'effet secondaire.
+
+Paiement avec authentification 3DS réussie
+Nouveau RDV 4 créé par le catalogue et le formulaire réels, Alice,
+13/10/2026 14:00–15:30 Europe/Paris ; tarif fictif préalablement restauré.
+PaymentIntent créé et associé par l'application :
+pi_3UODGWAnaDrTxWUc071eSqzR.
+Carte TEST 4000 0025 0000 3155 saisie dans le Payment Element ; challenge réel
+« 3D Secure 2 Test Page » ouvert. Avant réponse au challenge :
+Stripe requires_action, livemode=false, amount=15000, amount_received=0.
+Bouton COMPLETE du challenge Stripe actionné dans son iframe, puis retour
+automatique à /rendez-vous/list.
+
+Preuve récupérée auprès de Stripe APRÈS le challenge :
+- PaymentIntent succeeded, livemode=false, 15000 centimes EUR reçus,
+  metadata appointment_id=4 ;
+- charge ch_3UODGWAnaDrTxWUc0QNFuhR4 associée à ce PaymentIntent,
+  livemode=false, paid=true, succeeded, amount_captured=15000 ;
+- payment_method_details.card.three_d_secure.result=authenticated,
+  authentication_flow=challenge, version=2.1.0.
+En base : confirmed, numéro 20261008-15358, preuve 2026-10-08 09:06:41 UTC,
+payment_issue=null, notification sent à 09:06:43 UTC.
+Un seul courrier de confirmation du RDV 4 capturé ; compteur total 10 -> 11
+pendant le paiement. Aucune livraison externe.
+Le listener a réellement reçu evt_3UODGWAnaDrTxWUc0E4tJl5D à 09:06:41 UTC ;
+le retour navigateur a ensuite effectué l'envoi vers la capture locale.
+
+Commandes de preuve exécutées :
+php -d xdebug.mode=off tests/PaymentBrowser/console.php stripe-proof 4
+php -d xdebug.mode=off tests/PaymentBrowser/console.php stripe-3ds-proof 4
+Résultat : requires_action avant ; succeeded + authenticated après ; code 0.
+Preuves ETAT/stripe-proof-4-090624.json et stripe-proof-4-090654.json,
+webhook-proof.ndjson et courrier fictif dans ETAT/mail.
+
+Adaptations limitées des aides de recette :
+- console.php : essai temporaire du tarif avec restauration automatique et
+  lecture filtrée de la preuve 3DS de la charge réellement associée ;
+- browser.py : ouverture/lecture de la modale sans confirmer l'annulation ;
+- ConfigureStripe.ps1 : option -ReuseTestKeys pour redémarrer le listener avec
+  les clés TEST privées existantes, sans nouvelle saisie ni affichage.
+  Cette option conserve l'ACL existante. La première tentative de redémarrage
+  avait échoué en réappliquant l'ACL (SeSecurityPrivilege) ; le lancement est
+  ensuite réussi en conservant les droits. Le contrôle de préfixe TEST reste
+  obligatoire. Aucune configuration habituelle n'a été remplacée.
+Pendant ce redémarrage, l'accès au paiement du RDV 4 a été bloqué par le garde
+de recette tant que le listener n'était pas prêt. Après réception du secret,
+la page a été rouverte et le même RDV a servi au paiement complet ci-dessus.
+
+Autres vérifications limitées à ces changements :
+php -d xdebug.mode=off vendor/phpunit/phpunit/phpunit -c phpunit.payment.xml --filter 'testPayableAmountFallsBackForManualAppointmentWithoutProof|testCreationNeedsConsentAndReusesIntentAndFrozenAmount'
+OK : 2 tests, 14 assertions. Repli historique et montant figé vérifiés.
+php -d xdebug.mode=off -l tests/PaymentBrowser/console.php : OK.
+Analyse ast.parse de browser.py et Parser.ParseFile de ConfigureStripe.ps1 : OK.
+git --no-optional-locks diff --check : code 0.
+Pas de nouvelle exécution de la suite complète ni de recette de concurrence.
+
+L'index conserve exactement l'empreinte donnée en section 1. Empreintes des
+cinq fichiers Google hors .env inchangées ; git diff --exit-code sur les six
+fichiers indexés : code 0. Aucun fichier Google, commit, push ou déploiement.
+Ces deux points sont vérifiés. La réserve précédente sur l'absence d'un succès
+3DS est levée pour Stripe TEST dans Edge ; l'essai tactile sur appareil physique
+reste distinct et n'a pas été réalisé pendant cette passe.

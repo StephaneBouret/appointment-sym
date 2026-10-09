@@ -4,7 +4,7 @@ namespace App\Command;
 
 use App\Enum\AppointmentStatus;
 use App\Repository\AppointmentRepository;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\AppointmentPaymentService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,13 +14,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
     name: 'app:appointments:cleanup-pending',
-    description: 'Annule les rendez-vous en statut PENDING trop anciens (ex: > 30 minutes).',
+    description: 'Annule les PENDING à échéance ; sans échéance, utilise leur ancienneté.',
 )]
 final class CleanupPendingAppointmentsCommand extends Command
 {
     public function __construct(
         private readonly AppointmentRepository $appointments,
-        private readonly EntityManagerInterface $em,
+        private readonly AppointmentPaymentService $payments,
     ) {
         parent::__construct();
     }
@@ -28,8 +28,7 @@ final class CleanupPendingAppointmentsCommand extends Command
     protected function configure(): void
     {
         $this
-            // Délai d'expiration des PENDING
-            ->addOption('minutes', null, InputOption::VALUE_REQUIRED, 'Âge max des PENDING (minutes)', '30')
+            ->addOption('minutes', null, InputOption::VALUE_REQUIRED, 'Âge max des PENDING sans échéance persistée (minutes)', (string) AppointmentPaymentService::PENDING_MINUTES)
             // Sécurité/diagnostic
             ->addOption('dry-run', null, InputOption::VALUE_NONE, 'N\'annule rien, affiche seulement ce qui serait fait')
             ->addOption('limit', null, InputOption::VALUE_REQUIRED, 'Nombre max de RDV à traiter', '500');
@@ -51,12 +50,12 @@ final class CleanupPendingAppointmentsCommand extends Command
         $nowUtc           = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
         $thresholdCreated = $nowUtc->modify("-{$minutes} minutes");
 
-        // Récupération des PENDING antérieurs au seuil (basé sur createdAt)
-        // On fait une requête ciblée côté repo pour éviter de tout charger.
+        // The persisted deadline takes priority over the legacy age threshold.
         $qb = $this->appointments->createQueryBuilder('a')
             ->andWhere('a.status = :pending')
-            ->andWhere('a.createdAt <= :threshold')
+            ->andWhere('(a.payment.expiresAt <= :now OR (a.payment.expiresAt IS NULL AND a.createdAt <= :threshold))')
             ->setParameter('pending', AppointmentStatus::PENDING)
+            ->setParameter('now', $nowUtc)
             ->setParameter('threshold', $thresholdCreated)
             ->setMaxResults($limit);
 
@@ -68,7 +67,7 @@ final class CleanupPendingAppointmentsCommand extends Command
         }
 
         $io->section(sprintf(
-            'Trouvé %d RDV PENDING plus vieux que %d min (UTC<=%s). %s',
+            'Trouvé %d RDV PENDING à échéance ; repli sans échéance : %d min (création UTC<=%s). %s',
             count($toCancel),
             $minutes,
             $thresholdCreated->format('Y-m-d H:i:s'),
@@ -77,6 +76,11 @@ final class CleanupPendingAppointmentsCommand extends Command
 
         $count = 0;
         foreach ($toCancel as $appt) {
+            // Dry-run uses the same locked refresh and eligibility decision.
+            if (!$this->payments->expire($appt, $thresholdCreated, $nowUtc, $dryRun)) {
+                continue;
+            }
+            $count++;
             // Optionnel : log/affichage
             /** @var \App\Entity\Appointment $appt */
             $io->text(sprintf(
@@ -87,35 +91,12 @@ final class CleanupPendingAppointmentsCommand extends Command
                 $appt->getCreatedAt()?->format('Y-m-d H:i') ?? 'n/a'
             ));
 
-            if ($dryRun) {
-                // En dry-run, on n'annule pas
-                continue;
-            }
-
-            // Annulation effective
-            $appt->setStatus(AppointmentStatus::CANCELED);
-            if (method_exists($appt, 'setUpdatedAt')) {
-                $appt->setUpdatedAt($nowUtc);
-            }
-
-            // Flush par lot pour éviter la surcharge mémoire/transactions trop longues
-            $this->em->persist($appt);
-            $count++;
-
-            if (($count % 50) === 0) {
-                $this->em->flush();
-                $this->em->clear(); // si nécessaire pour de très gros volumes
-            }
         }
 
         if ($dryRun) {
-            // Patch d'affichage : on indique combien de RDVs auraient été annulés
-            $io->success(sprintf('DRY-RUN terminé : %d rendez-vous auraient été annulés.', count($toCancel)));
+            $io->success(sprintf('DRY-RUN terminé : %d rendez-vous auraient été annulés.', $count));
             return Command::SUCCESS;
         }
-
-        // Commit final
-        $this->em->flush();
 
         $io->success(sprintf('%d rendez-vous annulés avec succès.', $count));
         return Command::SUCCESS;

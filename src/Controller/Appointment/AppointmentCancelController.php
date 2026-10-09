@@ -75,7 +75,7 @@ final class AppointmentCancelController extends AbstractController
         // Montant payé (en centimes) via le type
         $paidCents = null;
         if ($appointment->getType() && method_exists($appointment->getType(), 'getPrice')) {
-            $paidCents = $appointment->getType()->getPrice(); // int (centimes)
+            $paidCents = $appointment->getPayableAmount(); // frozen payment amount, legacy fallback
         }
 
         $refundCents = null;

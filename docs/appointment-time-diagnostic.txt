@@ -1,0 +1,146 @@
+Diagnostic et correction des horaires — 8 octobre 2026
+
+Périmètre et protections
+- Projet appointment-sym, branche main, HEAD 6e29d1b09cd828c0d37216f792c382456ca55748.
+- Index Git inchangé : SHA256 B4B30A42A85A9E73894C13F7BC7168B40DA8DA3326A30BEAB2E959837BDD1CD4.
+- Les six fichiers Google restent identiques à leur version indexée. Aucun commit, push ou déploiement.
+- appointment_sym consultée uniquement en lecture ; diagnostic SQL dans une transaction READ ONLY, terminée par rollback.
+- Aucun nouveau rendez-vous dans cette base, aucun paiement Stripe, aucun courrier externe.
+
+Constats réels, de bout en bout
+1. HTTP 8000 (HTTPS après redirection HTTP) et CLI : même base appointment_sym,
+   serveur STEF-LEGION, 127.0.0.1:3306, MySQL 8.4.7/InnoDB.
+   PHP 8.4.15 HTTP et CLI : Europe/Paris. Twig : Europe/Paris.
+   MySQL : session time_zone=SYSTEM. Les colonnes horaires sont DATETIME,
+   sans conversion automatique de fuseau par MySQL.
+2. API /api/fixed-slots-range?type=3&start=2026-10-12&end=2026-10-13 : HTTP 200,
+   start=2026-10-12T09:00:00+02:00, end=2026-10-12T10:15:00+02:00.
+   En hiver (12 janvier 2027) : mêmes heures locales, suffixe +01:00.
+3. FullCalendar startStr conserve cet ISO et son décalage. Son objet Date natif
+   vaut 09:00Z (coercition interne du calendrier avec fuseau nommé), mais le code
+   de sélection utilise startStr. Aucun décalage de formulaire observé.
+   Clic grille ET liste : champ caché et FormData = 2026-10-12T09:00.
+   Bannière = 09:00–10:15, dans les navigateurs émulés Europe/Paris et UTC.
+   Le contrôleur ajax_form envoie FormData sans transformation de date.
+   Aucune soumission HTTP de réservation effectuée : sérialisation contrôlée seulement.
+4. AppointmentFormType utilise model_timezone et view_timezone Europe/Paris.
+   Le champ soumis devient 09:00+02:00 ; AppointmentController le convertit
+   en 07:00Z, sans changer l'instant (1791788400). Le stockage initial 07:00 est correct.
+5. Avant correction, datetime_immutable Doctrine rechargeait le DATETIME 07:00
+   comme 07:00 Europe/Paris, suivant le fuseau PHP ambiant. Le récapitulatif
+   affichait donc 07:00 au lieu de 09:00.
+6. NormalizeAppointmentTimezoneListener reconvertissait ensuite cet objet mal
+   interprété vers UTC lors de chaque mise à jour. La recomposition du changeset
+   persistait le nouveau décalage même sans modification volontaire de l'horaire.
+   Reproduction isolée avec le vrai listener et les services de paiement :
+     création        12/10 07:00 UTC stocké
+     consentement    12/10 05:00
+     association PI  12/10 03:00
+     confirmation    12/10 01:00
+     notification    11/10 21:00 (deux mises à jour : sending, puis sent)
+   En hiver : 08:00 → 07:00 → 06:00 → 05:00 → 03:00.
+   Cette reproduction retrouve exactement la dérive du cas rapporté ; elle ne
+   prétend pas reconstituer des traces historiques HTTP qui n'ont pas été observées.
+7. Rendez-vous réel 20261008-10283, id 1 : start_at=2026-10-11 21:00:00,
+   end_at=2026-10-11 22:15:00, status=confirmed, montant figé=9000 EUR centimes.
+   Valeurs relues inchangées après correction. Il y a donc une erreur persistée,
+   en plus de l'erreur d'interprétation au chargement.
+8. Affichages : récapitulatif, liste, courriels principaux et PDF demandaient déjà
+   Europe/Paris ; administration également. Intl utilise HH:mm (24 heures).
+   Le format 12/24 heures n'est pas la cause. L'ancien mail appointment_confirmation
+   reposait sur le fuseau implicite ; il est maintenant explicite.
+
+Lien avec le correctif paiement
+Le mapping et le listener existaient déjà. Les relectures sous verrou et les
+mises à jour successives du paiement rendent leur incompatibilité visible et
+amplifient la dérive. La migration paiement n'est pas la cause de conversion.
+La recette 8097 et les anciens tests initialisaient PHP en UTC : ils ne reproduisaient
+pas les conditions de 8000. Les nouveaux tests imposent Europe/Paris et chargent
+le vrai listener ; aucun changement aux garanties du paiement n'a été nécessaire.
+
+Correction de code
+- src/Doctrine/Type/UtcDateTimeImmutableType.php (nouveau) : sérialisation UTC et
+  hydratation explicitement UTC, indépendantes du fuseau PHP.
+- config/packages/doctrine.yaml : enregistrement de ce type.
+- src/Entity/Appointment.php : utilisation uniquement pour startAt et endAt.
+  Aucun remplacement global de datetime_immutable ; les autres dates conservent
+  leurs conventions. Déclaration SQL DATETIME inchangée, aucune migration ajoutée.
+- src/Controller/Admin/AppointmentCrudController.php : input datetime_immutable
+  explicite pour ces champs (EasyAdmin ne reconnaît pas automatiquement un type
+  personnalisé) et correction de single-text en single_text.
+- templates/appointment/payment.html.twig : rappel de l'horaire en Europe/Paris.
+- templates/emails/appointment_confirmation.html.twig : fuseau Paris explicite.
+Le listener existant est conservé ; les objets rechargés UTC ne subissent plus
+de nouvelle interprétation. Aucun décalage numérique fixe n'a été ajouté.
+
+Tests et outils ajoutés/ajustés
+- tests/Payment/AppointmentTimezoneTest.php : octobre et hiver, vrai listener,
+  services de paiement/notification, Stripe simulé, courrier NullTransport capturé,
+  comparaison du stockage à chaque étape, égalité des timestamps après relecture.
+  Requêtes du vrai AppointmentRepository et génération des créneaux du SlotService :
+  09:00 bloqué, créneau suivant libre. Cette partie appelle la génération de plage
+  indépendamment de la barrière d'ouverture actuelle, qui n'est pas modifiée.
+  Rendu des vrais templates récapitulatif/paiement/liste/PDF et cinq mails ; seuls
+  l'habillage de base, les liens et les widgets de formulaire sont remplacés.
+  Configuration, formatteur et transformation du champ d'administration contrôlés.
+- tests/Payment/UtcDateTimeTypeTest.php : MySQL84Platform, déclaration SQL inchangée,
+  null, entrées invalides, immutabilité, conversion avec PHP UTC/Paris/New York.
+- tests/Payment/bootstrap.php : enregistrement du type dans le banc ORM isolé.
+- tests/Payment/PaymentWiringTest.php : vrai AppointmentFormType du conteneur,
+  transformation des deux dates en été/hiver.
+- tests/AppointmentTime/diagnostic.php : lecture ciblée, garde de cible, transaction
+  READ ONLY, pas de secret affiché ; seule la CLI demeure disponible.
+- tests/AppointmentTime/browser.py : contrôle CDP sans réservation sur 8000,
+  API et vraie sélection Stimulus/FullCalendar, dates octobre/hiver, fuseaux Paris/UTC.
+  Ce diagnostic attend le créneau de 09:00 actuellement visible ; après réparation
+  du rendez-vous réel, il faudra choisir un créneau libre pour le réutiliser.
+- La sonde HTTP temporaire public/_local_time_probe_20261008.php a été supprimée.
+
+Commandes et résultats réellement exécutés (depuis C:\Formations\appointment-sym)
+1. php -d xdebug.mode=off tests/AppointmentTime/diagnostic.php
+   Lecture avant/après : mêmes valeurs brutes, hydratation UTC après correction.
+   La même fonction a été appelée par la sonde HTTP locale : HTTP 200, même cible,
+   PHP/Twig Paris, hydratation UTC vérifiée. Sonde retirée ensuite.
+2. php -d xdebug.mode=off vendor/phpunit/phpunit/phpunit -c phpunit.payment.xml tests/Payment/AppointmentTimezoneTest.php
+   Avant correctif : 2 échecs / 14 assertions, dérives ci-dessus reproduites.
+   Après correctif et enrichissement : 2 tests / 86 assertions, succès.
+   Un essai intermédiaire du banc Twig a échoué faute de fonction asset simulée ;
+   cette fonction a été ajoutée au banc et le test a ensuite réussi.
+3. python tests/AppointmentTime/browser.py
+   4 combinaisons date/fuseau réussies ; API HTTP 200, heures et FormData cohérents,
+   pas d'erreur JS capturée. Un premier essai du diagnostic utilisait end=start :
+   l'API répondait correctement 422. Le script utilise désormais le lendemain
+   comme borne exclusive ; aucune modification du code applicatif n'était nécessaire.
+4. php -d xdebug.mode=off vendor/phpunit/phpunit/phpunit -c phpunit.payment.xml
+   Dernière exécution : 56 tests, 585 assertions, succès. SQLite uniquement en mémoire,
+   garde Stripe interdisant les requêtes réseau, aucun transport de courrier externe.
+5. php -l src/Doctrine/Type/UtcDateTimeImmutableType.php
+   php -l src/Entity/Appointment.php
+   php -l src/Controller/Admin/AppointmentCrudController.php
+   Syntaxe valide pour les trois. Xdebug a signalé son journal local inaccessible,
+   sans erreur de syntaxe et avec codes de sortie 0.
+6. git --no-optional-locks diff --check
+   Aucun défaut de diff.
+7. git --no-optional-locks diff --quiet -- .env assets/styles/app.css config/services.yaml src/Google/GoogleService.php templates/home/index.html.twig templates/partials/_google_reviews.html.twig
+   Code 0 ; index contrôlé par Get-FileHash .git/index -Algorithm SHA256, inchangé.
+
+Rendez-vous payé : rectification séparée, NON EXECUTEE
+Pour le choix confirmé par Stéphane (12/10/2026 09:00–10:15 Europe/Paris), les deux
+valeurs attendues sont start_at='2026-10-12 07:00:00' et end_at='2026-10-12 08:15:00'.
+Une intervention autorisée devra cibler uniquement id=1, number='20261008-10283',
+contrôler les anciennes valeurs sous verrou et modifier seulement ces deux colonnes,
+sans toucher au statut, au numéro ni à la preuve/historique de paiement ou notification.
+Pas de nouvel envoi automatique de confirmation.
+En attendant, l'interprétation UTC désormais correcte affiche les données actuelles
+du 11/10 à 23:00 au 12/10 à 00:15 Europe/Paris. Le créneau voulu du 12/10 à 09:00
+reste donc libre dans l'API : seule la rectification des données le bloquera.
+
+Résultat attendu et limites
+Les nouveaux rendez-vous conservent le même instant et affichent 09:00–10:15 Paris
+du calendrier à la confirmation, en octobre comme en hiver. Ce résultat est testé
+avec persistance fictive isolée ; aucune nouvelle réservation sur 8000 n'a été créée.
+La lecture ORM MySQL réelle et le câblage HTTP ont été vérifiés en lecture seule.
+Pas de nouvelle recette de concurrence InnoDB : SQLite ne la valide pas.
+Rendus HTML des mails et du PDF contrôlés ; aucun courriel externe, aucune génération
+du binaire PDF et aucune navigation authentifiée dans l'administration effectués.
+La rectification des deux horaires du rendez-vous payé reste à autoriser et effectuer.

@@ -1,0 +1,226 @@
+RECETTE TECHNIQUE PAIEMENT — MYSQL / INNODB — 7 OCTOBRE 2026
+
+Résultat : migration réelle et cinq scénarios concurrents réussis après un
+ajustement de la migration. Aucun navigateur Stripe test utilisé.
+
+1. CIBLE ET ISOLATION
+
+Serveur local : 127.0.0.1:3306, hostname STEF-LEGION.
+Version effectivement interrogée : MySQL 8.4.7.
+Moteur par défaut et tables de recette : InnoDB.
+Isolation effectivement observée : REPEATABLE-READ.
+Base du passage réussi : appointment_payment_recette_20261007_c84ffed49131.
+Commit de départ inchangé : 6e29d1b09cd828c0d37216f792c382456ca55748, branche main.
+
+Aucun fichier d'environnement privé lu. Aucun accès aux tables des bases
+habituelles ; seuls information_schema et performance_schema ont été consultés
+pour les contrôles du serveur et les verrous des connexions de recette.
+Les informations d'authentification ne figurent pas dans ce rapport.
+
+Avant création : connexion locale sans base sélectionnée (DATABASE() NULL),
+contrôle hostname, port, version, UUID serveur, InnoDB et absence exacte du nom
+généré. Une base inexistante ne peut pas encore être sélectionnée : la seule
+écriture de provisionnement est CREATE DATABASE, sans IF NOT EXISTS.
+Avant toute écriture de schéma/données : nouvelle connexion, SELECT DATABASE()
+strictement égal au nom attendu et mêmes serveur/version/port/moteur.
+Ces contrôles sont refaits sur chaque connexion des processus enfants.
+Aucune base existante n'est réutilisée, purgée ou supprimée par le banc.
+
+Deux bases neuves d'essais initiaux échoués restent également présentes,
+exclusivement fictives, sans réutilisation ni suppression :
+- appointment_payment_recette_20261007_631eeb67cadb
+- appointment_payment_recette_20261007_4936b4520722
+La première a établi l'échec, la deuxième l'a précisé avec SQLSTATE/code pilote.
+La troisième est le passage complet réussi. Les trois bases ont été créées
+par cette recette ; aucune autre base n'a été modifiée.
+
+Le banc lit seulement PAYMENT_MYSQL_USER et PAYMENT_MYSQL_PASSWORD, si fournis
+au processus, jamais DATABASE_URL. Sans ces variables, il essaie l'accès local
+WAMP par défaut. Il ne les affiche ni ne les écrit dans les artefacts.
+La commande exige --create-new et impose un nom généré sous le préfixe
+appointment_payment_recette_ ; elle ne propose pas de cible de remplacement.
+En cas d'accès insuffisant, elle s'arrête et ne contourne pas les contrôles.
+
+2. MIGRATION REELLE
+
+Schéma représentatif avant correctif : métadonnées ORM de l'application, dont
+on retire les 12 colonnes payment_* et leur index AVANT toute création SQL.
+Le diff de src/Entity/Appointment.php contre le commit initial confirme que
+ce sont les seuls ajouts de mapping du correctif. Le schéma final n'est donc
+pas créé directement pour contourner la migration.
+
+Trois rendez-vous fictifs datés de 2020 sont insérés : pending, confirmed,
+canceled, avec numéros historiques fictifs pour les deux derniers, ainsi
+que leurs utilisateurs et prestations fictifs. Aucun enregistrement réel copié.
+
+Exécution de Doctrine\Migrations\Tools\Console\Command\ExecuteCommand via
+CommandTester, avec DependencyFactory et ExistingConnection sur la connexion
+déjà contrôlée. Versions : [DoctrineMigrations\Version20261005090000], --up,
+d'abord --dry-run puis exécution, sans interaction, verbosité DEBUG.
+Ce sont le véritable planificateur, DbalExecutor, calcul de diff, DDL MySQL
+et stockage doctrine_migration_versions. Aucun appel direct à up() dans ce banc.
+bin/console n'est pas démarré afin de ne pas charger l'environnement utilisateur.
+Le dry-run peut initialiser la table de métadonnées Doctrine ; les tables
+métier et lignes historiques restent inchangées pendant ce dry-run.
+
+Défaut trouvé sur les deux premiers essais : DDL exécuté avec commit implicite
+MySQL, alors que la migration était déclarée transactionnelle. L'état DBAL
+restait incohérent ; une transaction suivante échouait lors de son rollback
+avec SQLSTATE 42000 / code MySQL 1305 (savepoint inexistant).
+Correction : Version20261005090000::isTransactional() retourne false.
+La recette vérifie désormais que DBAL ET PDO sont hors transaction après
+chaque exécution Doctrine. Ne pas interpréter ce changement comme une garantie
+de rollback du DDL : une migration partiellement appliquée doit être inspectée.
+
+Passage réussi :
+- dry-run puis application réelle, code 0 ; 2 requêtes DDL exécutées ;
+- trois lignes conservées champ par champ, y compris statuts et numéros ;
+- exactement 12 colonnes payment_* nullables, NULL sur l'historique ;
+- index unique uniq_appointment_payment_intent sur payment_intent_id ;
+- tentative de doublon réellement rejetée par MySQL, mutations fictives annulées ;
+- une entrée de version enregistrée dans doctrine_migration_versions ;
+- hydratation ORM des trois rendez-vous et repli du prix vérifiés ;
+- toutes les tables créées utilisent InnoDB ;
+- les trois lignes historiques restent identiques à la fin des scénarios.
+
+3. CONCURRENCE REELLE ET SYNCHRONISATION
+
+Chaque acteur est un nouveau processus PHP lancé par Symfony Process, avec
+son EntityManager et sa connexion. PID et CONNECTION_ID() sont distincts.
+Des fichiers de signalisation publiés par renommage atomique et des barrières
+explicites arrêtent le premier acteur après son SELECT FOR UPDATE, ou avant
+son COMMIT. Les délais ne servent qu'à borner une attente, pas à supposer
+qu'un traitement concurrent a atteint son point de synchronisation.
+
+Avant de libérer le premier acteur, l'observateur interroge
+performance_schema.data_lock_waits, data_locks et threads. Il vérifie que la
+connexion B attend réellement celle de A sur appointment dans la base dédiée.
+Les cinq scénarios disposent chacun d'un lock-wait.json avec ces preuves.
+L'instrumentation DBAL est réservée au banc ; les services métier restent réels.
+
+Scénario                Connexions A/B  Etat final  Incident      Numéros / mails
+retour + webhook        1063 / 1064     confirmed   aucun         1 / 1
+deux webhooks           1066 / 1067     confirmed   aucun         1 / 1
+nettoyage premier       1070 / 1071     canceled    late_payment  0 / 0
+confirmation première   1073 / 1074     confirmed   aucun         1 / 1
+deux commandes d'envoi  1077 / 1078     confirmed   aucun         1 / 1
+
+Retour + webhook : confirmReturn() utilise un StripeService simulé, pendant
+qu'un autre processus invoque le vrai contrôleur webhook avec corps signé
+fictif. Un numéro généré, une preuve conservée, aucun incident, un envoi capturé.
+
+Deux webhooks : deux événements fictifs signés, deux vrais contrôleurs et une
+attente de verrou ; confirmation unique, notification pending et zéro envoi
+dans les webhooks, puis la commande la livre une fois.
+
+Nettoyage premier : échéance persistée réellement passée avant le démarrage.
+La vraie commande de nettoyage, --minutes=60, réclame le verrou ; le webhook
+attend. Après libération : annulé, preuve vérifiée, late_payment, aucun numéro
+ni notification. Le seuil de 60 minutes ne retarde pas l'échéance persistée.
+
+Confirmation première : échéance persistée quatre secondes dans le futur.
+La confirmation passe le contrôle temporel et prépare son commit avant cette
+échéance. Elle attend ensuite à la barrière, verrou encore détenu. Le parent
+attend que l'échéance réelle soit passée (UTC_TIMESTAMP()), puis lance le
+nettoyage. Celui-ci sélectionne l'ancien PENDING non encore committé, puis
+attend le verrou. Après commit de la confirmation, sa relecture voit CONFIRMED
+et la commande annonce zéro annulation. verifiedAt < expiresAt est vérifié.
+Le temps n'est ni simulé ni avancé artificiellement dans le service de paiement.
+Le repository du nettoyage est limité à l'identifiant de la fixture pour
+préserver les trois anciens rendez-vous ; le DQL d'expiration de la commande
+de production et son service restent inchangés.
+
+Deux envois : deux vraies exécutions de PaymentNotificationsCommand --retry
+sélectionnent la notification. La seconde attend le verrou de la première.
+La première valide sending, puis attend avant son transport capturé. La seconde
+termine en observant sending, sans envoyer. La première est libérée et envoie
+une fois. Un nouveau passage ultérieur ne renvoie rien. L'état final est sent.
+
+Stripe HTTP est bloqué par le bootstrap partagé ; réponses simulées seulement.
+Mailer utilise NullTransport ; son événement SentMessageEvent compte l'envoi.
+Le numéro est produit par le vrai générateur, instrumenté uniquement pour
+compter ses appels. Le transport vérifie que la transaction est déjà validée.
+Les captures ne contiennent que des données fictives et des identifiants de test.
+
+4. COMMANDES EXECUTEES ET RESULTATS
+
+Contrôles Git en lecture seule : git --no-optional-locks status --short,
+rev-parse HEAD, diff --cached --numstat, diff -- src/Entity/Appointment.php,
+diff --check, et empreintes SHA-256 des fichiers protégés.
+Lecture des instructions applicables : aucun AGENTS.md dans le dépôt/parents,
+AGENTS.md global vide. Configuration Doctrine et code des tests inspectés.
+
+Client mysql local, --no-defaults, mode batch, lecture seule :
+SELECT @@hostname, @@port, DATABASE(), VERSION(), @@default_storage_engine;
+SELECT SUPPORT FROM information_schema.ENGINES WHERE ENGINE = 'InnoDB';
+SELECT @@performance_schema, @@transaction_isolation, @@server_uuid;
+SELECT COUNT(*) FROM performance_schema.data_lock_waits WHERE REQUESTING_THREAD_ID = -1;
+Résultats : serveur local, 8.4.7, DATABASE() NULL, InnoDB DEFAULT,
+performance_schema activé, isolation REPEATABLE-READ, lecture des verrous permise.
+Aucun secret passé dans une ligne de commande.
+
+php -d xdebug.mode=off tests/PaymentMysql/run.php --create-new
+Exécuté trois fois : deux échecs de transaction ci-dessus (codes 1), puis
+code 0, migration et cinq scénarios réussis. Chaque essai crée une base neuve.
+Les workers sont lancés automatiquement par cette commande ; aucune commande
+Doctrine ni notification ne cible la configuration habituelle de l'application.
+
+php -d xdebug.mode=off vendor/phpunit/phpunit/phpunit -c phpunit.payment.xml
+Après ajustement : code 0, OK (51 tests, 466 assertions).
+La suite conserve ses connexions SQLite en mémoire, courrier nul et Stripe
+bloqué. Le banc MySQL est dans tests/PaymentMysql, hors de cette suite isolée.
+
+php -d xdebug.mode=off -l <fichier>
+Exécuté sur la migration, PaymentMigrationTest.php et les trois nouveaux scripts
+MySQL : aucune erreur de syntaxe.
+git --no-optional-locks diff --check : aucune anomalie.
+
+5. FICHIERS DE CETTE ETAPE
+
+Modifiés :
+- migrations/Version20261005090000.php : migration explicitement non transactionnelle.
+- tests/Payment/PaymentMigrationTest.php : assertion de cette propriété.
+- docs/payment-confirmation.txt : résultats MySQL, limites et DDL non transactionnel.
+
+Ajoutés :
+- tests/PaymentMysql/Support.php : gardes, connexions, ORM, simulation/capture, barrières.
+- tests/PaymentMysql/worker.php : acteurs indépendants, services/commandes réels.
+- tests/PaymentMysql/run.php : provisionnement neuf, migration et orchestration.
+- docs/payment-mysql-recette.txt : présent compte rendu reproductible.
+
+Aucun changement aux services de paiement ou aux avis Google dans cette étape.
+Index Git inchangé, SHA-256 :
+B4B30A42A85A9E73894C13F7BC7168B40DA8DA3326A30BEAB2E959837BDD1CD4.
+Les six fichiers Google restent indexés dans leur état initial.
+Aucun commit, push, déploiement, appel Stripe réel ni courriel externe.
+
+Preuves locales hors dépôt, données exclusivement fictives :
+C:\Users\STEF-LEGION\AppData\Local\Temp\appointment_payment_recette_20261007_c84ffed49131
+results.json : bilan ; target.json : cible sans secrets ; schema-before.sql :
+DDL préparatoire ; migration-dry-run.txt / migration-execute.txt : sorties du
+véritable exécuteur ; dossiers de scénarios : PID, connexions, attentes de
+verrous, états et comptages de courrier/numéros.
+
+6. LIMITES ET SUITE
+
+Ces résultats valident les cinq entrelacements provoqués sur MySQL 8.4.7 local
+en REPEATABLE-READ. Ils ne constituent pas un test de charge ni une exploration
+de toutes les courses, pannes ou arrêts brutaux possibles. Aucun test MySQL de
+deadlock injecté, panne réseau ou arrêt pendant un envoi n'a été effectué.
+Les tests SQLite existants couvrent notamment failed et sending incertain.
+Une acceptation SMTP suivie d'une rupture peut toujours rendre une reprise
+ambiguë : aucune garantie universelle de courrier exactement une fois.
+
+Le retour est exercé à l'entrée du service, le webhook par son contrôleur
+signé dans un processus CLI ; pas de serveur HTTP, navigateur ou Stripe réel.
+Le vrai subscriber/template est couvert par la suite SQLite, tandis que la
+concurrence utilise un listener contrôlé et NullTransport pour compter les envois.
+La recette ne lit pas le schéma réel du site : il faut comparer les versions,
+collations, migrations déjà appliquées et configuration de la cible autorisée
+avant livraison. Sauvegarde/restauration de cette cible non testées ici.
+
+Restent : recette navigateur mobile/ordinateur et webhooks Stripe en MODE TEST
+dans un environnement autorisé, contrôle de configuration/signature sur cette
+cible, planification effective des notifications et surveillance, rapprochement
+des anciens paiements avant bascule. Ne pas commencer ces étapes implicitement.
+L'archive de revue précédente précède cette étape et ne contient pas ces ajouts.

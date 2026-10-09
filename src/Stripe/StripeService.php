@@ -3,7 +3,7 @@
 namespace App\Stripe;
 
 use App\Entity\Appointment;
-use App\Entity\Purchase;
+use Stripe\PaymentIntent;
 use Stripe\StripeClient;
 
 class StripeService
@@ -22,48 +22,41 @@ class StripeService
         return $this->publicKey;
     }
 
-    /**
-     * Méthode générique : on créé un PaymentIntent avec metedata et description
-     *
-     * @param integer $amount
-     * @param array $metadata
-     * @param string|null $description
-     */
-    public function createPaymentIntent(int $amount, array $metadata = [], ?string $description = null)
+    /** All request parameters are stable across retries with the same persisted key. */
+    private function createPaymentIntent(int $amount, array $metadata, string $idempotencyKey): PaymentIntent
     {
         return $this->client->paymentIntents->create([
             'amount'               => $amount,
             'currency'             => 'eur',
             'payment_method_types' => ['card'], // 'paypal' à ajouter dans le tableau ['card', 'paypal'] si activé dans Stripe
             'metadata'             => array_filter($metadata, fn($v) => $v !== null && $v !== ''),
-            'description'          => $description,
-        ]);
+            'description'          => 'Rendez-vous #'.$metadata['appointment_id'],
+        ], ['idempotency_key' => $idempotencyKey]);
     }
 
     /**
      * RDV (Appointment) — PaymentIntent avec metadata et description dédiée
      */
-    public function getPaymentIntentForAppointment(Appointment $appointment)
+    public function createAppointmentIntent(Appointment $appointment): PaymentIntent
     {
-        $type = $appointment->getType();
-        $user = $appointment->getUser();
-        $amount = (int) $type->getPrice();
+        $payment = $appointment->getPayment();
+        if (!$payment->acceptedAt || !$payment->attemptKey || !$payment->amount || $payment->currency !== 'eur') {
+            throw new \LogicException('Payment has not been prepared.');
+        }
 
         return $this->createPaymentIntent(
-            $amount,
+            $payment->amount,
             [
                 'kind' => 'appointment',
                 'appointment_id'    => (string) $appointment->getId(),
-                'appointment_type'  => $type ? (string) $type->getName() : null,
-                'start_at'          => $appointment->getStartAt()?->format('c'), // ISO 8601 (UTC)
-                'end_at'            => $appointment->getEndAt()?->format('c'),
-                'user_id'           => $user ? (string) $user->getId() : null,
-                'user_email'        => $user ? (string) $user->getEmail() : null,
-                'appointment_num'   => method_exists($appointment, 'getNumber') ? (string) $appointment->getNumber() : null,
+                'attempt_key' => $payment->attemptKey,
             ],
-            $type
-                ? sprintf('RDV • %s • %s', $type->getName(), $appointment->getStartAt()?->format('Y-m-d H:i'))
-                : 'RDV'
+            $payment->attemptKey
         );
+    }
+
+    public function retrievePaymentIntent(string $id): PaymentIntent
+    {
+        return $this->client->paymentIntents->retrieve($id, []);
     }
 }

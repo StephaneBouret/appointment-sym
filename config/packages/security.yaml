@@ -12,6 +12,9 @@ security:
                 property: email
 
     firewalls:
+        stripe_webhook:
+            pattern: ^/stripe/webhook$
+            security: false
         dev:
             # Ensure dev tools and static assets are always allowed
             pattern: ^/(_profiler|_wdt|assets|build)/

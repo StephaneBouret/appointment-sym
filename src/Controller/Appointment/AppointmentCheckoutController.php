@@ -25,8 +25,8 @@ final class AppointmentCheckoutController extends AbstractController
             return $this->redirectToRoute('app_home');
         }
 
-        if ($appointment->getStatus() === AppointmentStatus::CONFIRMED) {
-            $this->addFlash('info', 'Ce rendez-vous est déjà confirmé.');
+        if ($appointment->getStatus() !== AppointmentStatus::PENDING) {
+            $this->addFlash('info', 'Ce rendez-vous n’est plus en attente de paiement.');
             return $this->redirectToRoute('app_home');
         }
 

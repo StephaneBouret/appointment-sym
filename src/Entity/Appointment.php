@@ -13,8 +13,22 @@ use Vich\UploaderBundle\Mapping\Attribute as Vich;
 
 #[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: AppointmentRepository::class)]
+#[ORM\UniqueConstraint(name: 'uniq_appointment_payment_intent', columns: ['payment_intent_id'])]
 class Appointment
 {
+    #[ORM\Embedded(class: PaymentRecord::class, columnPrefix: 'payment_')]
+    private PaymentRecord $payment;
+
+    public function getPayment(): PaymentRecord
+    {
+        return $this->payment;
+    }
+
+    public function getPayableAmount(): ?int
+    {
+        return $this->payment->amount ?? $this->type?->getPrice();
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -28,10 +42,10 @@ class Appointment
     #[ORM\JoinColumn(nullable: false)]
     private ?AppointmentType $type = null;
 
-    #[ORM\Column(type: 'datetime_immutable')]
+    #[ORM\Column(type: 'utc_datetime_immutable')]
     private ?\DateTimeImmutable $startAt = null;
 
-    #[ORM\Column(type: 'datetime_immutable')]
+    #[ORM\Column(type: 'utc_datetime_immutable')]
     private ?\DateTimeImmutable $endAt = null;
 
     #[ORM\Column(enumType: AppointmentStatus::class)]
@@ -82,6 +96,7 @@ class Appointment
 
     public function __construct()
     {
+        $this->payment = new PaymentRecord();
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
         $this->evaluatedPerson = new EvaluatedPerson();

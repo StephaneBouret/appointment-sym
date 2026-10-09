@@ -27,7 +27,10 @@ class AppointmentCheckoutFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            // Configure your form options here
+            'method' => 'POST',
+            'csrf_protection' => true,
+            // Stateful token, deliberately separate from the global stateless "submit" token.
+            'csrf_token_id' => 'appointment_payment_confirmation',
         ]);
     }
 }

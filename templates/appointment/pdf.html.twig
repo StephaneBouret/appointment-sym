@@ -140,7 +140,7 @@
                 </tr>
                 {% endif %}
 
-                {% set total = appointment.type.price %}
+                {% set total = appointment.payableAmount %}
                 {% if total is not null %}
                 <tr>
                     <th class="text-left">Montant payé T.T.C</th>

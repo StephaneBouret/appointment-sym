@@ -44,6 +44,11 @@ final class MaintenanceListener
 
         $request = $event->getRequest();
 
+        // Stripe must reach this signature-protected endpoint even during maintenance.
+        if ($request->getPathInfo() === '/stripe/webhook') {
+            return;
+        }
+
         $maintenance = $this->settings->isMaintenanceEnabled();
 
         if (!$maintenance) {
