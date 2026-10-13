@@ -46,6 +46,7 @@ services:
     App\Google\GoogleService:
         arguments:
             $googleKey: "%env(GOOGLE_API_KEY)%"
+            $googlePlaceId: "%env(GOOGLE_PLACE_ID)%"
 
     auth_mailer:
         class: App\Service\SendEmail2faService

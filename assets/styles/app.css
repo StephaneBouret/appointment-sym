@@ -198,13 +198,13 @@ html[data-bs-theme="dark"] {
 
 .nvtq2t {
     padding-top: 3rem;
-    padding-bottom: 3rem;
+    /* padding-bottom: 3rem; */
 }
 
 @media (min-width: 768px) {
     .nvtq2t {
         padding-top: 5rem;
-        padding-bottom: 5rem;
+        /* padding-bottom: 5rem; */
     }
 }
 

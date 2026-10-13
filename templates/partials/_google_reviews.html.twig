@@ -1,0 +1,23 @@
+<section class="container py-4">
+	<div class="mx-auto text-center" style="max-width: 720px;">
+		<div class="border rounded-4 p-4 shadow-sm">
+			<p class="mb-2 fw-semibold">⭐ Avis Google</p>
+
+			{% if googleReviews.rating is not null and googleReviews.reviewCount is not null %}
+				<p class="display-6 fw-bold mb-1">
+					{{ googleReviews.rating|number_format(1, ',', ' ') }} / 5
+				</p>
+
+				<p class="text-muted mb-3">
+					basé sur {{ googleReviews.reviewCount }} avis
+				</p>
+			{% else %}
+				<p class="text-muted mb-3">Les avis Google sont momentanément indisponibles.</p>
+			{% endif %}
+
+			<a href="{{ googleReviews.googleMapsUri ?: 'https://share.google/5jm9LrumRKFu7LiIJ' }}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary">
+				Voir les avis Google
+			</a>
+		</div>
+	</div>
+</section>
