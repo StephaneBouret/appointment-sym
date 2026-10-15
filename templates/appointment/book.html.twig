@@ -1,25 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Prendre rendez-vous
-{% endblock %}
+{% block title %}Réserver — {{ type.name }}{% endblock %}
+{% block meta_robots %}noindex,follow{% endblock %}
 
 {% block body %}
-	<div class="container my-5">
-		<h1 class="mb-4">Prendre rendez-vous</h1>
-		{{ form_start(form) }}
-		{{ form_errors(form) }}
-		<div class="mb-3">
-			{{ form_row(form.type) }}
-		</div>
-		<div class="row">
-			<div class="col-md-6">
-				{{ form_row(form.startAt) }}
-			</div>
-		</div>
-        <h4 class="mt-4">Personne évaluée</h4>
-        {{ form_row(form.evaluatedPerson) }}
-
-        <button class="btn btn-primary mt-4" type="submit">Réserver</button>
-		{{ form_end(form) }}
+	<div class="container py-4" data-controller="appointment-type" data-appointment-type-target="container">
+		{% include 'appointment/_form.html.twig' %}
 	</div>
 {% endblock %}

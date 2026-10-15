@@ -4,22 +4,26 @@ export default class extends Controller {
     static targets = ["container"];
 
     showDetail(event) {
-        event.preventDefault();
-        const url = event.currentTarget.dataset.url;
-        if (!url) return;
-        this.fetchIntoContainer(url);
+        this.followLink(event);
     }
 
     showForm(event) {
-        event.preventDefault();
-        const url = event.currentTarget.dataset.url;
-        if (!url) return;
-        this.fetchIntoContainer(url);
+        this.followLink(event);
     }
 
     reloadRecap(event) {
+        this.followLink(event);
+    }
+
+    followLink(event) {
+        // Leave modified clicks and new tabs to the browser, including keyboard use.
+        if (event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+        const link = event.currentTarget;
+        if (link.target && link.target !== '_self') return;
+        const url = link.href;
+        if (!url) return;
         event.preventDefault();
-        this.fetchIntoContainer('/rendez-vous/types');
+        this.fetchIntoContainer(url);
     }
 
     // --- utilitaire commun ---
@@ -31,6 +35,12 @@ export default class extends Controller {
             }
         })
         .then(async (response) => {
+            // A normal navigation lets Symfony save the protected URL if the session expired.
+            if (response.redirected) {
+                window.location.assign(url);
+                return;
+            }
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
             const ct = (response.headers.get("Content-Type") || "").toLowerCase();
 
             // JSON : on attend potentiellement { redirect: ... }
@@ -47,12 +57,17 @@ export default class extends Controller {
 
             // Sécurité login (comme avant)
             if (html.includes('id="login_form"')) {
-                window.location.href = "/login";
+                window.location.assign(url);
                 return;
             }
 
             this.containerTarget.innerHTML = html;
+            const heading = this.containerTarget.querySelector('h1, h2, h5');
+            if (heading) {
+                heading.tabIndex = -1;
+                heading.focus();
+            }
         })
-        .catch((e) => console.error("Erreur AJAX RDV:", e));
+        .catch(() => window.location.assign(url));
     }
 }

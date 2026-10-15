@@ -24,10 +24,14 @@ trait ErrorFormTrait
             $form->addError(new FormError($error));
         }
 
-        return $this->render('appointment/_form.html.twig', array_merge([
+        $request = $this->container->get('request_stack')->getCurrentRequest();
+        $response = $this->render($request->isXmlHttpRequest() ? 'appointment/_form.html.twig' : 'appointment/book.html.twig', array_merge([
             'form' => $form,
             'type' => $type,
             'action' => $this->generateUrl($routeName, ['id' => $type->getId()]),
         ], $extraVars));
+        $response->setVary('X-Requested-With', false);
+
+        return $response;
     }
 }

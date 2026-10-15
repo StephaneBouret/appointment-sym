@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -28,6 +29,11 @@ final class GenerateSitemapCommand extends Command
         private readonly string $hostname,
     ) {
         parent::__construct();
+    }
+
+    protected function configure(): void
+    {
+        $this->addOption('output', null, InputOption::VALUE_REQUIRED, 'Fichier XML de destination (par défaut : public/sitemap.xml).');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -72,7 +78,6 @@ final class GenerateSitemapCommand extends Command
 
             // Pages "métier" publiques
             ['route' => 'app_appointment_types', 'changefreq' => 'weekly', 'priority' => '0.8'],
-            ['route' => 'app_numerologie', 'changefreq' => 'monthly', 'priority' => '0.8'],
 
             // (à toi de voir) : inscription / login -> souvent inutile en SEO
             // ['route' => 'app_register', 'changefreq' => 'yearly', 'priority' => '0.2'],
@@ -115,7 +120,7 @@ final class GenerateSitemapCommand extends Command
         }
 
         // 3) Urls dynamiques "SEO OK" : page détail d'un type de rendez-vous
-        // Ici : la page détail d'un type de rendez-vous : /rendez-vous/type/{id}
+        // Ici : la page détail d'un type de rendez-vous : /rendez-vous/types/{id}
         $types = $this->em->getRepository(AppointmentType::class)->findAll();
 
         foreach ($types as $type) {
@@ -133,7 +138,7 @@ final class GenerateSitemapCommand extends Command
         $xml = $this->generateXml($urls);
 
         // 5) Ecriture dans public/sitemap.xml
-        $target = $this->kernel->getProjectDir() . '/public/sitemap.xml';
+        $target = $input->getOption('output') ?? $this->kernel->getProjectDir() . '/public/sitemap.xml';
         file_put_contents($target, $xml);
 
         $output->writeln(sprintf('<info>Sitemap généré : %s (%d URL)</info>', $target, count($urls)));

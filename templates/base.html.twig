@@ -16,7 +16,7 @@
 		name="robots" content="{% block meta_robots %}index,follow{% endblock %}">
 		{# ✅ Canonical (évite contenu dupliqué) #}
 		<link
-		rel="canonical" href="{{ app.request.schemeAndHttpHost ~ app.request.pathInfo }}">
+		rel="canonical" href="{% block canonical %}{{ app.request.schemeAndHttpHost ~ app.request.pathInfo }}{% endblock %}">
 		{# Favicons #}
 		<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('favicon/apple-touch-icon.png') }}">
 		<link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon/favicon-32x32.png') }}">

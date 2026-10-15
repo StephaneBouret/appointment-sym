@@ -2,7 +2,7 @@
 	<div class="row">
 		{% for type in types %}
 			<div class="col-md-4 mb-4 h-100">
-				<div class="card shadow-sm fgfump h-100" data-action="click->appointment-type#showDetail" data-url="{{ path('app_appointment_type_detail', {id: type.id}) }}">
+				<div class="card shadow-sm fgfump h-100">
 					<div class="f6416l">
 						<img src="{{ vich_uploader_asset(type) }}" alt="{{ type.name }}" class="q19ai9">
 					</div>
@@ -22,7 +22,7 @@
 								<strong>Tarif :</strong>
 								{{ type.price|amount }}</li>
 						</ul>
-						<span class="btn btn-outline-primary g5av1p">Voir le détail</span>
+						<a href="{{ path('app_appointment_type_detail', {id: type.id}) }}" class="btn btn-outline-primary g5av1p stretched-link" data-action="click->appointment-type#showDetail">Voir le détail<span class="visually-hidden"> : {{ type.name }}</span></a>
 					</div>
 				</div>
 			</div>

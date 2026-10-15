@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ type.name }} — {{ appName }}{% endblock %}
+{% block meta_description %}{{ (type.introduction ?: type.description ?: type.name)|striptags|u.truncate(160, '…') }}{% endblock %}
+{% block canonical %}{{ url('app_appointment_type_detail', {id: type.id}) }}{% endblock %}
+
+{% block body %}
+    <div class="container py-4" data-controller="appointment-type" data-appointment-type-target="container">
+        {% include 'appointment/type_detail.html.twig' %}
+    </div>
+{% endblock %}

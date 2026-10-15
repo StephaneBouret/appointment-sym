@@ -1,12 +1,17 @@
 <div class="skhvxm">
-	<section class="sodj8n">
+	<section class="sodj8n w-100">
 		<h1 class="eblipi">
-			<span class="zyartt">{{ type.name }}</span>
+			<span class="zyartt mw-100 text-break">{{ type.name }}</span>
 		</h1>
 		<div aria-hidden="true" class="f3a07x">
 			<hr class="ueb12c">
 		</div>
 	</section>
+	{% if type.imageName %}
+		<div class="text-center mb-4">
+			<img src="{{ vich_uploader_asset(type) }}" alt="{{ type.name }}" class="img-fluid rounded" style="max-height: 360px; object-fit: contain;">
+		</div>
+	{% endif %}
 	<div>
 		<div class="dhz2jj">
 			<h2 class="qzvfbm">
@@ -51,11 +56,11 @@
 		</div>
 	</div>
 	<div class="svik0o">
-		<button type="button" class="btn btn-link btod86" data-action="click->appointment-type#reloadRecap">
+		<a href="{{ path('app_appointment_types') }}" class="btn btn-link btod86" data-action="click->appointment-type#reloadRecap">
 			← Retour
-		</button>
-		<button type="button" class="btn btn-primary tj8cbo" data-action="click->appointment-type#showForm" data-url="{{ path('app_appointment_ajax_form', {id: type.id}) }}">
+		</a>
+		<a href="{{ path('app_appointment_ajax_form', {id: type.id}) }}" class="btn btn-primary tj8cbo" {% if is_granted('ROLE_USER') %}data-action="click->appointment-type#showForm"{% endif %}>
 			Réserver
-		</button>
+		</a>
 	</div>
 </div>

@@ -2321,7 +2321,7 @@ form:invalid button.btn-dark[type=submit],
 .f6416l {
     background: linear-gradient(to bottom, #5BAEBE, #9FD0BD);
     /* vert clair vers vert foncé */
-    padding: 20px;
+    /* padding: 20px; */
     text-align: center;
 }
 
@@ -2333,7 +2333,7 @@ form:invalid button.btn-dark[type=submit],
     object-position: center center;
     margin: 0 auto;
     aspect-ratio: unset;
-    width: 60%;
+    width: 100%;
     height: auto;
     min-height: 225px;
 }

@@ -17,22 +17,22 @@ final class AppointmentTypeController extends AbstractController
     {
         $types = $repo->findAll();
 
-        if ($request->isXmlHttpRequest()) {
-            return $this->render('appointment/_types.html.twig', [
-                'types' => $types
-            ]);
-        }
-
-        return $this->render('appointment/types.html.twig', [
+        $response = $this->render($request->isXmlHttpRequest() ? 'appointment/_types.html.twig' : 'appointment/types.html.twig', [
             'types' => $types,
         ]);
+        $response->setVary('X-Requested-With', false);
+
+        return $response;
     }
 
-    #[Route('/{id}', name: 'app_appointment_type_detail', methods: ['GET'])]
+    #[Route('/{id}', name: 'app_appointment_type_detail', requirements: ['id' => '\\d+'], methods: ['GET'])]
     public function detail(AppointmentType $type, Request $request): Response
     {
-        return $this->render('appointment/type_detail.html.twig', [
+        $response = $this->render($request->isXmlHttpRequest() ? 'appointment/type_detail.html.twig' : 'appointment/type_page.html.twig', [
             'type' => $type,
         ]);
+        $response->setVary('X-Requested-With', false);
+
+        return $response;
     }
 }
