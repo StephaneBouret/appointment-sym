@@ -18,7 +18,7 @@ ARTIFACTS = Path(__file__).resolve().parents[2] / 'var/prestations-tests'
 
 
 class Browser:
-    def __init__(self):
+    def __init__(self, allowed_origin=None):
         targets = json.load(urllib.request.urlopen('http://127.0.0.1:9231/json'))
         target = next(t for t in targets if t['type'] == 'page')
         url = urlsplit(target['webSocketDebuggerUrl'])
@@ -31,6 +31,8 @@ class Browser:
         assert b'101' in response.split(b'\r\n', 1)[0]
         self.seq = 0
         self.blocked_writes = 0
+        self.allowed_origin = allowed_origin
+        self.blocked_external = 0
 
     def read(self, size):
         data = b''
@@ -70,6 +72,9 @@ class Browser:
                             {'name': 'Access-Control-Allow-Origin', 'value': '*'}], 'body': base64.b64encode(body).decode()})
                 elif request['request']['method'] not in ('GET', 'HEAD'):
                     self.blocked_writes += 1
+                    self.send('Fetch.failRequest', {'requestId': request['requestId'], 'errorReason': 'BlockedByClient'})
+                elif self.allowed_origin and not request['request']['url'].startswith(self.allowed_origin + '/'):
+                    self.blocked_external += 1
                     self.send('Fetch.failRequest', {'requestId': request['requestId'], 'errorReason': 'BlockedByClient'})
                 else:
                     self.send('Fetch.continueRequest', {'requestId': request['requestId']})

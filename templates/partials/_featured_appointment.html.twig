@@ -1,0 +1,28 @@
+<section id="appointment" class="statisfied" aria-labelledby="featured-appointment-title">
+    <div class="container-programs">
+        <div class="row g-4 align-items-center">
+            <div class="{{ appointmentType.imageName ? 'col-md-7' : 'col-12' }}">
+                <p class="text-body-secondary mb-2">Une première séance</p>
+                <h2 id="featured-appointment-title" class="title-program">{{ appointmentType.name }}</h2>
+                <div class="content-program">
+                    <p>Vous traversez une période de transition ou de questionnement professionnel&nbsp;?</p>
+                    <p>Un espace d’exploration de vos ressources, de vos aspirations et de vos choix.</p>
+                    <p class="fw-semibold">
+                        <span>{{ appointmentType.duration }} minutes</span>
+                        <span aria-hidden="true"> · </span>
+                        <span>{{ (appointmentType.price / 100)|number_format(2, ',', ' ') }}&nbsp;€</span>
+                    </p>
+                    <div class="d-flex flex-wrap align-items-center gap-3 mt-4">
+                        <a href="{{ path('app_appointment_type_detail', {id: appointmentType.id}) }}" class="btn btn-primary">Découvrir la séance</a>
+                        <a href="{{ path('app_appointment_types') }}" class="link-body-emphasis small">Voir toutes les prestations</a>
+                    </div>
+                </div>
+            </div>
+            {% if appointmentType.imageName %}
+                <div class="col-md-5">
+                    <img src="{{ vich_uploader_asset(appointmentType, 'imageFile') }}" alt="{{ appointmentType.name }}" class="img-fluid rounded-4 w-100" loading="lazy" decoding="async">
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>

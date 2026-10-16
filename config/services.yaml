@@ -9,6 +9,8 @@
 parameters:
     avatars_directory: '%kernel.project_dir%/public/images/avatars'
     app.hostname: '%env(APP_HOSTNAME)%'
+    # Set to null (or remove) to keep the general accompaniment block on home.
+    app.home_featured_appointment_type_id: 1
 
 services:
     # default configuration for services in *this* file

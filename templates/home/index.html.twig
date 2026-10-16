@@ -16,7 +16,11 @@ Accompagnement individuel avec France Tuncq : transition de vie, connaissance de
 	<div class="pt-5">
 		{% include "partials/_introduction.html.twig" %}
         {% include "partials/_google_reviews.html.twig" %}
-		{% include "partials/_appointment.html.twig" %}
+		{% if featuredAppointmentType %}
+			{% include "partials/_featured_appointment.html.twig" with {appointmentType: featuredAppointmentType} only %}
+		{% else %}
+			{% include "partials/_appointment.html.twig" %}
+		{% endif %}
 		{% include "partials/_about_me_homepage.html.twig" %}
 
 		<section class="container py-5">

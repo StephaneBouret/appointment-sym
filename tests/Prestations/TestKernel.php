@@ -30,7 +30,7 @@ final class SyntheticAvatarService extends AvatarService
     }
 }
 
-final class TestKernel extends \App\Kernel
+class TestKernel extends \App\Kernel
 {
     public function getProjectDir(): string { return dirname(__DIR__, 2); }
     public function getCacheDir(): string { return $this->getProjectDir().'/var/prestations-tests/cache'; }
