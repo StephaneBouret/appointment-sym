@@ -1,0 +1,16 @@
+<div data-analytics-config="{{ analytics.clientConfig(app.request)|json_encode|e('html_attr') }}">
+    <div class="analytics-preferences">
+        <button type="button" class="btn btn-outline-secondary" data-analytics-manage aria-controls="analytics-consent" aria-expanded="false">Gérer mes cookies</button>
+    </div>
+    <section id="analytics-consent" class="analytics-consent" aria-labelledby="analytics-consent-title" hidden>
+        <h2 id="analytics-consent-title" tabindex="-1">Mesure d’audience</h2>
+        <p data-analytics-information>Avec votre accord, Google Analytics mesure les consultations de nos pages publiques et les clics vers la réservation. Refuser ne change ni la navigation ni la réservation. Votre choix est conservé six mois et reste modifiable ici.</p>
+        <p><a href="{{ path('app_privacy') }}">Politique de confidentialité</a></p>
+        <div class="analytics-consent-actions">
+            <button type="button" class="btn btn-outline-primary" data-analytics-choice="accepted">Accepter</button>
+            <button type="button" class="btn btn-outline-primary" data-analytics-choice="refused">Refuser</button>
+            <button type="button" class="btn btn-link" data-analytics-close>Fermer</button>
+        </div>
+        <p data-analytics-status role="status" class="mb-0"></p>
+    </section>
+</div>

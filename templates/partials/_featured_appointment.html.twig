@@ -13,7 +13,7 @@
                         <span>{{ (appointmentType.price / 100)|number_format(2, ',', ' ') }}&nbsp;€</span>
                     </p>
                     <div class="d-flex flex-wrap align-items-center gap-3 mt-4">
-                        <a href="{{ path('app_appointment_type_detail', {id: appointmentType.id}) }}" class="btn btn-primary">Découvrir la séance</a>
+                        <a href="{{ path('app_appointment_type_detail', {id: appointmentType.id}) }}" class="btn btn-primary" data-analytics-event="discover_session_click" data-service-id="{{ appointmentType.id }}" data-display-context="home_featured">Découvrir la séance</a>
                         <a href="{{ path('app_appointment_types') }}" class="link-body-emphasis small">Voir toutes les prestations</a>
                     </div>
                 </div>

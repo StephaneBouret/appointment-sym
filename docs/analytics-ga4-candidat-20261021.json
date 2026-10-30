@@ -1,0 +1,442 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-10-21T08:58:04.240617+00:00",
+  "workspace": "C:/Formations/appointment-sym",
+  "git_branch": "main",
+  "git_head": "2653315d0f9ee2594079f8bfb34b357459aca955",
+  "git_index_sha256": "06895bdcfaba9acd36665679095e35dc9a56a116e4fb487f9ae8ee7ee00c2d76",
+  "scope": "GA4 source candidate: base Git HEAD plus the listed modified and untracked GA4 source/config/test files; supporting entrypoints, dependency locks and Prestations tests are included. Not a built deployment artifact.",
+  "hash_algorithm": "SHA-256 over exact on-disk bytes (including line endings)",
+  "inventory_digest_format": "UTF-8 of sorted path + NUL + sha256 + NUL + decimal byte count + LF for each files entry",
+  "inventory_sha256": "550a4c98db00871ec131aa578bcb9d96f23dec6382bb259584fc97b7522f124d",
+  "file_count": 45,
+  "source_files": [
+    {
+      "path": ".env.ga4.example",
+      "category": "configuration",
+      "bytes": 338,
+      "sha256": "aece736742173f5f07c34af5720b3ddd7f68e82ea4fe1753f75d30d15f90b511",
+      "modified_utc": "2026-10-19T09:28:09.240949+00:00",
+      "git_state": "untracked"
+    },
+    {
+      "path": "assets/app.js",
+      "category": "application",
+      "bytes": 1740,
+      "sha256": "0da1ba8f5cdf713ef8efc432a66ed60a8fce2a361e212d7ce5bc5fbcd7463945",
+      "modified_utc": "2026-10-19T09:41:03.994460+00:00",
+      "git_state": "tracked"
+    },
+    {
+      "path": "assets/controllers/appointment_type_controller.js",
+      "category": "application",
+      "bytes": 3592,
+      "sha256": "6cfcb047c2f1d4ae62ec9a947477f0449cefeba8861e91e9ce0d47b09a029e8d",
+      "modified_utc": "2026-10-19T09:31:03.035220+00:00",
+      "git_state": "modified"
+    },
+    {
+      "path": "assets/modules/analytics.js",
+      "category": "application",
+      "bytes": 9648,
+      "sha256": "237c546ac32fc7270d4c4dce414e9de430ac035fc51333eb4f5f72b214ae2d57",
+      "modified_utc": "2026-10-21T08:07:05.393165+00:00",
+      "git_state": "untracked"
+    },
+    {
+      "path": "assets/modules/analytics_frame.js",
+      "category": "application",
+      "bytes": 4433,
+      "sha256": "7dc88b50f4b03dd3f1a24676338563ce7ccd1ff38c6222e4e9a54312c4dd5765",
+      "modified_utc": "2026-10-21T08:05:36.408659+00:00",
+      "git_state": "untracked"
+    },
+    {
+      "path": "assets/modules/analytics_policy.js",
+      "category": "application",
+      "bytes": 3219,
+      "sha256": "2c06777aa3ce6a5d3a64a581658d1fc41f48c6c651d0877b050c4c6d72e2bc47",
+      "modified_utc": "2026-10-19T09:39:42.294715+00:00",
+      "git_state": "untracked"
+    },
+    {
+      "path": "assets/modules/analytics_transport.js",
+      "category": "application",
+      "bytes": 2619,
+      "sha256": "e9e4a04efb568b66529ae5486c14fcbb9d46744f394822fb690dcf831a8e9185",
+      "modified_utc": "2026-10-21T08:13:49.729238+00:00",
+      "git_state": "untracked"
+    },
+    {
+      "path": "assets/styles/app.css",
+      "category": "application",
+      "bytes": 72792,
+      "sha256": "18b9646d0e275ca47ed49665c8d82be00094eda2e011914593da184f0d62c66b",
+      "modified_utc": "2026-10-19T09:46:01.404857+00:00",
+      "git_state": "modified"
+    },
+    {
+      "path": "composer.json",
+      "category": "configuration",
+      "bytes": 3934,
+      "sha256": "13d3544d7f3306af0d91a625a9a7b349997dc5935f940e6c383d6b4cf803229a",
+      "modified_utc": "2026-02-23T09:22:12.295926+00:00",
+      "git_state": "tracked"
+    },
+    {
+      "path": "composer.lock",
+      "category": "configuration",
+      "bytes": 470012,
+      "sha256": "dd45694e05c883d9c90090641574827cadc9ebb4a6872f0aaa6d806823e66515",
+      "modified_utc": "2026-02-13T09:06:41+00:00",
+      "git_state": "tracked"
+    },
+    {
+      "path": "config/bundles.php",
+      "category": "configuration",
+      "bytes": 1619,
+      "sha256": "fcfcfaa14954515b3c6657da621715b3a7c01deaf4b5fc90801213f91386ce67",
+      "modified_utc": "2026-02-13T09:06:47.773788+00:00",
+      "git_state": "tracked"
+    },
+    {
+      "path": "config/packages/asset_mapper.yaml",
+      "category": "configuration",
+      "bytes": 248,
+      "sha256": "46e5f1b7a1899fca87bd265d12b93ab7a02d35f7f3f0218c51eba36192ef206d",
+      "modified_utc": "2026-01-22T09:53:30.461196+00:00",
+      "git_state": "tracked"
+    },
+    {
+      "path": "config/packages/twig.yaml",
+      "category": "configuration",
+      "bytes": 301,
+      "sha256": "e9b835747dd286ee73e03cd8fea1ef9ed5dde5889d02756a5eb2e4e8381ba44b",
+      "modified_utc": "2026-10-19T09:28:08.962304+00:00",
+      "git_state": "modified"
+    },
+    {
+      "path": "config/services.yaml",
+      "category": "configuration",
+      "bytes": 2512,
+      "sha256": "918319127c6986b7c30096c2c797884f026e828273f1d517bcb51813a3372496",
+      "modified_utc": "2026-10-19T09:28:08.689630+00:00",
+      "git_state": "modified"
+    },
+    {
+      "path": "importmap.php",
+      "category": "configuration",
+      "bytes": 1478,
+      "sha256": "1ecf7d1709f87f7b17623153f2003d2916245feca02e17e8aae388423401da3b",
+      "modified_utc": "2026-10-19T09:41:04.303619+00:00",
+      "git_state": "modified"
+    },
+    {
+      "path": "phpunit.dist.xml",
+      "category": "configuration",
+      "bytes": 1410,
+      "sha256": "ffbdff21453e4dba98b5db2c9feef26dab18e6c8af21778adf4bd8918190bee0",
+      "modified_utc": "2026-01-22T09:53:30.464709+00:00",
+      "git_state": "tracked"
+    },
+    {
+      "path": "src/Analytics/AnalyticsConfig.php",
+      "category": "application",
+      "bytes": 3142,
+      "sha256": "a8653d656cfeb6f0be929ffc91442c7b5c0595b5912a225f76aed80c4ef6ff00",
+      "modified_utc": "2026-10-19T09:39:42.294715+00:00",
+      "git_state": "untracked"
+    },
+    {
+      "path": "src/Controller/AnalyticsController.php",
+      "category": "application",
+      "bytes": 1115,
+      "sha256": "2c20410620a71b7bb4869ded45bb71be95fa9bd83fa18d7ab04a11d622936503",
+      "modified_utc": "2026-10-19T09:28:08.371503+00:00",
+      "git_state": "untracked"
+    },
+    {
+      "path": "src/Kernel.php",
+      "category": "application",
+      "bytes": 201,
+      "sha256": "44397b5fb4f91efc093b92477c240712ad387081f8b25f10a33387c160ce1f83",
+      "modified_utc": "2026-01-22T09:53:19.326944+00:00",
+      "git_state": "tracked"
+    },
+    {
+      "path": "symfony.lock",
+      "category": "configuration",
+      "bytes": 13011,
+      "sha256": "456e96ce8ac852b2f3b1db08f8bba4e446c9f4be55a337554eb1dcabbc5d6155",
+      "modified_utc": "2026-02-13T09:06:47.777981+00:00",
+      "git_state": "tracked"
+    },
+    {
+      "path": "templates/analytics/_consent.html.twig",
+      "category": "application",
+      "bytes": 1347,
+      "sha256": "67fd3847bce19cba7e8025a46db9987ce235e9b5bb7d4da779cc665c4833966e",
+      "modified_utc": "2026-10-19T09:28:10.363340+00:00",
+      "git_state": "untracked"
+    },
+    {
+      "path": "templates/analytics/frame.html.twig",
+      "category": "application",
+      "bytes": 298,
+      "sha256": "c2c013911b0c4a0c652af29cd032da097e3ba7395c4c2c04b926712820640cd3",
+      "modified_utc": "2026-10-19T09:36:06.427908+00:00",
+      "git_state": "untracked"
+    },
+    {
+      "path": "templates/appointment/type_detail.html.twig",
+      "category": "application",
+      "bytes": 1754,
+      "sha256": "f54f12f4cd600b8963e118c34799f29d510e5e673297d960d9e38d7de070149b",
+      "modified_utc": "2026-10-19T09:28:11.181010+00:00",
+      "git_state": "modified"
+    },
+    {
+      "path": "templates/base.html.twig",
+      "category": "application",
+      "bytes": 8466,
+      "sha256": "a375543af5807e6cab030b3a77cae42d4ad0c02097a33b1e882c160ef86e0eea",
+      "modified_utc": "2026-10-19T09:41:04.601568+00:00",
+      "git_state": "modified"
+    },
+    {
+      "path": "templates/legal/privacy.html.twig",
+      "category": "application",
+      "bytes": 31752,
+      "sha256": "83ebf21754a083d68ef6a6c4f2a94952e1107e26a10af9f643085aeb65ee5dce",
+      "modified_utc": "2026-10-19T09:39:42.294715+00:00",
+      "git_state": "modified"
+    },
+    {
+      "path": "templates/partials/_featured_appointment.html.twig",
+      "category": "application",
+      "bytes": 1943,
+      "sha256": "df81de193f82517b78d78aae1f73d18fbe4fce52378cdc37be7ca11f49bd26e2",
+      "modified_utc": "2026-10-19T09:28:10.901579+00:00",
+      "git_state": "modified"
+    },
+    {
+      "path": "tests/Analytics/AnalyticsTest.php",
+      "category": "tests_analytics",
+      "bytes": 5674,
+      "sha256": "b754045e0f5801efe04fe9a103ed4227cbfee3440be0ba9002047713e467f178",
+      "modified_utc": "2026-10-19T09:39:42.295721+00:00",
+      "git_state": "untracked"
+    },
+    {
+      "path": "tests/Analytics/browser.py",
+      "category": "tests_analytics",
+      "bytes": 28665,
+      "sha256": "503122e16abc78ec38c4089807ba8b1ba963e93b054b91154fbcbeffcbb672d4",
+      "modified_utc": "2026-10-21T08:17:33.682178+00:00",
+      "git_state": "untracked"
+    },
+    {
+      "path": "tests/Analytics/manual_recipe.py",
+      "category": "tests_analytics",
+      "bytes": 16067,
+      "sha256": "2a91a843eb48fe75dd9cb74df6649ee6f15f66d4c32b7d80ea148e2b2d6e0bd1",
+      "modified_utc": "2026-10-21T07:32:04.925598+00:00",
+      "git_state": "untracked"
+    },
+    {
+      "path": "tests/Analytics/mock_recipe.py",
+      "category": "tests_analytics",
+      "bytes": 2460,
+      "sha256": "fd0ecad6b3a183d5819d4071e99fffbb84eb800d658940cfea3edb623b2e7efc",
+      "modified_utc": "2026-10-21T08:07:06.285472+00:00",
+      "git_state": "untracked"
+    },
+    {
+      "path": "tests/Analytics/preview.php",
+      "category": "tests_analytics",
+      "bytes": 2464,
+      "sha256": "6a7cca339230fdd72292278e32a3474d851e8ce269af1a235bce3f51e8849342",
+      "modified_utc": "2026-10-19T09:39:42.295721+00:00",
+      "git_state": "untracked"
+    },
+    {
+      "path": "tests/Analytics/real_driver.py",
+      "category": "tests_analytics",
+      "bytes": 17368,
+      "sha256": "04748f6e3241192b26664d7fad8c33325955cba8489af9f535a6386b62f7478e",
+      "modified_utc": "2026-10-21T08:16:10.427332+00:00",
+      "git_state": "untracked"
+    },
+    {
+      "path": "tests/Analytics/real_preview.php",
+      "category": "tests_analytics",
+      "bytes": 2592,
+      "sha256": "db2e0da82bc2ccd13662901b560bf1314f2ace2248d4fa4d8f33826aecfa599b",
+      "modified_utc": "2026-10-19T10:30:46.868654+00:00",
+      "git_state": "untracked"
+    },
+    {
+      "path": "tests/Analytics/real_recipe.py",
+      "category": "tests_analytics",
+      "bytes": 35238,
+      "sha256": "4ebaa4a907aeb3238038e255dc8daa0c82e2030412d1faab0423e0837d4ff703",
+      "modified_utc": "2026-10-21T08:19:42.395476+00:00",
+      "git_state": "untracked"
+    },
+    {
+      "path": "tests/Analytics/transport_checks.js",
+      "category": "tests_analytics",
+      "bytes": 4799,
+      "sha256": "ec6f6168524bd78f8ad683cbda826a2983e9a9640ff7833530ea760bfd4c61e4",
+      "modified_utc": "2026-10-21T08:15:24.256879+00:00",
+      "git_state": "untracked"
+    },
+    {
+      "path": "tests/Prestations/AuthenticationTargetTest.php",
+      "category": "tests_support_and_regression",
+      "bytes": 2457,
+      "sha256": "4465adf64eefe5e12ef681f28c1423c5f944a67cc3ceb220dd0a1049f0be026a",
+      "modified_utc": "2026-10-14T10:16:38.687753+00:00",
+      "git_state": "tracked"
+    },
+    {
+      "path": "tests/Prestations/HomeFeaturedAppointmentTest.php",
+      "category": "tests_support_and_regression",
+      "bytes": 5125,
+      "sha256": "c0be3ddfdf35f6c79c5c6878f4f5075f3cdaa855d02499e927881c37c84305ff",
+      "modified_utc": "2026-10-16T09:13:26.610342+00:00",
+      "git_state": "tracked"
+    },
+    {
+      "path": "tests/Prestations/HomeFixtures.php",
+      "category": "tests_support_and_regression",
+      "bytes": 1918,
+      "sha256": "18848705eb4682a81cba8d760087e97b2bf3cced0023ed449c19330984d84f4f",
+      "modified_utc": "2026-10-16T09:14:18.705373+00:00",
+      "git_state": "tracked"
+    },
+    {
+      "path": "tests/Prestations/HomeTestKernel.php",
+      "category": "tests_support_and_regression",
+      "bytes": 1789,
+      "sha256": "c595116fd9a6305acf940a2c648ff7b2998058e6afe756f24e781f0fe01939ae",
+      "modified_utc": "2026-10-16T09:13:26.067709+00:00",
+      "git_state": "tracked"
+    },
+    {
+      "path": "tests/Prestations/PrestationJourneyTest.php",
+      "category": "tests_support_and_regression",
+      "bytes": 16864,
+      "sha256": "b76f982a141c4f44b673c43b8ffb88d6cc24f27535f5ca1b60f131e4b1093a71",
+      "modified_utc": "2026-10-15T09:57:49.591733+00:00",
+      "git_state": "tracked"
+    },
+    {
+      "path": "tests/Prestations/TestKernel.php",
+      "category": "tests_support_and_regression",
+      "bytes": 1995,
+      "sha256": "9ded7ea7238df7df1a920439adf5f2fa04127a06cc796c723e90f005e91dc123",
+      "modified_utc": "2026-10-16T09:13:25.798002+00:00",
+      "git_state": "tracked"
+    },
+    {
+      "path": "tests/Prestations/bootstrap.php",
+      "category": "tests_support_and_regression",
+      "bytes": 1121,
+      "sha256": "72375b0c43df0b4b5855f854bd838d01914debc2e824f7e82243259f65c60865",
+      "modified_utc": "2026-10-14T10:15:51.564970+00:00",
+      "git_state": "tracked"
+    },
+    {
+      "path": "tests/Prestations/browser.py",
+      "category": "tests_support_and_regression",
+      "bytes": 9504,
+      "sha256": "cdb789317338384e5322791f4f5cbeb41dff0396d0d2d94ace40639aafcb0860",
+      "modified_utc": "2026-10-16T09:16:15.586143+00:00",
+      "git_state": "tracked"
+    },
+    {
+      "path": "tests/Prestations/home_browser.py",
+      "category": "tests_support_and_regression",
+      "bytes": 4850,
+      "sha256": "84f090de968eaa2643a17c9774d4a5ce9855beb11be8a5b97b04903f880e0ea9",
+      "modified_utc": "2026-10-16T09:17:20.535945+00:00",
+      "git_state": "tracked"
+    },
+    {
+      "path": "tests/Prestations/home_preview.php",
+      "category": "tests_support_and_regression",
+      "bytes": 1441,
+      "sha256": "8941865aa98c2f2d080acfcfc8276cdeeccb5c9b16f8d786ebffcd5427c884f9",
+      "modified_utc": "2026-10-16T09:14:18.979090+00:00",
+      "git_state": "tracked"
+    }
+  ],
+  "evidence_reports": [
+    {
+      "path": "var/analytics-real/20261021-100407/report.json",
+      "bytes": 32416,
+      "sha256": "2a54c768a8b7b0faa38b19e16fe7c2d26d2c66fedab1bf41639404ad012aa78b"
+    },
+    {
+      "path": "var/analytics-real/20261021-101215/report.json",
+      "bytes": 183672,
+      "sha256": "14f457788807e9e9a5427853d0a1d3ccec0c2b56cb7116db131ec80799bc0202"
+    },
+    {
+      "path": "var/analytics-real/20261021-101945/report.json",
+      "bytes": 94635,
+      "sha256": "a88953749230cdce5949ebbc90b71a773ee5ea9c00a2381dedb4b020e6d9da49"
+    },
+    {
+      "path": "var/analytics-real/20261021-102059/report.json",
+      "bytes": 259501,
+      "sha256": "6f8edc4d3a7a6ace31baa507fcb1d0e3a0ed1b54bdd03401ab33c0a6964472c1"
+    },
+    {
+      "path": "var/analytics-tests/results.json",
+      "bytes": 2773,
+      "sha256": "77004e05af85d478a5dc4d8419e6ca63c0806d6efca283f9204ea53bd92225ab"
+    },
+    {
+      "path": "var/analytics-tests/transport-results.json",
+      "bytes": 874,
+      "sha256": "8358ae67ef6fb457eb05ec6f390da657a23751a71e82e9eab76595726de79842"
+    },
+    {
+      "path": "var/analytics-manual/20261021-073956Z-940fdf46/report.json",
+      "bytes": 59207,
+      "sha256": "487ad4c3eac8b3826c905f4bfe83e61567d5c6e6697ad2bfe24741da4c065b41"
+    }
+  ],
+  "usual_defaults": {
+    "GA4_ENABLED": "0",
+    "GA4_MEASUREMENT_ID": ""
+  },
+  "acceptance": {
+    "withdrawal_criterion": "Fresh valid consent for the same agreement before each covered native transport delegation; unauthorized read permanently closes context, with frame destruction, dedicated cookie cleanup and no old queue replay on reacceptance.",
+    "user_decision_date": "2026-10-21",
+    "accepted_limits": [
+      "non-atomic consent read and native delegation",
+      "requests already handed to browser",
+      "only intercepted transports; no universal guarantee for future Google versions"
+    ],
+    "global_production_validation": false,
+    "activation_authorized": false
+  },
+  "provenance_limits": [
+    "This manifest identifies the present local source files only.",
+    "It does not retrospectively prove exact source identity at any previous test execution. Those reports contain no contemporaneous source manifest.",
+    "SHA-256 comparison against the preceding analysis snapshot in this conversation found no differences in the recorded application/configuration/test files or Git index.",
+    "Known intermediate difference: 20261021-101215 spans the retained-constructor adjustment. The final targeted, simulated and full real reports are later.",
+    "No source/configuration/test change or test rerun was performed for this documentation and manifest task."
+  ],
+  "excluded": [
+    "private environment files",
+    "Chrome profiles and raw private NetLogs",
+    "installed vendor contents and generated caches/assets",
+    "remote Google library and Analytics property settings",
+    "pre-existing unrelated public/images/avatars/6ad0a39fe7f71.png",
+    "documentation files, to avoid circular self-hashing"
+  ]
+}

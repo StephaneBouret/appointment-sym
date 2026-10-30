@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		{# Excluded responses must never be rendered into a public Turbo document. #}
+		{% if analytics.page(app.request) is null %}
+			<meta name="turbo-visit-control" content="reload">
+		{% endif %}
 		<meta
 		charset="UTF-8">
 		{# ✅ Title #}
@@ -149,10 +153,13 @@
 
 			{% block importmap %}
 				{{ importmap('app') }}
+				{# Independent module: consent remains usable if another app import fails. #}
+				<script type="module">import 'analytics';</script>
 			{% endblock %}
 		{% endblock %}
 	</head>
 	<body>
+		{% include 'analytics/_consent.html.twig' %}
 		{% include "shared/_navbar.html.twig" %}
 		{% include "partials/_flash.html.twig" %}
 

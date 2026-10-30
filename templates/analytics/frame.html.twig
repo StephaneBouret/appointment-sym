@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="referrer" content="no-referrer">
+    <title>Mesure d’audience</title>
+</head>
+<body data-analytics-config="{{ analyticsConfig|json_encode|e('html_attr') }}">
+    {{ importmap('analytics-frame') }}
+</body>
+</html>

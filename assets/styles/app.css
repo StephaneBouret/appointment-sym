@@ -49,6 +49,24 @@ h6,
     --app-border: rgb(213, 215, 217);
 }
 
+/* Non-modal consent: equal choices, normal document flow, keyboard focus visible. */
+.analytics-preferences { padding: .5rem 1rem; text-align: right; background: var(--app-bg); }
+.analytics-consent { padding: 1.25rem; border-block: 1px solid var(--app-border); background: var(--app-surface); color: var(--app-text); }
+.analytics-consent[hidden] { display: none !important; }
+.analytics-consent h2 { font-size: 1.4rem; }
+.analytics-consent p { max-width: 70rem; }
+.analytics-consent-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-bottom: .75rem; }
+.analytics-consent-actions [data-analytics-choice] { min-width: 7rem; min-height: 44px; }
+.analytics-consent .btn-outline-primary, .analytics-preferences .btn-outline-secondary {
+    --bs-btn-color: var(--app-text);
+    --bs-btn-border-color: var(--app-text);
+    --bs-btn-hover-color: var(--app-bg);
+    --bs-btn-hover-bg: var(--app-text);
+    --bs-btn-hover-border-color: var(--app-text);
+}
+.analytics-consent a, .analytics-consent .btn-link { color: var(--bs-link-hover-color); }
+.analytics-consent button:focus-visible, .analytics-preferences button:focus-visible, .analytics-consent a:focus-visible { outline: 3px solid var(--bs-primary); outline-offset: 3px; }
+
 /* Surcharge automatique quand <html data-bs-theme="dark"> */
 html[data-bs-theme="dark"] {
     --app-bg: #0b0f14;

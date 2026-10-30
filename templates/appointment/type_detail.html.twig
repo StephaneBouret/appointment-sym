@@ -1,4 +1,4 @@
-<div class="skhvxm">
+<div class="skhvxm" data-analytics-service="{{ type.id }}">
 	<section class="sodj8n w-100">
 		<h1 class="eblipi">
 			<span class="zyartt mw-100 text-break">{{ type.name }}</span>
@@ -59,7 +59,7 @@
 		<a href="{{ path('app_appointment_types') }}" class="btn btn-link btod86" data-action="click->appointment-type#reloadRecap">
 			← Retour
 		</a>
-		<a href="{{ path('app_appointment_ajax_form', {id: type.id}) }}" class="btn btn-primary tj8cbo" {% if is_granted('ROLE_USER') %}data-action="click->appointment-type#showForm"{% endif %}>
+		<a href="{{ path('app_appointment_ajax_form', {id: type.id}) }}" class="btn btn-primary tj8cbo" data-turbo="false" data-analytics-event="reserve_click" data-service-id="{{ type.id }}">
 			Réserver
 		</a>
 	</div>

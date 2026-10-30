@@ -12,6 +12,14 @@
  * The "importmap:require" command can be used to add new entries to this file.
  */
 return [
+    'analytics' => [
+        'path' => './assets/modules/analytics.js',
+        'entrypoint' => true,
+    ],
+    'analytics-frame' => [
+        'path' => './assets/modules/analytics_frame.js',
+        'entrypoint' => true,
+    ],
     'app' => [
         'path' => './assets/app.js',
         'entrypoint' => true,
