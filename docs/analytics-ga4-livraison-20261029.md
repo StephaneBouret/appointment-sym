@@ -1,5 +1,11 @@
 # GA4 — intégration locale et livrable du 29 octobre 2026
 
+## Rectification du 4 novembre 2026 — confirmations utilisateur du 30 octobre
+
+**Statut documentaire actuel : « Personnalité juridique » clôturée sur confirmation rapportée.** Organisation Google Marketing Platform et personnalité juridique : **POTENTIEL CONSULTING** ; compte Analytics associé **France Tuncq, 412243474**. Contact principal **France Tuncq**, **contact@luniversdesnombres.com** ; correspondance **1B La Fendoire, 44770 La Plaine-sur-Mer, France**, siège **1 La Fendoire**. Le rattachement à une organisation est distinct des associations de produits Google, précédemment déclarées vides ; il ne contredit pas ce constat.
+
+Voir la [rectification et sa provenance](analytics-ga4-rectification-20261104.md). Les mentions ci-dessous de champ vide/ouvert, d’absence de rattachement et l’ancien courriel sont des **constats historiques rectifiés, à ne pas reprendre comme coordonnées courantes**. Les preuves, manifestes et approbations historiques restent inchangés. Aucune certification juridique globale ni vérification des rapports standards de production n’en découle. La production reste active ; les défauts locaux restent désactivés.
+
 **Préparation locale terminée, collecte désactivée. Aucun déploiement ni activation.** L’utilisateur déclare que France Tuncq lui a délégué la validation et approuve les mentions avec « France Tuncq et le prestataire chargé du développement et de la maintenance du site », les deux harmonisations et cette préparation. Cette approbation rédactionnelle n’est ni une certification juridique ni une autorisation de publication ou d’activation.
 
 La rubrique **« Personnalité juridique » du DPA reste vide / point administratif ouvert**, distinct de la préparation technique. Aucun rattachement Marketing Platform ajouté. Réception acquise, réserve sur le parcours manuel libre et critère de retrait accepté inchangés. Aucune campagne Analytics rejouée.

@@ -1,5 +1,11 @@
 # GA4 — contrôle des données existantes et préparation France
 
+## Rectification du 4 novembre 2026 — confirmations utilisateur du 30 octobre
+
+**Statut documentaire actuel : « Personnalité juridique » clôturée sur confirmation rapportée.** Organisation Google Marketing Platform et personnalité juridique : **POTENTIEL CONSULTING** ; compte Analytics associé **France Tuncq, 412243474**. Contact principal **France Tuncq**, **contact@luniversdesnombres.com** ; correspondance **1B La Fendoire, 44770 La Plaine-sur-Mer, France**, siège **1 La Fendoire**. Le rattachement à une organisation est distinct des associations de produits Google, précédemment déclarées vides ; il ne contredit pas ce constat.
+
+Voir la [rectification et sa provenance](analytics-ga4-rectification-20261104.md). Les mentions ci-dessous de champ vide/ouvert, d’absence de rattachement et l’ancien courriel sont des **constats historiques rectifiés, à ne pas reprendre comme coordonnées courantes**. Les preuves, manifestes et approbations historiques restent inchangés. Aucune certification juridique globale ni vérification des rapports standards de production n’en découle. La production reste active ; les défauts locaux restent désactivés.
+
 ## Actualisation — production du 30 octobre 2026
 
 **Déploiement, activation autorisée puis exécutée et réception des quatre événements dans Temps réel confirmés par l’utilisateur.** Voir le [compte rendu de mise en production](analytics-ga4-production-20261030.md). Les opérations et captures sont rapportées par l’utilisateur et son assistant ; aucune inspection directe du serveur, d’Analytics ou des captures de production par cet agent.
