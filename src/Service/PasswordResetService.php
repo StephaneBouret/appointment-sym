@@ -53,10 +53,15 @@ class PasswordResetService
         return $userRepository->findOneBy(['resetToken' => $token]);
     }
 
-    public function isTokenExpired(User $user, int $expirationInHours = 3): bool
+    public function isTokenExpired(User $user, int $expirationInHours = 3, ?\DateTimeImmutable $now = null): bool
     {
-        $now = new \DateTimeImmutable();
-        return $now > $user->getCreatedTokenAt()->modify("+{$expirationInHours} hour");
+        $createdAt = $user->getCreatedTokenAt();
+        if ($createdAt === null) {
+            return true;
+        }
+
+        $now ??= new \DateTimeImmutable();
+        return $now > $createdAt->modify("+{$expirationInHours} hour");
     }
 
     public function updatePassword(User $user, string $plainPassword, UserPasswordHasherInterface $hasher): void

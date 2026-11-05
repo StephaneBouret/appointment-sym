@@ -58,12 +58,20 @@ final class AppointmentRescheduleController extends AbstractController
             return $this->json(['error' => 'Type manquant'], 400);
         }
 
+        $oldStart = $a->getStartAt();
+        $oldEnd = $a->getEndAt();
+        if ($oldStart === null || $oldEnd === null) {
+            return $this->json([
+                'error' => 'Les dates initiales du rendez-vous sont incomplètes. Veuillez contacter le support avant de le reporter.',
+            ], 409);
+        }
+
         // Start choisi: ISO avec fuseau → on force Europe/Paris côté serveur
         $tz = new DateTimeZone('Europe/Paris');
         $nowParis = new DateTimeImmutable('now', $tz);
 
         // Règle : on ne replanifie pas un RDV passé
-        if ($a->getStartAt() && $a->getStartAt() <= $nowParis) {
+        if ($oldStart <= $nowParis) {
             return $this->json(['error' => 'Ce rendez-vous est passé et ne peut plus être replanifié.'], 422);
         }
 
@@ -80,8 +88,8 @@ final class AppointmentRescheduleController extends AbstractController
         $minNotice = max(0, (int) $settings->getInt('reschedule_min_notice_hours', 24));
         $limit = $nowParis->modify("+{$minNotice} hours");
 
-        $originalStartParis = $a->getStartAt()?->setTimezone($tz);
-        if ($originalStartParis && $originalStartParis < $limit) {
+        $originalStartParis = $oldStart->setTimezone($tz);
+        if ($originalStartParis < $limit) {
             return $this->json([
                 'error' => sprintf("Le report doit être demandé au moins %d h avant l'heure initiale du rendez-vous.", $minNotice),
             ], 422);
@@ -118,10 +126,6 @@ final class AppointmentRescheduleController extends AbstractController
         if (!$match) {
             return $this->json(['error' => 'Créneau indisponible'], 409);
         }
-
-        // Persistance
-        $oldStart = $a->getStartAt();
-        $oldEnd = $a->getEndAt();
 
         // OK → enregistre le report (conserve status)
         $a->setStartAt($startParis);

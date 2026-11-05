@@ -50,6 +50,7 @@ final class AppointmentPdfController extends AbstractController
     }
 
     #[Route('/admin/pdf/{id}', name: 'app_appointment_pdf_admin', methods: ['GET'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function admin(Appointment $appointment): Response
     {
         if (!$appointment) {
