@@ -1,5 +1,15 @@
 # GA4 — rectification des coordonnées et clôture administrative, 4 novembre 2026
 
+## Clôture du chantier France — 4 novembre 2026
+
+**Le correctif du contact est publié et sa présence en production est confirmée par les contrôles SSH/HTTP rapportés.** Le courriel visible et le lien `mailto:` sont **contact@luniversdesnombres.com** ; le template est conforme au contrôle. Publications réussies rapportées : **StephaneBouret/appointment-sym, main : 98d572aff3d8e7836660178b745b6c694673c31a** ; **ftuncq/sym-appointment, main et livraison/ga4-france-20261029 : 1c2a93ee2b2ff2813d97292cae4f8f8e44f4c5c9**. La production est sur `main` à ce dernier SHA, sans méthode ni heure de déploiement déduite.
+
+La clôture administrative déjà confirmée reste acquise avec les coordonnées du tableau ci-dessous. **Livraison, activation, correctif du contact, point administratif et réception dans les rapports standards sont clôturés.** Le contrôle auparavant non effectué est désormais effectué, selon les constats de captures rapportés : voir le [bilan de clôture et ses preuves](analytics-ga4-production-20261030.md#cloture-france-20261104).
+
+Les agrégats ne démontrent ni attribution individuelle au parcours de recette, ni déduplication, ni réservation finalisée. Le relevé jusqu’au 4 novembre est une photographie lors de la consultation. L’absence historique des essais automatisés et les limites du critère de retrait accepté restent conservées, sans certification juridique globale ni nouveau prérequis. Production active **GA4_ENABLED=1 / G-MWZX1GYXZE**, défauts locaux **GA4_ENABLED=0** ; aucun asset supplémentaire nécessaire.
+
+**Historique de la rectification conservé ci-dessous :** les constats de rapports non contrôlés, d’ancien HEAD serveur et d’intervention future décrivent l’étape de préparation, désormais dépassée. Les contrôles locaux décrits sont ceux de cette étape, pas une nouvelle modification applicative ni une nouvelle inspection distante.
+
 ## Provenance et statut courant
 
 **Confirmations du 30 octobre 2026 rapportées par l’utilisateur, consignées le 4 novembre 2026 (Europe/Paris).** Aucune inspection de l’interface Google, capture administrative ou connexion au serveur n’est réalisée pendant cette intervention.

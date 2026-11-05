@@ -1,5 +1,15 @@
 # Correctif du contact France — publication et déploiement préparés le 4 novembre 2026
 
+## Clôture du correctif et du chantier France — 4 novembre 2026
+
+**Publication et présence du correctif en production confirmées selon les sorties et contrôles rapportés par l’utilisateur.** Publications réussies : **StephaneBouret/appointment-sym, main : 98d572aff3d8e7836660178b745b6c694673c31a** ; **ftuncq/sym-appointment, main et livraison/ga4-france-20261029 : 1c2a93ee2b2ff2813d97292cae4f8f8e44f4c5c9**.
+
+Production rapportée : **/home/u664242226/domains/francetuncq.fr/public_html**, branche **main**, HEAD **1c2a93ee2b2ff2813d97292cae4f8f8e44f4c5c9** ; `templates/legal/privacy.html.twig` conforme, courriel public et `mailto:` **contact@luniversdesnombres.com**. Analytics reste actif : **GA4_ENABLED=1 / G-MWZX1GYXZE**. Aucun asset supplémentaire nécessaire ; les défauts locaux restent à **GA4_ENABLED=0**.
+
+Le périmètre livraison, activation, correctif du contact, point administratif et réception dans les rapports standards est **clôturé**. Voir le [bilan de clôture, les relevés et les réserves conservées](analytics-ga4-production-20261030.md#cloture-france-20261104). Le contrôle des rapports auparavant non effectué est désormais effectué sur les preuves rapportées ; aucune attribution individuelle, déduplication, réservation finalisée ou certification juridique globale n’en découle. L’absence historique des essais automatisés reste inexpliquée et les limites du retrait accepté restent applicables.
+
+**Procédure de préparation conservée ci-dessous comme historique, à ne pas rejouer pour cette clôture.** Ses anciens HEAD, le SHA alors futur et les contrôles alors à faire décrivent la préparation. Elle n’est pas un journal d’exécution : aucune méthode ni heure de déploiement n’est déduite des commandes proposées. Aucune commande distante, publication ou opération de déploiement n’a été exécutée pour cette consignation ; le dépannage SSH GitHub reste suivi dans un autre flux.
+
 **Commandes à exécuter seulement lors d’une intervention ultérieure autorisée. Rien ci-dessous n’a été exécuté sur GitHub ou sur le serveur pendant la préparation.** Voir la [rectification administrative et les contrôles locaux](analytics-ga4-rectification-20261104.md).
 
 La production est déjà active. Conserver sa configuration persistante **GA4_ENABLED=1 / G-MWZX1GYXZE** ; aucun changement d’environnement, de consentement, de modules ou d’assets dans ce correctif. Ne pas rejouer la procédure initiale de livraison désactivée, ni installer l’ancien ZIP. Les défauts locaux restent à 0.

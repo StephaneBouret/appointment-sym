@@ -1,5 +1,15 @@
 # GA4 — contrôle des données existantes et préparation France
 
+## Clôture du chantier France — 4 novembre 2026
+
+**Périmètre clôturé : livraison, activation, correctif du contact public, point administratif et réception dans les rapports standards.** Le contrôle auparavant « non effectué » est désormais **effectué** : les quatre événements applicatifs figurent dans le rapport standard du 30 octobre, selon les constats de captures rapportés par l’utilisateur et son assistant conversationnel.
+
+La production reste active avec **GA4_ENABLED=1**, destination **G-MWZX1GYXZE** ; les défauts locaux restent à **GA4_ENABLED=0**. Le courriel public et le lien `mailto:` sont confirmés à **contact@luniversdesnombres.com**. « Personnalité juridique » : **POTENTIEL CONSULTING**, point déjà clôturé sur confirmation utilisateur. Le rattachement à une organisation Marketing Platform reste distinct des associations de produits.
+
+Voir le [bilan de clôture, les publications et les relevés de production](analytics-ga4-production-20261030.md#cloture-france-20261104) pour les SHA, les deux périodes, les six compteurs et leur provenance. Les agrégats ne prouvent ni attribution individuelle au parcours de recette, ni déduplication, ni réservation finalisée ; le relevé jusqu’au 4 novembre est une photographie lors de la consultation. L’absence historique des essais automatisés reste inexpliquée et les limites du critère de retrait accepté sont conservées. Aucune certification juridique globale.
+
+**Historique conservé ci-dessous :** les anciens statuts « non contrôlé », « ouvert », « non publié » ou « non activé » décrivent leur époque et leur périmètre ; ils sont remplacés, pour le statut actuel du chantier France, par cette clôture. Cette consignation est documentaire, sans nouvelle opération distante ni nouveau prérequis.
+
 ## Rectification du 4 novembre 2026 — confirmations utilisateur du 30 octobre
 
 **Statut documentaire actuel : « Personnalité juridique » clôturée sur confirmation rapportée.** Organisation Google Marketing Platform et personnalité juridique : **POTENTIEL CONSULTING** ; compte Analytics associé **France Tuncq, 412243474**. Contact principal **France Tuncq**, **contact@luniversdesnombres.com** ; correspondance **1B La Fendoire, 44770 La Plaine-sur-Mer, France**, siège **1 La Fendoire**. Le rattachement à une organisation est distinct des associations de produits Google, précédemment déclarées vides ; il ne contredit pas ce constat.
@@ -111,6 +121,10 @@ Preuves à conserver : capture du nom de propriété et de la fiche du flux/ID ;
 **Historique du contrôle prévu le 22 octobre :** la consultation a ensuite été rapportée par l'utilisateur le 28 octobre. Les données du 21 restent limitées à 9 h, sans événement affiché à 10 h ; le panneau du 22 indiquait 100 % des données disponibles, non échantillonnées, source intrajournalière. Le rapport consulté le matin du 21 était vide ; ces constats datés sont distincts. La passe recherchée reste 10:21:08–10:24:46 Paris, 13/1/5/3 événements applicatifs. **L'étape actuelle consiste à inspecter les paramètres de sélection de l'exploration**, selon le diagnostic du 28, plutôt qu'à seulement attendre ou rejouer les parcours. Aucune cause n'est attribuée au mode headless, au correctif ou à Google ; l'absence du 19 octobre reste inexpliquée.
 
 ## 4. Prérequis France restant avant une activation distinctement autorisée
+
+**Statut au 4 novembre 2026 : périmètre France clôturé.** Livraison, activation, correctif du contact public et point administratif sont acquis sur les confirmations rapportées. Le contrôle des rapports standards est désormais effectué : présence des quatre événements applicatifs dans le rapport du 30 octobre confirmée par les constats de captures rapportés. Voir les [relevés, totaux et limites de preuve](analytics-ga4-production-20261030.md#cloture-france-20261104). Aucun nouveau prérequis.
+
+Le « statut courant » du 30 octobre et sa table ci-dessous sont conservés comme **historique à cette date**, remplacés pour le statut actuel par la clôture du 4 novembre.
 
 ### Statut courant — 30 octobre 2026
 

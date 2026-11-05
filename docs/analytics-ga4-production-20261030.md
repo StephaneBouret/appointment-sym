@@ -1,5 +1,64 @@
 # GA4 — mise en production et réception du 30 octobre 2026
 
+<a id="cloture-france-20261104"></a>
+
+## Clôture du chantier France — 4 novembre 2026
+
+**Livraison, activation, correctif du contact public, point administratif et réception dans les rapports standards : périmètre clôturé au 4 novembre 2026 (Europe/Paris).** Cette consignation s’appuie sur les sorties Git, les contrôles SSH/HTTP et les constats de captures transmis par l’utilisateur. Aucun accès distant, navigateur, inspection directe d’Analytics ou nouvel envoi n’a été réalisé pour cette mise à jour.
+
+### Publications Git et état de production rapportés
+
+| Dépôt | Références publiées avec succès, selon les sorties utilisateur | Commit |
+| --- | --- | --- |
+| StephaneBouret/appointment-sym | main | `98d572aff3d8e7836660178b745b6c694673c31a` |
+| ftuncq/sym-appointment | main et livraison/ga4-france-20261029 | `1c2a93ee2b2ff2813d97292cae4f8f8e44f4c5c9` |
+
+Selon les contrôles SSH et HTTP rapportés, la production France, dans **/home/u664242226/domains/francetuncq.fr/public_html**, est sur **main**, HEAD **1c2a93ee2b2ff2813d97292cae4f8f8e44f4c5c9**. Le fichier `templates/legal/privacy.html.twig` est conforme au contrôle ; le courriel public et le lien `mailto:` sont **contact@luniversdesnombres.com**. Analytics reste actif : **GA4_ENABLED=1**, destination **G-MWZX1GYXZE**. Aucun asset supplémentaire n’est nécessaire pour ce correctif.
+
+Ces éléments confirment le résultat rapporté, sans documenter la méthode ni l’heure exacte du déploiement : aucune n’est déduite de la [procédure préparée](analytics-ga4-correctif-contact-publication.md). Les défauts locaux restent **GA4_ENABLED=0** dans les deux worktrees. Les archives, manifestes, récépissés, `release-sha.txt` et preuves historiques ne sont pas réécrits.
+
+### Point administratif confirmé et clos
+
+« Personnalité juridique » : **POTENTIEL CONSULTING** ; contact principal : **France Tuncq** ; courriel : **contact@luniversdesnombres.com** ; correspondance : **1B La Fendoire, 44770 La Plaine-sur-Mer**. La clôture a déjà été confirmée par l’utilisateur. La distinction avec le siège au **1 La Fendoire** est conservée.
+
+Le rattachement du compte à l’organisation **Google Marketing Platform POTENTIEL CONSULTING** est distinct des **associations de produits de la propriété Analytics**, précédemment déclarées vides. Il ne modifie pas ce constat. La [rectification administrative](analytics-ga4-rectification-20261104.md) et ses réserves juridiques restent applicables ; cette clôture n’est pas une certification juridique globale.
+
+### Rapports standards de production — constats de captures rapportés
+
+L’utilisateur indique consulter **francetuncq.fr, propriété 559257505**. Les captures du rapport **« Événements : Nom de l’événement »** ont été examinées par son assistant conversationnel. Elles ne sont pas disponibles comme pièces jointes dans cette intervention : les observations ci-dessous sont **consignées comme rapportées**, sans prétendre à une lecture de ces images par cet agent ni à une inspection directe d’Analytics.
+
+Pièces identifiées par l’utilisateur :
+
+- `image(20261104-105455).png` : période du **30 octobre 2026**.
+- `image(20261104-105523).png` : période du **30 octobre au 4 novembre 2026**.
+
+Les périodes et les six lignes d’événements sont visibles selon ces constats. Les captures recadrées ne montrent pas le sélecteur de propriété : son identification repose aussi sur le contexte rapporté par l’utilisateur, et non sur les seules images. Les noms de pièces sont des références rapportées, pas des liens vers des fichiers locaux disponibles.
+
+| Événement / indicateur | 30/10/2026 | 30/10 au 04/11/2026 |
+| --- | ---: | ---: |
+| page_view | 6 | 12 |
+| discover_session_click | 2 | 2 |
+| view_service | 2 | 2 |
+| reserve_click | 1 | 1 |
+| first_visit | 2 | 3 |
+| session_start | 2 | 5 |
+| **TOTAL événements** | **15** | **25** |
+| **Nombre total utilisateurs** | **2** | **3** |
+
+Totaux vérifiés : **6 + 2 + 2 + 1 + 2 + 2 = 15** et **12 + 2 + 2 + 1 + 3 + 5 = 25**. Les quatre événements applicatifs représentent respectivement **11** et **17** événements ; `first_visit` et `session_start` complètent les totaux avec **4** et **8** événements automatiques. Le nombre total d’utilisateurs est un indicateur distinct, sans addition aux événements.
+
+**La présence des quatre événements applicatifs dans le rapport standard du 30 octobre est confirmée par ces preuves rapportées. Le contrôle précédemment « non effectué » / « non contrôlé » est désormais effectué.** Ce constat complète la réception Temps réel du 30 octobre et reste distinct des explorations de recette historiques.
+
+Ces totaux agrégés ne démontrent **ni l’attribution individuelle au parcours de recette, ni la déduplication, ni une réservation finalisée**. `reserve_click` reste un clic, sans preuve de réservation ni de paiement. Le relevé jusqu’au **4 novembre est une photographie au moment de la consultation**, pas une garantie de journée complète ; aucune heure exacte de consultation n’est déduite des noms de fichiers.
+
+### Réserves et portée de la clôture
+
+L’absence historique des essais automatisés reste **inexpliquée**, sans responsabilité démontrée du mode headless. Le critère de retrait accepté reste inchangé : chaque transport couvert relit le consentement avant délégation ; une lecture non autorisante bloque définitivement ce contexte, détruit le cadre, nettoie les cookies dédiés et empêche le rejeu après une nouvelle acceptation. Ses limites restent conservées : **absence d’atomicité entre lecture et délégation, requêtes déjà confiées au navigateur, couverture limitée aux transports interceptés**, sans garantie universelle sur les versions futures de Google. Voir le [dossier de retrait](analytics-ga4-retrait-onglets.md).
+
+Ces réserves ne créent pas de nouveau prérequis à la clôture du périmètre annoncé. Aucun changement applicatif, de configuration ou de test, aucune reconstruction d’assets, aucun commit, push ou déploiement n’est réalisé pour cette consignation. Le dépannage SSH GitHub reste dans son flux distinct.
+
+**Historique conservé ci-dessous :** les constats du 30 octobre et de la préparation du correctif restent valables à leur date ; leurs mentions de rapports non contrôlés, de point administratif ouvert ou d’ancien HEAD ne décrivent plus le statut courant. Les preuves historiques ne sont pas modifiées.
+
 ## Rectification du 4 novembre 2026 — confirmations utilisateur du 30 octobre
 
 **Statut documentaire actuel : « Personnalité juridique » clôturée sur confirmation rapportée.** Organisation Google Marketing Platform et personnalité juridique : **POTENTIEL CONSULTING** ; compte Analytics associé **France Tuncq, 412243474**. Contact principal **France Tuncq**, **contact@luniversdesnombres.com** ; correspondance **1B La Fendoire, 44770 La Plaine-sur-Mer, France**, siège **1 La Fendoire**. Le rattachement à une organisation est distinct des associations de produits Google, précédemment déclarées vides ; il ne contredit pas ce constat.
@@ -80,6 +139,8 @@ Le sous-comptage lié au refus et aux bloqueurs demeure. L’absence historique 
 Ces emplacements sont fournis par l’utilisateur, hors racine web. Aucun contenu n’est récupéré, inventorié ou exposé ici. Les références ne constituent pas une vérification de leur contenu ou de leurs permissions par cet agent.
 
 ## Statut courant et suite documentaire
+
+**Table historique au 30 octobre, remplacée pour le statut actuel par la [clôture du 4 novembre](#cloture-france-20261104).** Les suites alors prévues pour les rapports standards et le point administratif sont désormais effectuées / closes selon les preuves et confirmations rapportées ci-dessus.
 
 | Critère | Statut au 30 octobre | Suite / responsable |
 | --- | --- | --- |

@@ -1,5 +1,15 @@
 # GA4 — intégration locale et livrable du 29 octobre 2026
 
+## Clôture du chantier France — 4 novembre 2026
+
+**Périmètre clôturé : livraison, activation, correctif du contact public, point administratif et réception dans les rapports standards.** Le contrôle auparavant « non effectué » est désormais **effectué** : les quatre événements applicatifs figurent dans le rapport standard du 30 octobre, selon les constats de captures rapportés par l’utilisateur et son assistant conversationnel.
+
+La production reste active avec **GA4_ENABLED=1**, destination **G-MWZX1GYXZE** ; les défauts locaux restent à **GA4_ENABLED=0**. Le courriel public et le lien `mailto:` sont confirmés à **contact@luniversdesnombres.com**. « Personnalité juridique » : **POTENTIEL CONSULTING**, point déjà clôturé sur confirmation utilisateur. Le rattachement à une organisation Marketing Platform reste distinct des associations de produits.
+
+Voir le [bilan de clôture, les publications et les relevés de production](analytics-ga4-production-20261030.md#cloture-france-20261104) pour les SHA, les deux périodes, les six compteurs et leur provenance. Les agrégats ne prouvent ni attribution individuelle au parcours de recette, ni déduplication, ni réservation finalisée ; le relevé jusqu’au 4 novembre est une photographie lors de la consultation. L’absence historique des essais automatisés reste inexpliquée et les limites du critère de retrait accepté sont conservées. Aucune certification juridique globale.
+
+**Historique conservé ci-dessous :** les anciens statuts « non contrôlé », « ouvert », « non publié » ou « non activé » décrivent leur époque et leur périmètre ; ils sont remplacés, pour le statut actuel du chantier France, par cette clôture. Cette consignation est documentaire, sans nouvelle opération distante ni nouveau prérequis.
+
 ## Rectification du 4 novembre 2026 — confirmations utilisateur du 30 octobre
 
 **Statut documentaire actuel : « Personnalité juridique » clôturée sur confirmation rapportée.** Organisation Google Marketing Platform et personnalité juridique : **POTENTIEL CONSULTING** ; compte Analytics associé **France Tuncq, 412243474**. Contact principal **France Tuncq**, **contact@luniversdesnombres.com** ; correspondance **1B La Fendoire, 44770 La Plaine-sur-Mer, France**, siège **1 La Fendoire**. Le rattachement à une organisation est distinct des associations de produits Google, précédemment déclarées vides ; il ne contredit pas ce constat.
