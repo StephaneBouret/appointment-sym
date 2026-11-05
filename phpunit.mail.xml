@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="tests/Mail/bootstrap.php" cacheResult="false"
+         failOnWarning="true" failOnRisky="true" failOnNotice="true" failOnPhpunitNotice="true"
+         failOnDeprecation="true" failOnPhpunitDeprecation="true">
+    <testsuites>
+        <testsuite name="Mail services"><directory>tests/Mail</directory></testsuite>
+    </testsuites>
+</phpunit>

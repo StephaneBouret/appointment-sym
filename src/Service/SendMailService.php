@@ -10,14 +10,15 @@ class SendMailService
 {
     public function __construct(protected MailerInterface $mailer, protected string $defaultFrom) {}
 
+    /** @param array<string, mixed> $context Template variables (entities, dates and scalar values). */
     public function sendMail(
-        ?string $from = null,
+        ?string $from,
         string $name,
         string $to,
         string $subject,
         string $template,
         array $context
-    )
+    ): void
     {
         $email = new TemplatedEmail();
         $email->from(new Address($from ?? $this->defaultFrom, $name))
