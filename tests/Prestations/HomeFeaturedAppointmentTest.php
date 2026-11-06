@@ -86,7 +86,12 @@ final class HomeFeaturedAppointmentTest extends TestCase
         self::assertSame(0, $page->filter('#featured-appointment-title')->count());
         self::assertStringContainsString('Un accompagnement pour faire le point', $page->filter('#appointment')->text());
         self::assertSame(0, $page->selectLink('Découvrir la séance')->count());
-        self::assertSame('/rendez-vous/types', $page->filter('#appointment')->selectLink('Prendre rendez-vous')->attr('href'));
+        $block = $page->filter('#appointment');
+        self::assertCount(1, $block);
+        $link = $block->filter('a.show-detail-program:not([href^="tel:"])');
+        self::assertCount(1, $link);
+        self::assertSame('/rendez-vous/types', $link->attr('href'));
+        self::assertNotSame('', trim($link->text()));
     }
 
     public static function fallbackModes(): iterable
