@@ -61,6 +61,7 @@ class UnavailabilityCrudController extends AbstractCrudController
                 ->setHelp('Date & Heure de début')
                 // Saisie : vue Paris / modèle UTC
                 ->setFormTypeOption('widget', 'single_text')
+                ->setFormTypeOption('input', 'datetime_immutable')
                 ->setFormTypeOption('view_timezone', $displayTz)
                 ->setFormTypeOption('model_timezone', 'UTC')
                 // Affichage index/show
@@ -68,6 +69,7 @@ class UnavailabilityCrudController extends AbstractCrudController
             DateTimeField::new('endAt', 'Fin')
                 ->setHelp('Date & Heure de fin')
                 ->setFormTypeOption('widget', 'single_text')
+                ->setFormTypeOption('input', 'datetime_immutable')
                 ->setFormTypeOption('view_timezone', $displayTz)
                 ->setFormTypeOption('model_timezone', 'UTC')
                 ->setTimezone($displayTz),
@@ -79,7 +81,7 @@ class UnavailabilityCrudController extends AbstractCrudController
 
     /**
      * Normalise si "Journée entière" est cochée : 00:00-23:59 sur la date de startAt
-     * — la normalisation se fait en Europe/Paris puis on laisse EA convertir en UTC (model_timezone)
+     * La journée est déterminée en Europe/Paris ; le type Doctrine persiste les instants en UTC.
      */
     public function persistEntity(EntityManagerInterface $em, $entityInstance): void
     {
@@ -110,12 +112,13 @@ class UnavailabilityCrudController extends AbstractCrudController
         $dayParis = $startAt->setTimezone($paris); // on "voit" le jour réel sur Paris
 
         // 00:00:00 et 23:59:59 (Paris)
-        $startParis = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $dayParis->format('Y-m-d') . ' 00:00:00', $paris);
-        $endParis   = \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', $dayParis->format('Y-m-d') . ' 23:59:59', $paris);
+        $startParis = $dayParis->setTime(0, 0, 0);
+        $endParis = $dayParis->setTime(23, 59, 59);
 
-        // On affecte directement ces instants (EA se charge déjà de model_timezone=UTC côté formulaire)
-        // Ici nous sommes en phase persist/update, donc nous restons cohérents : on enregistre des instants corrects
-        $entityInstance->setStartAt($startParis);
-        $entityInstance->setEndAt($endParis);
+        // Doctrine ne remplace pas les objets gérés lors du flush. Conserver aussi en mémoire
+        // le modèle UTC attendu par le formulaire, sans changer les instants Paris calculés.
+        $utc = new \DateTimeZone('UTC');
+        $entityInstance->setStartAt($startParis->setTimezone($utc));
+        $entityInstance->setEndAt($endParis->setTimezone($utc));
     }
 }

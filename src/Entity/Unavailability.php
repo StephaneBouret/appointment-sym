@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Doctrine\Type\UtcDateTimeImmutableType;
 use App\Repository\UnavailabilityRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -16,11 +17,11 @@ class Unavailability
     private ?int $id = null;
 
     // Début et fin (sur une même journée)
-    #[ORM\Column(type: 'datetime_immutable')]
+    #[ORM\Column(type: UtcDateTimeImmutableType::NAME)]
     #[Assert\NotNull(message: 'La date/heure de début est obligatoire.')]
     private ?\DateTimeImmutable $startAt = null;
 
-    #[ORM\Column(type: 'datetime_immutable')]
+    #[ORM\Column(type: UtcDateTimeImmutableType::NAME)]
     #[Assert\NotNull(message: 'La date/heure de fin est obligatoire.')]
     #[Assert\GreaterThan(
         propertyPath: 'startAt',
