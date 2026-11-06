@@ -2,7 +2,9 @@
 
 namespace App\Service;
 
+use App\Entity\Appointment;
 use App\Entity\AppointmentType;
+use App\Entity\Unavailability;
 use App\Enum\AppointmentStatus;
 use App\Service\ScheduleSettingService;
 use App\Repository\AppointmentRepository;
@@ -73,8 +75,7 @@ final class SlotService
         // 5) Données du jour (RDV confirmés + indispos horaires)
         $appointments = $this->appointmentRepo->findByDate($dayParis); // idéalement: CONFIRMED/PENDING
         // Par sûreté, on filtre ici
-        $appointments = array_filter($appointments, function ($a) {
-            if (!method_exists($a, 'getStatus')) return true;
+        $appointments = array_filter($appointments, function (Appointment $a): bool {
             $st = $a->getStatus();
             return in_array($st, [AppointmentStatus::PENDING, AppointmentStatus::CONFIRMED], true);
         });
@@ -96,8 +97,8 @@ final class SlotService
      * @param \DateTimeImmutable $date (seule la date est utilisée, Europe/Paris)
      * @param string $start "HH:MM"
      * @param string $end   "HH:MM"
-     * @param array<int,object>  $appointments objets avec getStartAt()/getEndAt()
-     * @param array<int,object>  $unavails     objets avec getStartAt()/getEndAt() (même jour)
+     * @param array<int,Appointment> $appointments
+     * @param array<int,Unavailability> $unavails
      * @return array<int, array{start:\DateTimeImmutable,end:\DateTimeImmutable}>
      */
     private function generateSlots(
@@ -151,6 +152,7 @@ final class SlotService
         return $slots;
     }
 
+    /** @param iterable<Appointment|Unavailability> $periods */
     private function overlapAny(\DateTimeImmutable $start, \DateTimeImmutable $end, iterable $periods, int $buffer): bool
     {
         foreach ($periods as $p) {

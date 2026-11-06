@@ -35,6 +35,7 @@ class AppointmentRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    /** @return list<Appointment> */
     public function findByDate(\DateTimeInterface $dayParis): array
     {
         $tzParis = new \DateTimeZone('Europe/Paris');

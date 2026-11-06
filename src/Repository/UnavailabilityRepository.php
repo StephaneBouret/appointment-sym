@@ -20,7 +20,7 @@ class UnavailabilityRepository extends ServiceEntityRepository
      * Retourne toutes les indisponibilités (heures) qui touchent la journée donnée
      *
      * @param \DateTimeInterface $date
-     * @return array
+     * @return list<Unavailability>
      */
     public function findForDate(\DateTimeInterface $date): array
     {
