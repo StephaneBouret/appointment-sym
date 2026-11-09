@@ -21,6 +21,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Filter\BooleanFilter;
 use Misd\PhoneNumberBundle\Templating\Helper\PhoneNumberHelper;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
+/**
+ * @extends AbstractCrudController<User>
+ */
 class UserCrudController extends AbstractCrudController
 {
     public function __construct(protected PhoneNumberHelper $phoneNumberHelper) {}
