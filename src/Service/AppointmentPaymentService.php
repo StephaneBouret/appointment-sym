@@ -156,9 +156,9 @@ class AppointmentPaymentService
     private function canPay(Appointment $appointment): bool
     {
         $expiry = $appointment->getPayment()->expiresAt
-            ?? $appointment->getCreatedAt()?->modify('+'.self::PENDING_MINUTES.' minutes');
+            ?? $appointment->getCreatedAt()->modify('+'.self::PENDING_MINUTES.' minutes');
         return $appointment->getStatus() === AppointmentStatus::PENDING
-            && $expiry !== null && $expiry > new \DateTimeImmutable();
+            && $expiry > new \DateTimeImmutable();
     }
 
     private function issue(Appointment $appointment, string $code): string

@@ -88,7 +88,7 @@ final class CleanupPendingAppointmentsCommand extends Command
                 $appt->getId(),
                 $appt->getStartAt()?->format('Y-m-d H:i') ?? 'n/a',
                 $appt->getStatus()->value,
-                $appt->getCreatedAt()?->format('Y-m-d H:i') ?? 'n/a'
+                $appt->getCreatedAt()->format('Y-m-d H:i')
             ));
 
         }

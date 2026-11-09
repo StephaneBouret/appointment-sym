@@ -52,10 +52,10 @@ class Appointment
     private AppointmentStatus $status = AppointmentStatus::PENDING;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private ?\DateTimeImmutable $createdAt = null;
+    private \DateTimeImmutable $createdAt;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private ?\DateTimeImmutable $updatedAt = null;
+    private \DateTimeImmutable $updatedAt;
 
     #[ORM\Embedded(class: EvaluatedPerson::class)]
     #[Assert\Valid(groups: ['Default', 'couple'])]   // ✅ cascade sur les deux groupes
@@ -167,7 +167,7 @@ class Appointment
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }
@@ -179,7 +179,7 @@ class Appointment
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): \DateTimeImmutable
     {
         return $this->updatedAt;
     }
