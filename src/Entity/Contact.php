@@ -40,6 +40,7 @@ class Contact
     private ?string $email = null;
 
     #[ORM\Column(type: 'phone_number')]
+    #[Assert\NotNull(message: 'Merci de renseigner votre numéro de téléphone.')]
     #[AssertPhoneNumber(defaultRegion: 'FR')]
     private ?PhoneNumber $phone = null;
 
