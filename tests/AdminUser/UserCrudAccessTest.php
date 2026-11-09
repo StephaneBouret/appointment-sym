@@ -40,6 +40,7 @@ final class UserCrudAccessTest extends TestCase
         $this->client = new KernelBrowser($this->kernel);
         $this->client->disableReboot();
         CaptureAuthMailer::$codes = [];
+        UserCrudWriteObserver::$calls = [];
     }
 
     public static function actions(): iterable
@@ -109,8 +110,10 @@ final class UserCrudAccessTest extends TestCase
         $form = $page->filter('form[name="User"]')->form([
             'User[firstname]' => 'mArIe', 'User[lastname]' => 'duPont',
         ]);
+        self::assertSame([], UserCrudWriteObserver::$calls);
         $this->client->submit($form);
         self::assertSame(302, $this->client->getResponse()->getStatusCode());
+        self::assertSame(['beforeUpdateEntity', 'persist', 'flush'], UserCrudWriteObserver::$calls);
         $id = $this->ordinary->getId();
         $this->em->clear();
         $user = $this->em->find(User::class, $id);
@@ -119,6 +122,87 @@ final class UserCrudAccessTest extends TestCase
         self::assertSame(['ROLE_USER'], $user->getRoles());
         self::assertSame(2, $this->em->getRepository(User::class)->count([]));
         $this->assertNewForbidden();
+    }
+
+    public static function incompleteNames(): iterable
+    {
+        foreach (['firstname', 'lastname'] as $field) {
+            yield $field.' absent' => [[$field => null]];
+            yield $field.' empty' => [[$field => '']];
+            yield $field.' spaces' => [[$field => '   ']];
+        }
+        yield 'both empty' => [['firstname' => '', 'lastname' => '']];
+    }
+
+    #[DataProvider('incompleteNames')]
+    public function testIncompleteNamesAreFieldErrorsWithoutHookOrWrite(array $values): void
+    {
+        $messages = ['firstname' => 'Merci de renseigner le prénom.', 'lastname' => 'Merci de renseigner le nom.'];
+        $this->client->loginUser($this->admin);
+        $url = $this->url(Action::EDIT);
+        $page = $this->client->request('GET', $url);
+        self::assertSame(200, $this->client->getResponse()->getStatusCode());
+        $data = $page->filter('form[name="User"]')->form()->getPhpValues();
+        self::assertNotEmpty($data['User']['_token']);
+        foreach ($values as $field => $value) {
+            if ($value === null) {
+                unset($data['User'][$field]);
+            } else {
+                $data['User'][$field] = $value;
+            }
+        }
+        $id = $this->ordinary->getId();
+        $before = $this->em->getConnection()->fetchAssociative('SELECT * FROM user WHERE id = ?', [$id]);
+        self::assertSame([], UserCrudWriteObserver::$calls);
+        // Surface the original binding exception in the isolated counter-proof.
+        $this->client->catchExceptions(false);
+        $page = $this->client->request('POST', $url, $data);
+        // EasyAdmin's installed CrudResponseListener returns 422 when the form has errors.
+        self::assertSame(422, $this->client->getResponse()->getStatusCode());
+        self::assertSame([], UserCrudWriteObserver::$calls);
+        self::assertSame(0, $page->filter('.global-invalid-feedback')->count(), 'The valid CSRF token must not be rejected.');
+        foreach ($messages as $field => $message) {
+            $input = $page->filter('#User_'.$field);
+            $errors = $input->ancestors()->filter('.form-widget')->first()->filter('.invalid-feedback');
+            if (array_key_exists($field, $values)) {
+                self::assertStringContainsString('is-invalid', $input->attr('class'));
+                self::assertStringContainsString($message, implode(' ', $errors->each(static fn ($error): string => $error->text())));
+                self::assertSame('', $input->attr('value') ?? '', 'Do not restore the old name silently.');
+            } else {
+                self::assertSame(0, $errors->count());
+            }
+        }
+        $this->em->clear();
+        $reloaded = $this->em->find(User::class, $id);
+        self::assertInstanceOf(User::class, $reloaded);
+        self::assertSame($before['firstname'], $reloaded->getFirstname());
+        self::assertSame($before['lastname'], $reloaded->getLastname());
+        self::assertSame($before, $this->em->getConnection()->fetchAssociative('SELECT * FROM user WHERE id = ?', [$id]));
+    }
+
+    public static function shortNames(): iterable
+    {
+        yield 'firstname' => ['firstname', 'Al'];
+        yield 'lastname' => ['lastname', 'X'];
+    }
+
+    #[DataProvider('shortNames')]
+    public function testExistingLengthConstraintsStillRejectShortNames(string $field, string $value): void
+    {
+        $this->client->loginUser($this->admin);
+        $url = $this->url(Action::EDIT);
+        $page = $this->client->request('GET', $url);
+        $form = $page->filter('form[name="User"]')->form(['User['.$field.']' => $value]);
+        $id = $this->ordinary->getId();
+        $before = $this->em->getConnection()->fetchAssociative('SELECT * FROM user WHERE id = ?', [$id]);
+        $page = $this->client->submit($form);
+        self::assertSame(422, $this->client->getResponse()->getStatusCode());
+        self::assertSame([], UserCrudWriteObserver::$calls);
+        self::assertStringContainsString('is-invalid', $page->filter('#User_'.$field)->attr('class'));
+        $errors = $page->filter('#User_'.$field)->ancestors()->filter('.form-widget')->first()->filter('.invalid-feedback')->text();
+        self::assertStringContainsString($field === 'firstname' ? 'Votre prénom doit comporter' : 'Votre nom doit comporter', $errors);
+        $this->em->clear();
+        self::assertSame($before, $this->em->getConnection()->fetchAssociative('SELECT * FROM user WHERE id = ?', [$id]));
     }
 
     private function assertNewForbidden(): void

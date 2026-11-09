@@ -20,6 +20,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\BooleanFilter;
 use Misd\PhoneNumberBundle\Templating\Helper\PhoneNumberHelper;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * @extends AbstractCrudController<User>
@@ -60,9 +61,13 @@ class UserCrudController extends AbstractCrudController
             FormField::addFieldset('Détails de l\'utilisateur'),
             TextField::new('firstname', 'Prénom :')
                 ->setFormTypeOptions(['attr' => ['placeholder' => 'Prénom de l\'utilisateur']])
+                ->setFormTypeOption('empty_data', '')
+                ->setFormTypeOption('constraints', [new NotBlank(message: 'Merci de renseigner le prénom.')])
                 ->setColumns(6),
             TextField::new('lastname', 'Nom :')
                 ->setFormTypeOptions(['attr' => ['placeholder' => 'Nom de l\'utilisateur']])
+                ->setFormTypeOption('empty_data', '')
+                ->setFormTypeOption('constraints', [new NotBlank(message: 'Merci de renseigner le nom.')])
                 ->setColumns(6),
             EmailField::new('email', 'Email :')
                 ->setFormTypeOptions(['attr' => ['placeholder' => 'Email de l\'utilisateur']]),
