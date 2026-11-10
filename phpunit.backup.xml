@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="tests/Backup/bootstrap.php" cacheResult="false"
+         failOnWarning="true" failOnRisky="true" failOnNotice="true" failOnDeprecation="true">
+    <testsuites><testsuite name="Database backup"><directory>tests/Backup</directory></testsuite></testsuites>
+</phpunit>
