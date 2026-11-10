@@ -73,6 +73,7 @@ class AppointmentRepository extends ServiceEntityRepository
             ->getQuery()->getSingleScalarResult() > 0;
     }
 
+    /** @return list<Appointment> */
     public function findForCalendarExport(bool $includePending = false, bool $onlyNotSent = true): array
     {
         $qb = $this->createQueryBuilder('a')
@@ -93,17 +94,20 @@ class AppointmentRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    /** @param list<Appointment> $appointments */
     public function markAsSent(array $appointments): void
     {
         if (!$appointments) {
             return;
         }
 
-        foreach ($appointments as $a) {
-            $a->setIsSent(true);
-        }
-
-        $this->getEntityManager()->flush();
+        // Doctrine flushes and commits atomically; on failure it rolls back and closes the EM.
+        // The now-detached objects retain their in-memory flags and must be discarded/reloaded.
+        $this->getEntityManager()->wrapInTransaction(static function () use ($appointments): void {
+            foreach ($appointments as $a) {
+                $a->setIsSent(true);
+            }
+        });
     }
 
     /**

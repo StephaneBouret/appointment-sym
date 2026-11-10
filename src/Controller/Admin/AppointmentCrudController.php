@@ -29,7 +29,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Filter\DateTimeFilter;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\NullFilter;
 use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
-use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Vich\UploaderBundle\Form\Type\VichFileType;
 
 class AppointmentCrudController extends AbstractCrudController
@@ -304,7 +304,7 @@ class AppointmentCrudController extends AbstractCrudController
         }
     }
 
-    public function exportCsv(AppointmentExportService $exporter): StreamedResponse
+    public function exportCsv(AppointmentExportService $exporter): Response
     {
         $list = $this->appointmentRepository->findForCalendarExport(includePending: false, onlyNotSent: true);
         $resp = $exporter->streamCsv($list, 'confirmed');
@@ -312,13 +312,13 @@ class AppointmentCrudController extends AbstractCrudController
         return $resp;
     }
 
-    public function exportCsvAll(AppointmentExportService $exporter): StreamedResponse
+    public function exportCsvAll(AppointmentExportService $exporter): Response
     {
         $list = $this->appointmentRepository->findForCalendarExport(includePending: false, onlyNotSent: false);
         return $exporter->streamCsv($list, 'all'); // Pas de markAsSent
     }
 
-    public function exportIcs(AppointmentExportService $exporter): StreamedResponse
+    public function exportIcs(AppointmentExportService $exporter): Response
     {
         $list = $this->appointmentRepository->findForCalendarExport(includePending: false, onlyNotSent: true);
         $resp = $exporter->streamIcs($list, 'confirmed');
@@ -326,7 +326,7 @@ class AppointmentCrudController extends AbstractCrudController
         return $resp;
     }
 
-    public function exportIcsAll(AppointmentExportService $exporter): StreamedResponse
+    public function exportIcsAll(AppointmentExportService $exporter): Response
     {
         $list = $this->appointmentRepository->findForCalendarExport(includePending: false, onlyNotSent: false);
         return $exporter->streamIcs($list, 'all'); // pas de markAsSent

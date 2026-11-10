@@ -3,12 +3,12 @@
 namespace App\Service;
 
 use App\Entity\Appointment;
-use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 final class AppointmentExportService
 {
     /** @param Appointment[] $appointments */
-    public function streamCsv(array $appointments, string $suffix = 'export'): StreamedResponse
+    public function streamCsv(array $appointments, string $suffix = 'export'): Response
     {
         $filename = sprintf(
             'appointments_%s_%s.csv',
@@ -16,9 +16,8 @@ final class AppointmentExportService
             $suffix
         );
 
-        return $this->stream(function () use ($appointments) {
-            $out = fopen('php://output', 'w');
-            fputcsv($out, ['Subject', 'Start Date', 'Start Time', 'End Date', 'End Time', 'Description']);
+        return $this->prepare(function ($out) use ($appointments) {
+            $this->writeCsv($out, ['Subject', 'Start Date', 'Start Time', 'End Date', 'End Time', 'Description']);
             $tz = new \DateTimeZone('Europe/Paris');
 
             foreach ($appointments as $a) {
@@ -55,7 +54,7 @@ final class AppointmentExportService
 
                 $desc = trim(implode(' | ', array_filter([$clientTxt, $p1Txt, $p2Txt])));
 
-                fputcsv($out, [
+                $this->writeCsv($out, [
                     $subject,
                     $start?->format('m/d/Y') ?? '',
                     $start?->format('H:i') ?? '',
@@ -64,12 +63,11 @@ final class AppointmentExportService
                     $desc
                 ]);
             }
-            fclose($out);
         }, 'text/csv; charset=UTF-8', $filename);
     }
 
     /** @param Appointment[] $appointments */
-    public function streamIcs(array $appointments, string $suffix = 'export'): StreamedResponse
+    public function streamIcs(array $appointments, string $suffix = 'export'): Response
     {
         $filename = sprintf(
             'appointments_%s_%s.ics',
@@ -77,9 +75,9 @@ final class AppointmentExportService
             $suffix
         );
 
-        return $this->stream(function () use ($appointments) {
+        return $this->prepare(function ($out) use ($appointments) {
             $nowUtc = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
-            $w = static fn(string $s) => print $s;
+            $w = fn(string $s) => $this->writeAll($out, $s);
 
             $w("BEGIN:VCALENDAR\r\n");
             $w("PRODID:-//App Numerologie//Appointments Export//FR\r\n");
@@ -91,7 +89,9 @@ final class AppointmentExportService
                 $summary = $this->icsEscape($a->getType()?->getName() ?? 'Rendez-vous');
                 $dtStartUtc = $a->getStartAt()?->setTimezone(new \DateTimeZone('UTC'));
                 $dtEndUtc   = $a->getEndAt()?->setTimezone(new \DateTimeZone('UTC'));
-                if (!$dtStartUtc || !$dtEndUtc) continue;
+                if (!$dtStartUtc || !$dtEndUtc) {
+                    throw new \UnexpectedValueException('Impossible d’exporter un rendez-vous sans dates en ICS.');
+                }
 
                 $clientTxt = $a->getUser()
                     ? sprintf('Client : %s %s', $a->getUser()->getFirstName() ?? '', $a->getUser()->getLastName() ?? '')
@@ -138,12 +138,71 @@ final class AppointmentExportService
     }
 
     // --------------- Helpers ---------------
-    private function stream(\Closure $callback, string $contentType, string $filename): StreamedResponse
+    /** @param \Closure(resource): void $writer */
+    private function prepare(\Closure $writer, string $contentType, string $filename): Response
     {
-        $response = new StreamedResponse($callback);
+        // The selection is already materialized. Prepare it before any HTTP output or marking.
+        $out = fopen('php://memory', 'w+');
+        if ($out === false) {
+            throw new \RuntimeException('Impossible de préparer l’export calendrier.');
+        }
+        try {
+            $writer($out);
+            if (!fflush($out)) {
+                throw new \RuntimeException('Impossible de finaliser l’export calendrier.');
+            }
+            $size = ftell($out);
+            if ($size === false || !rewind($out)) {
+                throw new \RuntimeException('Impossible de relire l’export calendrier.');
+            }
+            $content = stream_get_contents($out);
+            if ($content === false || strlen($content) !== $size) {
+                throw new \RuntimeException('Lecture incomplète de l’export calendrier.');
+            }
+            if (!fclose($out)) {
+                throw new \RuntimeException('Impossible de fermer l’export calendrier.');
+            }
+        } finally {
+            if (is_resource($out)) {
+                try {
+                    fclose($out);
+                } catch (\Throwable) {
+                    // Cleanup must never replace the original generation/close exception.
+                }
+            }
+        }
+        $response = new Response($content);
         $response->headers->set('Content-Type', $contentType);
         $response->headers->set('Content-Disposition', 'attachment; filename="' . $filename . '"');
         return $response;
+    }
+
+    /** @param resource $out
+     *  @param list<string> $fields
+     */
+    private function writeCsv($out, array $fields): void
+    {
+        $before = ftell($out);
+        // Explicitly preserve PHP's historical comma, quote, backslash and LF defaults.
+        $written = fputcsv($out, $fields, ',', '"', '\\', "\n");
+        $after = ftell($out);
+        if ($before === false || $written === false || $written === 0 || $after === false || $after - $before !== $written) {
+            throw new \RuntimeException('Impossible de sérialiser une ligne CSV complète.');
+        }
+    }
+
+    /** @param resource $out */
+    private function writeAll($out, string $text): void
+    {
+        $offset = 0;
+        $length = strlen($text);
+        while ($offset < $length) {
+            $written = fwrite($out, substr($text, $offset));
+            if ($written === false || $written === 0) {
+                throw new \RuntimeException('Impossible d’écrire l’export calendrier.');
+            }
+            $offset += $written;
+        }
     }
 
     private function icsEscape(string $text): string
