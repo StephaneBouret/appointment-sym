@@ -117,6 +117,7 @@ class RegistrationFormType extends AbstractType
                 ],
             ])
             ->add('phone', PhoneNumberType::class, [
+                'constraints' => [new NotBlank(message: 'Merci de renseigner votre numéro de téléphone.')],
                 'default_region' => 'FR',
                 'format' => PhoneNumberFormat::NATIONAL,
                 'label' => 'Votre téléphone :',

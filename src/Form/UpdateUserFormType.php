@@ -10,6 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class UpdateUserFormType extends AbstractType
 {
@@ -72,6 +73,7 @@ class UpdateUserFormType extends AbstractType
                 ],
             ])
             ->add('phone', PhoneNumberType::class, [
+                'constraints' => [new NotBlank(message: 'Merci de renseigner votre numéro de téléphone.')],
                 'default_region' => 'FR',
                 'format' => PhoneNumberFormat::NATIONAL,
                 'label' => 'Votre téléphone :',
