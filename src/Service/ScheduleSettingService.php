@@ -20,6 +20,9 @@ final class ScheduleSettingService
         return is_numeric($v) ? (int) $v : $default;
     }
 
+    /**
+     * @return list<int>
+     */
     public function getCsvIntList(string $key, string $defaultCsv = ''): array
     {
         $raw = $this->get($key, $defaultCsv) ?? '';

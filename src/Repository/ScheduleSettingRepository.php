@@ -16,6 +16,9 @@ class ScheduleSettingRepository extends ServiceEntityRepository
         parent::__construct($registry, ScheduleSetting::class);
     }
 
+    /**
+     * @return array<int|string, string|null>
+     */
     public function findAllKeyValue(): array
     {
         $qb = $this->createQueryBuilder('s');

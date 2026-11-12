@@ -198,6 +198,9 @@ final class SlotApiController extends AbstractController
         return $d->modify('+1 day');
     }
 
+    /**
+     * @param list<int> $openDays
+     */
     private function isOpenDay(\DateTimeInterface $date, array $openDays): bool
     {
         // N=1 (Lun) ... 7 (Dim)
