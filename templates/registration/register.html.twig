@@ -28,7 +28,7 @@
 						{# Le loader Google doit absolument être présent AVANT tout JS qui utilise APILoader #}
 						<gmpx-api-loader key="{{ google_api_key }}" solution-channel="GMP_QB_addressselection_v3_cAC"></gmpx-api-loader>
 
-						{{ form_start(registrationForm, {'attr': {'id': 'registration_form'}}) }}
+						{{ form_start(registrationForm, {'attr': {'id': 'registration_form', 'data-turbo': 'false'}}) }}
 						<div class="row">
 							<div class="col-md-6">
 								{{ form_row(registrationForm.email, {'attr': {'class': 'form-control-login', 'data-register-target': 'email'}}) }}
