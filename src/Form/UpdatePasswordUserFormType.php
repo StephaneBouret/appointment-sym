@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\PasswordStrength;
 use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
 
@@ -46,6 +47,7 @@ class UpdatePasswordUserFormType extends AbstractType
                     'placeholder' => 'Merci de saisir votre mot de passe'
                 ],
                 'constraints' => [
+                    new NotBlank(message: 'Merci de renseigner votre nouveau mot de passe.'),
                     new PasswordStrength(
                         minScore: PasswordStrength::STRENGTH_STRONG,
                         message: 'Le mot de passe est trop faible. Veuillez utiliser un mot de passe plus fort.'

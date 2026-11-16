@@ -81,10 +81,6 @@ final class ProfileController extends AbstractController
 
                 $this->addFlash('success', 'Votre mot de passe a bien été mis à jour');
                 return $this->redirectToRoute('app_home');
-            } else {
-                // En cas d'erreurs de validation, rediriger vers la même page
-                $this->addFlash('warning', 'Une erreur est survenue !');
-                return $this->redirectToRoute('app_edit_password');
             }
         }
 
