@@ -144,25 +144,43 @@ class UserCrudController extends AbstractCrudController
 
     public function persistEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
+        $firstname = $entityInstance->getFirstname();
+        $lastname = $entityInstance->getLastname();
+        if ($firstname === null || trim($firstname) === '') {
+            throw new \InvalidArgumentException('Le champ firstname est obligatoire.');
+        }
+        if ($lastname === null || trim($lastname) === '') {
+            throw new \InvalidArgumentException('Le champ lastname est obligatoire.');
+        }
+
         $roles = $entityInstance->getRoles();
         if (!in_array('ROLE_USER', $roles, true)) {
             $roles[] = 'ROLE_USER';
             $entityInstance->setRoles($roles);
         }
-        $entityInstance->setFirstname(ucfirst($entityInstance->getFirstname()))
-            ->setLastname(strtoupper($entityInstance->getLastname()));
+        $entityInstance->setFirstname(ucfirst($firstname))
+            ->setLastname(strtoupper($lastname));
         parent::persistEntity($entityManager, $entityInstance);
     }
 
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
     {
+        $firstname = $entityInstance->getFirstname();
+        $lastname = $entityInstance->getLastname();
+        if ($firstname === null || trim($firstname) === '') {
+            throw new \InvalidArgumentException('Le champ firstname est obligatoire.');
+        }
+        if ($lastname === null || trim($lastname) === '') {
+            throw new \InvalidArgumentException('Le champ lastname est obligatoire.');
+        }
+
         $roles = $entityInstance->getRoles();
         if (!in_array('ROLE_USER', $roles, true)) {
             $roles[] = 'ROLE_USER';
             $entityInstance->setRoles($roles);
         }
-        $entityInstance->setFirstname(ucfirst($entityInstance->getFirstname()))
-                    ->setLastname(strtoupper($entityInstance->getLastname()));
+        $entityInstance->setFirstname(ucfirst($firstname))
+            ->setLastname(strtoupper($lastname));
         parent::persistEntity($entityManager, $entityInstance);
     }
 }
