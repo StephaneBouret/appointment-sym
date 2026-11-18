@@ -788,6 +788,14 @@ body {
     }
 }
 
+@media (min-width: 768px) {
+    .grid-credentials .refunded-content {
+        flex: 1 1 100%;
+        width: 100%;
+        max-width: 100%;
+    }
+}
+
 .fw7fq9 {
     position: relative;
     background-color: rgb(13, 22, 27);
