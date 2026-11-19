@@ -1,0 +1,30 @@
+includes:
+    - vendor/phpstan/phpstan-symfony/extension.neon
+    - vendor/phpstan/phpstan-symfony/rules.neon
+    - vendor/phpstan/phpstan-doctrine/extension.neon
+    - vendor/phpstan/phpstan-doctrine/rules.neon
+
+parameters:
+    level: 8
+    paths:
+        - ../../src
+    tmpDir: ../../var/phpstan
+    phpVersion: 80427
+    bootstrapFiles:
+        - bootstrap.php
+    parallel:
+        maximumNumberOfProcesses: 1
+    doctrine:
+        objectManagerLoader: object-manager.php
+        reportUnknownTypes: true
+    symfony:
+        containerXmlPath: ../../var/cache/phpstan_diag/DiagnosticKernelPhpstan_diagDebugContainer.xml
+        consoleApplicationLoader: console-loader.php
+
+services:
+    -
+        factory: DiagnosticObjectTypeDescriptor('App\Doctrine\Type\UtcDateTimeImmutableType', 'DateTimeImmutable')
+        tags: [phpstan.doctrine.typeDescriptor]
+    -
+        factory: DiagnosticObjectTypeDescriptor('Misd\PhoneNumberBundle\Doctrine\DBAL\Types\PhoneNumberType', 'libphonenumber\PhoneNumber')
+        tags: [phpstan.doctrine.typeDescriptor]

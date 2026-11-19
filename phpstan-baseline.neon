@@ -1,0 +1,919 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Method App\\Analytics\\AnalyticsConfig\:\:clientConfig\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Analytics/AnalyticsConfig.php
+
+		-
+			message: '#^Method App\\Analytics\\AnalyticsConfig\:\:page\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Analytics/AnalyticsConfig.php
+
+		-
+			message: '#^Expression on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.expr
+			count: 4
+			path: src/Command/DatabaseDumpDataCommand.php
+
+		-
+			message: '#^If condition is always false\.$#'
+			identifier: if.alwaysFalse
+			count: 1
+			path: src/Command/GenerateSitemapCommand.php
+
+		-
+			message: '#^Class App\\Controller\\Admin\\AboutCrudController extends generic class EasyCorp\\Bundle\\EasyAdminBundle\\Controller\\AbstractCrudController but does not specify its types\: TEntity$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Controller/Admin/AboutCrudController.php
+
+		-
+			message: '#^Class App\\Controller\\Admin\\AppointmentCrudController extends generic class EasyCorp\\Bundle\\EasyAdminBundle\\Controller\\AbstractCrudController but does not specify its types\: TEntity$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Controller/Admin/AppointmentCrudController.php
+
+		-
+			message: '#^Class App\\Controller\\Admin\\AppointmentTypeCrudController extends generic class EasyCorp\\Bundle\\EasyAdminBundle\\Controller\\AbstractCrudController but does not specify its types\: TEntity$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Controller/Admin/AppointmentTypeCrudController.php
+
+		-
+			message: '#^Class App\\Controller\\Admin\\CompanyCrudController extends generic class EasyCorp\\Bundle\\EasyAdminBundle\\Controller\\AbstractCrudController but does not specify its types\: TEntity$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Controller/Admin/CompanyCrudController.php
+
+		-
+			message: '#^Class App\\Controller\\Admin\\ContactCrudController extends generic class EasyCorp\\Bundle\\EasyAdminBundle\\Controller\\AbstractCrudController but does not specify its types\: TEntity$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Controller/Admin/ContactCrudController.php
+
+		-
+			message: '#^Cannot call method getEntity\(\) on EasyCorp\\Bundle\\EasyAdminBundle\\Context\\AdminContext\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Controller/Admin/ScheduleSettingCrudController.php
+
+		-
+			message: '#^Class App\\Controller\\Admin\\ScheduleSettingCrudController extends generic class EasyCorp\\Bundle\\EasyAdminBundle\\Controller\\AbstractCrudController but does not specify its types\: TEntity$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Controller/Admin/ScheduleSettingCrudController.php
+
+		-
+			message: '#^Parameter \#1 \$string of function strtolower expects string, bool given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Controller/Admin/ScheduleSettingCrudController.php
+
+		-
+			message: '#^Class App\\Controller\\Admin\\SettingCrudController extends generic class EasyCorp\\Bundle\\EasyAdminBundle\\Controller\\AbstractCrudController but does not specify its types\: TEntity$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Controller/Admin/SettingCrudController.php
+
+		-
+			message: '#^Class App\\Controller\\Admin\\UnavailabilityCrudController extends generic class EasyCorp\\Bundle\\EasyAdminBundle\\Controller\\AbstractCrudController but does not specify its types\: TEntity$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Controller/Admin/UnavailabilityCrudController.php
+
+		-
+			message: '#^Method App\\Controller\\Admin\\UnavailabilityCrudController\:\:normalizeAllDayIfNeeded\(\) has parameter \$entityInstance with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Controller/Admin/UnavailabilityCrudController.php
+
+		-
+			message: '#^Class App\\Controller\\Admin\\UnavailableDayCrudController extends generic class EasyCorp\\Bundle\\EasyAdminBundle\\Controller\\AbstractCrudController but does not specify its types\: TEntity$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Controller/Admin/UnavailableDayCrudController.php
+
+		-
+			message: '#^Call to function method_exists\(\) with App\\Entity\\AppointmentType and ''getPrice'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/Controller/Appointment/AppointmentCancelController.php
+
+		-
+			message: '#^Method App\\Controller\\Appointment\\AppointmentCancelController\:\:computeRefundPolicy\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Controller/Appointment/AppointmentCancelController.php
+
+		-
+			message: '#^Call to function method_exists\(\) with App\\Entity\\AppointmentType and ''isCouple'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/Controller/Appointment/AppointmentController.php
+
+		-
+			message: '#^Cannot call method getDuration\(\) on App\\Entity\\AppointmentType\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Controller/Appointment/AppointmentController.php
+
+		-
+			message: '#^Cannot call method getParticipants\(\) on App\\Entity\\AppointmentType\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Controller/Appointment/AppointmentController.php
+
+		-
+			message: '#^Cannot call method isXmlHttpRequest\(\) on Symfony\\Component\\HttpFoundation\\Request\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Controller/Appointment/AppointmentController.php
+
+		-
+			message: '#^Method App\\Controller\\Appointment\\AppointmentController\:\:renderAppointmentForm\(\) has parameter \$extraVars with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Controller/Appointment/AppointmentController.php
+
+		-
+			message: '#^Method App\\Controller\\Appointment\\AppointmentController\:\:renderAppointmentForm\(\) has parameter \$form with generic interface Symfony\\Component\\Form\\FormInterface but does not specify its types\: TData$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Controller/Appointment/AppointmentController.php
+
+		-
+			message: '#^Parameter \#2 \$type of method App\\Controller\\Appointment\\AppointmentController\:\:renderAppointmentForm\(\) expects App\\Entity\\AppointmentType, App\\Entity\\AppointmentType\|null given\.$#'
+			identifier: argument.type
+			count: 5
+			path: src/Controller/Appointment/AppointmentController.php
+
+		-
+			message: '#^Call to function method_exists\(\) with App\\Entity\\Appointment and ''getNumber'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 2
+			path: src/Controller/Appointment/AppointmentPdfController.php
+
+		-
+			message: '#^Negated boolean expression is always false\.$#'
+			identifier: booleanNot.alwaysFalse
+			count: 2
+			path: src/Controller/Appointment/AppointmentPdfController.php
+
+		-
+			message: '#^Call to function method_exists\(\) with App\\Entity\\AppointmentType and ''isCouple'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/Controller/Appointment/AppointmentPersonsController.php
+
+		-
+			message: '#^Cannot call method getParticipants\(\) on App\\Entity\\AppointmentType\|null\.$#'
+			identifier: method.nonObject
+			count: 1
+			path: src/Controller/Appointment/AppointmentPersonsController.php
+
+		-
+			message: '#^Negated boolean expression is always false\.$#'
+			identifier: booleanNot.alwaysFalse
+			count: 1
+			path: src/Controller/Appointment/AppointmentPersonsController.php
+
+		-
+			message: '#^If condition is always true\.$#'
+			identifier: if.alwaysTrue
+			count: 1
+			path: src/Controller/ContactController.php
+
+		-
+			message: '#^Parameter \#1 \$email of method App\\Entity\\Contact\:\:setEmail\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Controller/ContactController.php
+
+		-
+			message: '#^Parameter \#1 \$firstname of method App\\Entity\\Contact\:\:setFirstname\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Controller/ContactController.php
+
+		-
+			message: '#^Parameter \#1 \$lastname of method App\\Entity\\Contact\:\:setLastname\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Controller/ContactController.php
+
+		-
+			message: '#^Ternary operator condition is always true\.$#'
+			identifier: ternary.alwaysTrue
+			count: 1
+			path: src/Controller/HomeController.php
+
+		-
+			message: '#^Method App\\Controller\\ProfileController\:\:delete\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Controller/ProfileController.php
+
+		-
+			message: '#^Method App\\Controller\\ProfileController\:\:editPassword\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Controller/ProfileController.php
+
+		-
+			message: '#^Parameter \#2 \$token of method Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController\:\:isCsrfTokenValid\(\) expects string\|null, bool\|float\|int\|string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Controller/ProfileController.php
+
+		-
+			message: '#^Method App\\Controller\\RegistrationController\:\:index\(\) should return Symfony\\Component\\HttpFoundation\\Response but returns Symfony\\Component\\HttpFoundation\\Response\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Controller/RegistrationController.php
+
+		-
+			message: '#^Parameter \#1 \$string of method Symfony\\Component\\String\\Slugger\\SluggerInterface\:\:slug\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/DataFixtures/AppointmentTypeFixtures.php
+
+		-
+			message: '#^Call to function method_exists\(\) with App\\Entity\\Appointment and ''getEvaluatedPerson'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/DataFixtures/FullWeekTakenFixtures.php
+
+		-
+			message: '#^Call to function method_exists\(\) with App\\Entity\\Appointment and ''setCreatedAt'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/DataFixtures/FullWeekTakenFixtures.php
+
+		-
+			message: '#^Call to function method_exists\(\) with App\\Entity\\Appointment and ''setEvaluatedPerson'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/DataFixtures/FullWeekTakenFixtures.php
+
+		-
+			message: '#^Call to function method_exists\(\) with App\\Entity\\Appointment and ''setUpdatedAt'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/DataFixtures/FullWeekTakenFixtures.php
+
+		-
+			message: '#^Method App\\DataFixtures\\FullWeekTakenFixtures\:\:callFirstCallable\(\) has parameter \$methods with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/DataFixtures/FullWeekTakenFixtures.php
+
+		-
+			message: '#^Parameter \#1 \$user of method App\\Entity\\Appointment\:\:setUser\(\) expects App\\Entity\\User\|null, object given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/DataFixtures/FullWeekTakenFixtures.php
+
+		-
+			message: '#^Call to an undefined method Faker\\Generator\:\:mobileNumber\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: src/DataFixtures/UserFixtures.php
+
+		-
+			message: '#^Property App\\Entity\\About\:\:\$description type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/About.php
+
+		-
+			message: '#^Property App\\Entity\\About\:\:\$firstname type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/About.php
+
+		-
+			message: '#^Property App\\Entity\\About\:\:\$lastname type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/About.php
+
+		-
+			message: '#^Call to function method_exists\(\) with App\\Entity\\AppointmentType and ''isCouple'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/Entity/Appointment.php
+
+		-
+			message: '#^Property App\\Entity\\Appointment\:\:\$endAt type mapping mismatch\: property can contain DateTimeImmutable\|null but database expects DateTimeImmutable\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/Appointment.php
+
+		-
+			message: '#^Property App\\Entity\\Appointment\:\:\$evaluatedPerson on left side of \?\? is not nullable nor uninitialized\.$#'
+			identifier: nullCoalesce.initializedProperty
+			count: 1
+			path: src/Entity/Appointment.php
+
+		-
+			message: '#^Property App\\Entity\\Appointment\:\:\$isSent type mapping mismatch\: property can contain bool\|null but database expects bool\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/Appointment.php
+
+		-
+			message: '#^Property App\\Entity\\Appointment\:\:\$startAt type mapping mismatch\: property can contain DateTimeImmutable\|null but database expects DateTimeImmutable\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/Appointment.php
+
+		-
+			message: '#^Property App\\Entity\\Appointment\:\:\$type type mapping mismatch\: property can contain App\\Entity\\AppointmentType\|null but database expects App\\Entity\\AppointmentType\.$#'
+			identifier: doctrine.associationType
+			count: 1
+			path: src/Entity/Appointment.php
+
+		-
+			message: '#^Property App\\Entity\\Appointment\:\:\$user type mapping mismatch\: property can contain App\\Entity\\User\|null but database expects App\\Entity\\User\.$#'
+			identifier: doctrine.associationType
+			count: 1
+			path: src/Entity/Appointment.php
+
+		-
+			message: '#^Method App\\Entity\\AppointmentType\:\:__toString\(\) should return string but returns string\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Entity/AppointmentType.php
+
+		-
+			message: '#^Property App\\Entity\\AppointmentType\:\:\$duration type mapping mismatch\: property can contain int\|null but database expects int\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/AppointmentType.php
+
+		-
+			message: '#^Property App\\Entity\\AppointmentType\:\:\$isPack type mapping mismatch\: property can contain bool\|null but database expects bool\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/AppointmentType.php
+
+		-
+			message: '#^Property App\\Entity\\AppointmentType\:\:\$name type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/AppointmentType.php
+
+		-
+			message: '#^Property App\\Entity\\AppointmentType\:\:\$participants type mapping mismatch\: property can contain int\|null but database expects int\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/AppointmentType.php
+
+		-
+			message: '#^Property App\\Entity\\AppointmentType\:\:\$price type mapping mismatch\: property can contain int\|null but database expects int\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/AppointmentType.php
+
+		-
+			message: '#^Property App\\Entity\\AppointmentType\:\:\$slug type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/AppointmentType.php
+
+		-
+			message: '#^Method App\\Entity\\Avatar\:\:__toString\(\) should return string but returns string\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Entity/Avatar.php
+
+		-
+			message: '#^Method App\\Entity\\Avatar\:\:__unserialize\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Entity/Avatar.php
+
+		-
+			message: '#^Method App\\Entity\\Avatar\:\:resize\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Entity/Avatar.php
+
+		-
+			message: '#^Parameter \#2 \$font of method Imagine\\Draw\\DrawerInterface\:\:text\(\) expects Imagine\\Image\\AbstractFont, Imagine\\Image\\FontInterface given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Entity/Avatar.php
+
+		-
+			message: '#^Property App\\Entity\\Avatar\:\:\$user type mapping mismatch\: property can contain App\\Entity\\User\|null but database expects App\\Entity\\User\.$#'
+			identifier: doctrine.associationType
+			count: 1
+			path: src/Entity/Avatar.php
+
+		-
+			message: '#^Property App\\Entity\\Company\:\:\$adress type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/Company.php
+
+		-
+			message: '#^Property App\\Entity\\Company\:\:\$city type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/Company.php
+
+		-
+			message: '#^Property App\\Entity\\Company\:\:\$email type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/Company.php
+
+		-
+			message: '#^Property App\\Entity\\Company\:\:\$manager type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/Company.php
+
+		-
+			message: '#^Property App\\Entity\\Company\:\:\$name type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/Company.php
+
+		-
+			message: '#^Property App\\Entity\\Company\:\:\$phone type mapping mismatch\: property can contain libphonenumber\\PhoneNumber\|null but database expects libphonenumber\\PhoneNumber\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/Company.php
+
+		-
+			message: '#^Property App\\Entity\\Company\:\:\$postalCode type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/Company.php
+
+		-
+			message: '#^Property App\\Entity\\Company\:\:\$siren type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/Company.php
+
+		-
+			message: '#^Property App\\Entity\\Company\:\:\$slug type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/Company.php
+
+		-
+			message: '#^Property App\\Entity\\Company\:\:\$type type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/Company.php
+
+		-
+			message: '#^Property App\\Entity\\Company\:\:\$url type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/Company.php
+
+		-
+			message: '#^Property App\\Entity\\Contact\:\:\$content type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/Contact.php
+
+		-
+			message: '#^Property App\\Entity\\Contact\:\:\$email type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/Contact.php
+
+		-
+			message: '#^Property App\\Entity\\Contact\:\:\$firstname type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/Contact.php
+
+		-
+			message: '#^Property App\\Entity\\Contact\:\:\$lastname type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/Contact.php
+
+		-
+			message: '#^Property App\\Entity\\Contact\:\:\$phone type mapping mismatch\: property can contain libphonenumber\\PhoneNumber\|null but database expects libphonenumber\\PhoneNumber\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/Contact.php
+
+		-
+			message: '#^Property App\\Entity\\Contact\:\:\$sendAt type mapping mismatch\: property can contain DateTimeImmutable\|null but database expects DateTimeImmutable\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/Contact.php
+
+		-
+			message: '#^Method App\\Entity\\Link\:\:__toString\(\) should return string but returns string\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Entity/Link.php
+
+		-
+			message: '#^Property App\\Entity\\Link\:\:\$type type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/Link.php
+
+		-
+			message: '#^Property App\\Entity\\Link\:\:\$url type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/Link.php
+
+		-
+			message: '#^Property App\\Entity\\ScheduleSetting\:\:\$setting_key type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/ScheduleSetting.php
+
+		-
+			message: '#^Property App\\Entity\\ScheduleSetting\:\:\$value type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/ScheduleSetting.php
+
+		-
+			message: '#^Property App\\Entity\\Unavailability\:\:\$allDay type mapping mismatch\: property can contain bool\|null but database expects bool\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/Unavailability.php
+
+		-
+			message: '#^Property App\\Entity\\Unavailability\:\:\$endAt type mapping mismatch\: property can contain DateTimeImmutable\|null but database expects DateTimeImmutable\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/Unavailability.php
+
+		-
+			message: '#^Property App\\Entity\\Unavailability\:\:\$startAt type mapping mismatch\: property can contain DateTimeImmutable\|null but database expects DateTimeImmutable\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/Unavailability.php
+
+		-
+			message: '#^Property App\\Entity\\UnavailableDay\:\:\$date type mapping mismatch\: property can contain DateTimeImmutable\|null but database expects DateTimeImmutable\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/UnavailableDay.php
+
+		-
+			message: '#^Method App\\Entity\\User\:\:getEmailAuthRecipient\(\) should return string but returns string\|null\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Entity/User.php
+
+		-
+			message: '#^Method App\\Entity\\User\:\:getUserIdentifier\(\) should return non\-empty\-string but returns string\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Entity/User.php
+
+		-
+			message: '#^Parameter \#2 \$data of function hash expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Entity/User.php
+
+		-
+			message: '#^Property App\\Entity\\User\:\:\$adress type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/User.php
+
+		-
+			message: '#^Property App\\Entity\\User\:\:\$city type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/User.php
+
+		-
+			message: '#^Property App\\Entity\\User\:\:\$email type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/User.php
+
+		-
+			message: '#^Property App\\Entity\\User\:\:\$firstname type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/User.php
+
+		-
+			message: '#^Property App\\Entity\\User\:\:\$lastname type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/User.php
+
+		-
+			message: '#^Property App\\Entity\\User\:\:\$password type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/User.php
+
+		-
+			message: '#^Property App\\Entity\\User\:\:\$phone type mapping mismatch\: property can contain libphonenumber\\PhoneNumber\|null but database expects libphonenumber\\PhoneNumber\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/User.php
+
+		-
+			message: '#^Property App\\Entity\\User\:\:\$postalCode type mapping mismatch\: property can contain string\|null but database expects string\.$#'
+			identifier: doctrine.columnType
+			count: 1
+			path: src/Entity/User.php
+
+		-
+			message: '#^Property App\\EventDispatcher\\AppointmentEmailCancelledSubscriber\:\:\$defaultFrom is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: src/EventDispatcher/AppointmentEmailCancelledSubscriber.php
+
+		-
+			message: '#^Property App\\EventDispatcher\\AppointmentEmailRescheduledSubscriber\:\:\$defaultFrom is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: src/EventDispatcher/AppointmentEmailRescheduledSubscriber.php
+
+		-
+			message: '#^Left side of && is always true\.$#'
+			identifier: booleanAnd.leftAlwaysTrue
+			count: 1
+			path: src/EventDispatcher/AppointmentEmailSuccessSubscriber.php
+
+		-
+			message: '#^Property App\\EventDispatcher\\AppointmentEmailSuccessSubscriber\:\:\$defaultFrom is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: src/EventDispatcher/AppointmentEmailSuccessSubscriber.php
+
+		-
+			message: '#^Right side of && is always true\.$#'
+			identifier: booleanAnd.rightAlwaysTrue
+			count: 1
+			path: src/EventDispatcher/AppointmentEmailSuccessSubscriber.php
+
+		-
+			message: '#^Method App\\EventDispatcher\\ContactEmailSuccessSubscriber\:\:sendSuccessEmail\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/EventDispatcher/ContactEmailSuccessSubscriber.php
+
+		-
+			message: '#^Method App\\EventSubscriber\\EasyAdminAvatarSubscriber\:\:createAvatar\(\) has parameter \$event with generic class EasyCorp\\Bundle\\EasyAdminBundle\\Event\\BeforeEntityPersistedEvent but does not specify its types\: TEntity$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/EventSubscriber/EasyAdminAvatarSubscriber.php
+
+		-
+			message: '#^Method App\\EventSubscriber\\EasyAdminAvatarSubscriber\:\:updateAvatar\(\) has parameter \$event with generic class EasyCorp\\Bundle\\EasyAdminBundle\\Event\\BeforeEntityUpdatedEvent but does not specify its types\: TEntity$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/EventSubscriber/EasyAdminAvatarSubscriber.php
+
+		-
+			message: '#^Parameter \#1 \$string of function substr expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/EventSubscriber/EasyAdminAvatarSubscriber.php
+
+		-
+			message: '#^Call to an undefined method object\:\:setSlug\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/EventSubscriber/EasyAdminSlugSubscriber.php
+
+		-
+			message: '#^Method App\\EventSubscriber\\EasyAdminSlugSubscriber\:\:setSlug\(\) has parameter \$event with generic class EasyCorp\\Bundle\\EasyAdminBundle\\Event\\BeforeEntityPersistedEvent but does not specify its types\: TEntity$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/EventSubscriber/EasyAdminSlugSubscriber.php
+
+		-
+			message: '#^Method App\\EventSubscriber\\EasyAdminSlugSubscriber\:\:setSlug\(\) has parameter \$event with generic class EasyCorp\\Bundle\\EasyAdminBundle\\Event\\BeforeEntityUpdatedEvent but does not specify its types\: TEntity$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/EventSubscriber/EasyAdminSlugSubscriber.php
+
+		-
+			message: '#^Method App\\EventSubscriber\\InvalidateMaintenanceCacheSubscriber\:\:onBeforeEntityUpdated\(\) has parameter \$event with generic class EasyCorp\\Bundle\\EasyAdminBundle\\Event\\BeforeEntityUpdatedEvent but does not specify its types\: TEntity$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/EventSubscriber/InvalidateMaintenanceCacheSubscriber.php
+
+		-
+			message: '#^Class App\\Form\\AppointmentCheckoutFormType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Form/AppointmentCheckoutFormType.php
+
+		-
+			message: '#^Call to function method_exists\(\) with App\\Entity\\AppointmentType and ''isCouple'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: src/Form/AppointmentEditPersonsType.php
+
+		-
+			message: '#^Class App\\Form\\AppointmentEditPersonsType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Form/AppointmentEditPersonsType.php
+
+		-
+			message: '#^Method App\\Form\\AppointmentEditPersonsType\:\:buildForm\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Form/AppointmentEditPersonsType.php
+
+		-
+			message: '#^Class App\\Form\\AppointmentFormType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Form/AppointmentFormType.php
+
+		-
+			message: '#^Class App\\Form\\AvatarFormType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Form/AvatarFormType.php
+
+		-
+			message: '#^Class App\\Form\\ContactFormType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Form/ContactFormType.php
+
+		-
+			message: '#^Class App\\Form\\EvaluatedPersonType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Form/EvaluatedPersonType.php
+
+		-
+			message: '#^Class App\\Form\\LinkFormType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Form/LinkFormType.php
+
+		-
+			message: '#^Class App\\Form\\RegistrationFormType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Form/RegistrationFormType.php
+
+		-
+			message: '#^Class App\\Form\\ResetPasswordFormType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Form/ResetPasswordFormType.php
+
+		-
+			message: '#^Class App\\Form\\ResetPasswordRequestFormType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Form/ResetPasswordRequestFormType.php
+
+		-
+			message: '#^Class App\\Form\\UpdatePasswordUserFormType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Form/UpdatePasswordUserFormType.php
+
+		-
+			message: '#^Class App\\Form\\UpdateUserFormType extends generic class Symfony\\Component\\Form\\AbstractType but does not specify its types\: TData$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Form/UpdateUserFormType.php
+
+		-
+			message: '#^Method App\\Google\\GoogleService\:\:getPlaceReviewsSummary\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Google/GoogleService.php
+
+		-
+			message: '#^Ternary operator condition is always true\.$#'
+			identifier: ternary.alwaysTrue
+			count: 2
+			path: src/Service/AppointmentExportService.php
+
+		-
+			message: '#^Expression on left side of \?\? is not nullable\.$#'
+			identifier: nullCoalesce.expr
+			count: 1
+			path: src/Service/AppointmentNotifier.php
+
+		-
+			message: '#^Cannot call method getMaxAge\(\) on App\\Entity\\AppointmentType\|null\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: src/Service/AppointmentValidator.php
+
+		-
+			message: '#^Cannot call method getMinAge\(\) on App\\Entity\\AppointmentType\|null\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: src/Service/AppointmentValidator.php
+
+		-
+			message: '#^Cannot call method getPrerequisite\(\) on App\\Entity\\AppointmentType\|null\.$#'
+			identifier: method.nonObject
+			count: 3
+			path: src/Service/AppointmentValidator.php
+
+		-
+			message: '#^Method App\\Service\\AppointmentValidator\:\:validate\(\) has parameter \$form with generic interface Symfony\\Component\\Form\\FormInterface but does not specify its types\: TData$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Service/AppointmentValidator.php
+
+		-
+			message: '#^Method App\\Service\\AvatarService\:\:handleAvatarForm\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: src/Service/AvatarService.php
+
+		-
+			message: '#^Method App\\Service\\AvatarService\:\:handleAvatarForm\(\) has parameter \$avatar with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Service/AvatarService.php
+
+		-
+			message: '#^Method App\\Service\\AvatarService\:\:handleAvatarForm\(\) has parameter \$avatarForm with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Service/AvatarService.php
+
+		-
+			message: '#^Parameter \#1 \$string of function mb_substr expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Service/AvatarService.php
+
+		-
+			message: '#^Property App\\Service\\AvatarService\:\:\$em has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Service/AvatarService.php
+
+		-
+			message: '#^Property App\\Service\\AvatarService\:\:\$params has no type specified\.$#'
+			identifier: missingType.property
+			count: 1
+			path: src/Service/AvatarService.php
+
+		-
+			message: '#^Parameter \#3 \$to of method App\\Service\\SendMailService\:\:sendMail\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Service/PasswordResetService.php
+
+		-
+			message: '#^Class App\\Service\\TwigFileNamer implements generic interface Vich\\UploaderBundle\\Naming\\NamerInterface but does not specify its types\: T$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Service/TwigFileNamer.php
+
+		-
+			message: '#^Parameter \#1 \$haystack of function str_starts_with expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Service/TwigFileNamer.php
+
+		-
+			message: '#^Parameter \#1 \$string of function strtolower expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Service/TwigFileNamer.php
+
+		-
+			message: '#^Method App\\Stripe\\StripeService\:\:createPaymentIntent\(\) has parameter \$metadata with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: src/Stripe/StripeService.php
+
+		-
+			message: '#^Method App\\Twig\\AmountExtension\:\:formatPrice\(\) has parameter \$value with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: src/Twig/AmountExtension.php
+
+		-
+			message: '#^Parameter \#1 \$num1 of function intdiv expects int, float given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Twig/DurationExtension.php

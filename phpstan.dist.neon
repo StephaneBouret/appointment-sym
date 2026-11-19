@@ -1,0 +1,8 @@
+# Renouvellement manuel après revue des diagnostics bruts du niveau 8 :
+# php tools/phpstan/vendor/bin/phpstan analyse -c tools/phpstan/analysis.neon --memory-limit=1G --generate-baseline=phpstan-baseline.neon
+includes:
+    - tools/phpstan/analysis.neon
+    - phpstan-baseline.neon
+
+parameters:
+    reportUnmatchedIgnoredErrors: true

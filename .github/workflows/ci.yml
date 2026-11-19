@@ -1,0 +1,84 @@
+name: Contrôles automatiques
+
+on:
+  push:
+    branches: [main, 'correction/**']
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+env:
+  APP_ENV: 'test'
+  APP_DEBUG: '0'
+  APP_SECRET: 'ci-test'
+  APP_HOSTNAME: 'http://localhost'
+  DEFAULT_URI: 'http://localhost'
+  DATABASE_URL: 'sqlite:///:memory:'
+  MAILER_DSN: 'null://null'
+  MAILER_DEFAULT_FROM: 'ci@example.invalid'
+  MESSENGER_TRANSPORT_DSN: 'in-memory://'
+  GOOGLE_API_KEY: 'unused'
+  GOOGLE_PLACE_ID: 'unused'
+  STRIPE_SECRET_KEY: 'unused'
+  STRIPE_PUBLIC_KEY: 'unused'
+  STRIPE_WEBHOOK_SECRET: 'unused'
+  GA4_ENABLED: '0'
+
+jobs:
+  tests:
+    name: Tests
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: ./.github/actions/setup-php
+      - name: Installer et vérifier les assets HTTP
+        id: assets
+        run: |
+          php bin/console importmap:install --env=test --no-interaction
+          test -s assets/vendor/@hotwired/stimulus/stimulus.index.js
+          test -s vendor/symfony/stimulus-bundle/assets/dist/loader.js
+      - name: phpunit.payment.xml
+        run: php vendor/bin/phpunit -c phpunit.payment.xml
+      - name: phpunit.admin-user.xml
+        if: ${{ !cancelled() && steps.assets.outcome == 'success' }}
+        run: php vendor/bin/phpunit -c phpunit.admin-user.xml
+      - name: phpunit.slots.xml
+        if: ${{ !cancelled() && steps.assets.outcome == 'success' }}
+        run: php vendor/bin/phpunit -c phpunit.slots.xml
+      - name: phpunit.regression.xml
+        if: ${{ !cancelled() && steps.assets.outcome == 'success' }}
+        run: php vendor/bin/phpunit -c phpunit.regression.xml
+
+  lint:
+    name: Twig et YAML
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - name: Vérifier le workflow avec actionlint
+        run: |
+          cd "$RUNNER_TEMP"
+          curl --fail --silent --show-error --location -o actionlint.tar.gz https://github.com/rhysd/actionlint/releases/download/v1.7.7/actionlint_1.7.7_linux_amd64.tar.gz
+          echo "023070a287cd8cccd71515fedc843f1985bf96c436b7effaecce67290e7e0757  actionlint.tar.gz" | sha256sum --check
+          tar -xzf actionlint.tar.gz actionlint
+          cd "$GITHUB_WORKSPACE"
+          "$RUNNER_TEMP/actionlint" .github/workflows/ci.yml
+      - uses: ./.github/actions/setup-php
+      - name: Twig
+        run: php bin/console lint:twig templates/ --env=test
+      - name: YAML
+        run: php bin/console lint:yaml config/ --parse-tags --env=test
+
+  phpstan:
+    name: PHPStan
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: ./.github/actions/setup-php
+      - name: Installer PHPStan et ses extensions
+        run: composer --working-dir=tools/phpstan install --prefer-dist --no-interaction --no-progress --no-scripts
+      - name: Compiler le conteneur d’analyse
+        run: php tools/phpstan/prepare.php
+      - name: Analyser src au niveau 8
+        run: php tools/phpstan/vendor/bin/phpstan analyse -c phpstan.dist.neon --no-progress --memory-limit=1G
