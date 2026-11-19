@@ -23,27 +23,39 @@ final class UserCrudHooksTest extends TestCase
     public static function usersAndHooks(): iterable
     {
         foreach (['persistEntity', 'updateEntity'] as $hook) {
-            yield $hook.' basic' => [$hook, 'alice', 'martin', [], 'Alice', 'MARTIN'];
-            yield $hook.' admin' => [$hook, 'mArIe', 'duPont', ['ROLE_ADMIN'], 'MArIe', 'DUPONT'];
-            yield $hook.' accented guest' => [$hook, 'éLODIE', 'dupré', ['ROLE_GUEST', 'ROLE_USER'], 'éLODIE', 'DUPRé'];
-            yield $hook.' surrounding spaces' => [$hook, ' alice ', ' duPont ', [], ' alice ', ' DUPONT '];
+            yield $hook.' basic' => [$hook, 'alice', 'martin', [], ['ROLE_USER'], 'Alice', 'MARTIN'];
+            yield $hook.' admin' => [$hook, 'mArIe', 'duPont', ['ROLE_ADMIN'], ['ROLE_ADMIN', 'ROLE_USER'], 'MArIe', 'DUPONT'];
+            yield $hook.' accented guest' => [$hook, 'éLODIE', 'dupré', ['ROLE_GUEST', 'ROLE_USER'], ['ROLE_GUEST', 'ROLE_USER'], 'éLODIE', 'DUPRé'];
+            yield $hook.' surrounding spaces' => [$hook, ' alice ', ' duPont ', [], ['ROLE_USER'], ' alice ', ' DUPONT '];
+            yield $hook.' duplicate roles' => [
+                $hook, 'alice', 'martin',
+                [0 => 'ROLE_ADMIN', 1 => 'ROLE_ADMIN', 2 => 'ROLE_GUEST'],
+                [0 => 'ROLE_ADMIN', 2 => 'ROLE_GUEST', 3 => 'ROLE_USER'],
+                'Alice', 'MARTIN',
+            ];
         }
     }
 
     #[DataProvider('usersAndHooks')]
-    public function testHooksKeepCasingRolesAndSingleOrderedPersistence(string $hook, string $firstname, string $lastname, array $roles, string $expectedFirstname, string $expectedLastname): void
+    public function testHooksKeepCasingRolesAndSingleOrderedPersistence(
+        string $hook,
+        string $firstname,
+        string $lastname,
+        array $expectedStoredRoles,
+        array $expectedEffectiveRoles,
+        string $expectedFirstname,
+        string $expectedLastname,
+    ): void
     {
-        $user = (new User())->setFirstname($firstname)->setLastname($lastname)->setRoles($roles);
-        $effectiveRoles = $user->getRoles();
+        $user = (new User())->setFirstname($firstname)->setLastname($lastname)->setRoles($expectedStoredRoles);
         $storedRoles = new \ReflectionProperty(User::class, 'roles');
         $em = $this->createMock(EntityManagerInterface::class);
         $em->expects(self::once())->method('persist')->with(self::identicalTo($user))
-            ->willReturnCallback(function (object $entity) use ($expectedFirstname, $expectedLastname, $effectiveRoles, $storedRoles, $roles): void {
+            ->willReturnCallback(function (object $entity) use ($expectedFirstname, $expectedLastname, $expectedStoredRoles, $expectedEffectiveRoles, $storedRoles): void {
                 self::assertSame($expectedFirstname, $entity->getFirstname());
                 self::assertSame($expectedLastname, $entity->getLastname());
-                self::assertSame($effectiveRoles, $entity->getRoles());
-                // getRoles already adds ROLE_USER; the hook must not rewrite the stored roles.
-                self::assertSame($roles, $storedRoles->getValue($entity));
+                self::assertSame($expectedStoredRoles, $storedRoles->getValue($entity));
+                self::assertSame($expectedEffectiveRoles, $entity->getRoles());
             });
         $em->expects(self::once())->method('flush');
         $this->controller->$hook(new UserCrudWriteObserver($em), $user);

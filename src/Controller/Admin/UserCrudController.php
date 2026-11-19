@@ -153,11 +153,6 @@ class UserCrudController extends AbstractCrudController
             throw new \InvalidArgumentException('Le champ lastname est obligatoire.');
         }
 
-        $roles = $entityInstance->getRoles();
-        if (!in_array('ROLE_USER', $roles, true)) {
-            $roles[] = 'ROLE_USER';
-            $entityInstance->setRoles($roles);
-        }
         $entityInstance->setFirstname(ucfirst($firstname))
             ->setLastname(strtoupper($lastname));
         parent::persistEntity($entityManager, $entityInstance);
@@ -174,11 +169,6 @@ class UserCrudController extends AbstractCrudController
             throw new \InvalidArgumentException('Le champ lastname est obligatoire.');
         }
 
-        $roles = $entityInstance->getRoles();
-        if (!in_array('ROLE_USER', $roles, true)) {
-            $roles[] = 'ROLE_USER';
-            $entityInstance->setRoles($roles);
-        }
         $entityInstance->setFirstname(ucfirst($firstname))
             ->setLastname(strtoupper($lastname));
         parent::persistEntity($entityManager, $entityInstance);
