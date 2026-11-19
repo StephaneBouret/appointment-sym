@@ -6,6 +6,7 @@ use App\Entity\Appointment;
 use App\Service\AppointmentPaymentService;
 use Stripe\Exception\ApiErrorException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -16,7 +17,7 @@ final class AppointmentPaymentSuccessController extends AbstractController
 
     #[IsGranted('ROLE_USER')]
     #[Route('/terminate/{id}', name: 'app_appointment_payment_success', methods: ['GET'])]
-    public function success(Appointment $appointment)
+    public function success(Appointment $appointment): RedirectResponse
     {
         $user = $this->getUser();
 

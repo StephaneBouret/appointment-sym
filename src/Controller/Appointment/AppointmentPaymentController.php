@@ -8,6 +8,7 @@ use App\Stripe\StripeService;
 use App\Service\AppointmentPaymentService;
 use Stripe\Exception\ApiErrorException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -18,7 +19,7 @@ final class AppointmentPaymentController extends AbstractController
 
     #[IsGranted('ROLE_USER')]
     #[Route('/pay/{id}', name: 'appointment_payment_form', methods: ['GET'])]
-    public function showCardForm(Appointment $appointment)
+    public function showCardForm(Appointment $appointment): Response
     {
         $user = $this->getUser();
 
