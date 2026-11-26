@@ -2180,7 +2180,14 @@ form:invalid button.btn-dark[type=submit],
 }
 
 .toggle-password-button {
-    top: -1.6rem !important;
+    position: absolute;
+    right: 0.5rem;
+    top: -1.6rem;
+    padding: 0 0.25rem;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font-size: 0.875rem;
 }
 
 /*--------------------------------------------------------------
