@@ -12,7 +12,10 @@ import AppointmentCheckoutController from './controllers/appointment_checkout_co
 import AppointmentCancelController from './controllers/appointment-cancel_controller.js';
 import AppointmentRescheduleController from './controllers/appointment_reschedule_controller.js';
 
+import TogglePasswordController from './controllers/toggle_password_controller.js';
+
 const app = startStimulusApp();
+app.register('toggle-password', TogglePasswordController);
 // register any custom, 3rd party controllers here
 // app.register('some_controller_name', SomeImportedController);
 app.register('theme', ThemeController);
